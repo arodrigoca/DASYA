@@ -61,7 +61,7 @@ func parseArguments() string{
 	filenamePtr := flag.String("file", "", "filename to read")
 	flag.Parse()
 	if *filenamePtr == ""{
-			fmt.Println("Error: at least argument -file is necessary")
+			fmt.Println("Error: at least argument -file is necessary.")
 			os.Exit(1)
 	}
 
@@ -80,7 +80,7 @@ func main() {
 	filename := parseArguments()
 	file, err := os.Open(filename)
 	if err != nil {
-		fmt.Println("Error: No such file or directory")
+		fmt.Println("Error: No such file or directory.")
 		return
 	}
 	defer file.Close()
