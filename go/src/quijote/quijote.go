@@ -16,6 +16,20 @@ type wordInfo struct{
 
 }
 
+func cleanWord(word string) string{
+
+    runes := []rune(word)
+
+    for i:=0; i<len(runes); i++{
+        if !unicode.IsLetter(runes[i]){
+            runes = runes[i+1:]
+            //runes = runes
+        }
+    }
+
+    return  string(runes)
+}
+
 func saveTargetWords(splittedWords []string, wordsDictionary map[string]wordInfo, lineCounter int) {
 
 	for i := 0; i < len(splittedWords); i++ {
@@ -24,6 +38,7 @@ func saveTargetWords(splittedWords []string, wordsDictionary map[string]wordInfo
 			if runes := []rune(targetWord); unicode.IsLetter(runes[len(runes)-1]) == false {
 				targetWord = targetWord[:len(targetWord)-1]
 			}
+            targetWord = cleanWord(targetWord)
 			insertInMap(wordsDictionary, targetWord, lineCounter)
 		}
 	}
@@ -89,7 +104,6 @@ func main() {
 	var wordsDictionary map[string]wordInfo
 	wordsDictionary = make(map[string]wordInfo)
 	scanAndProcess(scanner, wordsDictionary)
-	//fmt.Println(wordsDictionary)
 	prettyPrint(wordsDictionary)
 
 }
