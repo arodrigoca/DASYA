@@ -8,6 +8,7 @@ import (
 	"unicode"
 	"flag"
 	"sort"
+	"strconv"
 )
 
 type wordInfo struct{
@@ -18,15 +19,17 @@ type wordInfo struct{
 
 func cleanWord(word string) string{
 
+		//fmt.Printf("Input: %s\n", word)
     runes := []rune(word)
-
-    for i:=0; i<len(runes); i++{
-        if !unicode.IsLetter(runes[i]){
-            runes = runes[i+1:]
-            //runes = runes
-        }
-    }
-
+		i := 0
+		for{
+			if len(runes) >= 1 && !unicode.IsLetter(runes[i]){
+				runes = runes[i+1:]
+			}else{
+				break
+			}
+		}
+		//fmt.Printf("Output: %s\n", string(runes))
     return  string(runes)
 }
 
@@ -38,15 +41,16 @@ func saveTargetWords(splittedWords []string, wordsDictionary map[string]wordInfo
 			if runes := []rune(targetWord); unicode.IsLetter(runes[len(runes)-1]) == false {
 				targetWord = targetWord[:len(targetWord)-1]
 			}
-            targetWord = cleanWord(targetWord)
-			insertInMap(wordsDictionary, targetWord, lineCounter)
+      	targetWord = cleanWord(targetWord)
+				if len(targetWord) >= 3{
+					insertInMap(wordsDictionary, targetWord, lineCounter)
+				}
 		}
 	}
 }
 
 func insertInMap(wordsDictionary map[string]wordInfo, targetWord string, lineCounter int) {
 
-	if len(targetWord) >= 3 {
 		targetWord = strings.ToLower(targetWord)
 		linesSlice := wordsDictionary[targetWord].seenInLines
 		if idx:=sort.SearchInts(linesSlice, lineCounter); idx<len(linesSlice) && len(linesSlice)!=0{
@@ -55,8 +59,6 @@ func insertInMap(wordsDictionary map[string]wordInfo, targetWord string, lineCou
 		}else{
 			wordsDictionary[targetWord] = wordInfo{wordsDictionary[targetWord].timesAppeared + 1, append(wordsDictionary[targetWord].seenInLines, lineCounter)}
 		}
-	}
-
 }
 
 func scanAndProcess(scanner *bufio.Scanner, wordsDictionary map[string]wordInfo) {
@@ -83,10 +85,14 @@ func parseArguments() string{
 	return *filenamePtr
 }
 
-func prettyPrint(wordsDictionary map[string]wordInfo){
+func prettyPrint(wordsDictionary map[string]wordInfo, filename string){
 
 	for i, v := range wordsDictionary {
-        fmt.Printf("%s:\n%s\n", i, strings.Trim(strings.Join(strings.Fields(fmt.Sprint(v.seenInLines)), "\n"), "[]"))
+
+        fmt.Printf("%s:%s\n", i, strconv.Itoa(v.timesAppeared))
+				for i:=0; i<len(v.seenInLines); i++{
+					fmt.Println("\t" + filename + ":" + strconv.Itoa(v.seenInLines[i]))
+				}
   }
 }
 
@@ -104,6 +110,6 @@ func main() {
 	var wordsDictionary map[string]wordInfo
 	wordsDictionary = make(map[string]wordInfo)
 	scanAndProcess(scanner, wordsDictionary)
-	prettyPrint(wordsDictionary)
+	prettyPrint(wordsDictionary, filename)
 
 }
