@@ -61,7 +61,7 @@ func insertInMap(wordsDictionary map[string]wordInfo, targetWord string, lineCou
 		}
 }
 
-func scanAndProcess(scanner *bufio.Scanner, wordsDictionary map[string]wordInfo) {
+func ScanAndProcess(scanner *bufio.Scanner, wordsDictionary map[string]wordInfo) {
 
 	var lineCounter int = 1
 	for scanner.Scan() {
@@ -85,7 +85,7 @@ func parseArguments() string{
 	return *filenamePtr
 }
 
-func prettyPrint(wordsDictionary map[string]wordInfo, filename string){
+func PrettyPrint(wordsDictionary map[string]wordInfo, filename string){
 
 	for i, v := range wordsDictionary {
 
@@ -109,7 +109,7 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	var wordsDictionary map[string]wordInfo
 	wordsDictionary = make(map[string]wordInfo)
-	scanAndProcess(scanner, wordsDictionary)
-	prettyPrint(wordsDictionary, filename)
+	ScanAndProcess(scanner, wordsDictionary)
+	PrettyPrint(wordsDictionary, filename)
 
 }
