@@ -3,6 +3,7 @@ package main
 import( "fmt"
         "os"
         "flag"
+        "bufio"
 )
 
 type RuneScanner interface{
@@ -13,11 +14,9 @@ type RuneScanner interface{
 type Lexer struct{
     file string
     line int
-    r RuneScanner
+    rs RuneScanner
     lastrune rune
 }
-
-
 
 
 func parseArguments() string{
@@ -32,6 +31,35 @@ func parseArguments() string{
 	return *filenamePtr
 }
 
+func NewLexer(rs RuneScanner, filename string) (l *Lexer){
+    l = &Lexer{line: 1}
+    l.file = filename
+    l.rs = rs
+    return l
+}
+
+func (l *Lexer) get() (r rune){
+
+    var err error
+
+    r, _, err = l.rs.ReadRune()
+
+    if err == nil{
+        l.lastrune = r
+        if r == '\n'{
+            l.line++
+        }
+    }
+
+    /*
+    if err == io.EOF{
+        l.lastrune ==
+    }
+    */
+
+    return r
+}
+
 
 func main(){
 
@@ -43,6 +71,6 @@ func main(){
 	}
 	defer file.Close()
 
-    //scanner := bufio.NewScanner(file)
+    reader := bufio.NewReader(file)
 
 }
