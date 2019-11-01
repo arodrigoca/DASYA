@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	//"bufio"
+	"bufio"
 	"errors"
 	"io"
 	"runtime/debug"
@@ -160,6 +160,8 @@ func main() {
 		return
 	}
 
-	//reader := bufio.NewReader(file)
+	reader := bufio.NewReader(file)
+	var myLexer *Lexer = NewLexer(reader, filename)
+	fmt.Println(myLexer)
 
 }
