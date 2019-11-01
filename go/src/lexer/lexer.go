@@ -9,6 +9,7 @@ import (
 	"io"
 	"runtime/debug"
 	"strings"
+	"unicode"
 )
 
 type RuneScanner interface {
@@ -21,6 +22,14 @@ type Lexer struct {
 	line     int
 	rs       RuneScanner
 	lastrune rune
+	accepted []rune
+}
+
+type Token struct{
+	lexema string
+	tokType int
+	value int
+	line int
 }
 
 const RuneEOF rune = 'ᛯ'
@@ -64,6 +73,7 @@ func (l *Lexer) get() (r rune) {
 	if err != nil {
 		panic(err)
 	}
+	l.accepted = append(l.accepted, rune)
 
 	return rune
 }
@@ -81,12 +91,45 @@ func (l *Lexer) unget() {
 	if err == nil && l.lastrune == '\n' {
 		l.line--
 	}
+	l.lastrune = unicode.ReplacementChar
+	if len(l.accepted) != 0{
+		l.accepted = l.accepted[0:len(l.accepted)-1]
+	}
 
 	if err != nil {
 		panic(err)
 	}
 
 }
+
+func (l *Lexer) accept() (tok string){
+
+	tok  = string(l.accepted)
+	if tok == "" && l.lastrune != RuneEOF{
+		panic(errors.New("empty token"))
+	}
+	l.accepted = nil
+	return tok
+
+}
+
+
+func (l *Lexer) Lex() (t Token, err error){
+
+	for r := l.get(); ; r = l.get(){
+
+		switch r{
+		case RuneEOF:
+			l.accept()
+			return t, nil
+
+		case '\n':
+			t.lexema = l.accept()
+			return t, nil
+		}
+	}
+}
+
 
 func main() {
 
