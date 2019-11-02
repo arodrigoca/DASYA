@@ -114,11 +114,40 @@ func (l *Lexer) accept() (tok string){
 }
 
 
+func (l *Lexer) lexComment(){
+
+	for r := l.get(); ;r = l.get(){
+		fmt.Println(r)
+		if r == '\n'{
+			fmt.Println("end of comment")
+			l.accept()
+			break
+		}
+	}
+
+	return
+}
+
 func (l *Lexer) Lex() (t Token, err error){
 
 	for r := l.get(); ; r = l.get(){
-
+		if unicode.IsSpace(r) && r != '\n'{
+			l.accept()
+			continue
+		}
 		switch r{
+
+		case '+', '-', '*', '/', '>', '<': //operator or comment
+			fmt.Println("This is an operator or a comment")
+			look_token := l.get()
+			if look_token == '/'{ //it's a comment
+				l.lexComment()
+			}else{ //not a comment so unget and continue
+				l.unget()
+				t.lexema = l.accept()
+				return t, nil
+			}
+
 		case RuneEOF:
 			l.accept()
 			return t, nil
@@ -162,6 +191,8 @@ func main() {
 
 	reader := bufio.NewReader(file)
 	var myLexer *Lexer = NewLexer(reader, filename)
-	fmt.Println(myLexer)
+	token, error := myLexer.Lex()
+	fmt.Println(token)
+	fmt.Println(error)
 
 }
