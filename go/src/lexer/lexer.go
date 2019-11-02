@@ -117,15 +117,21 @@ func (l *Lexer) accept() (tok string){
 func (l *Lexer) lexComment(){
 
 	for r := l.get(); ;r = l.get(){
-		fmt.Println(r)
+		//fmt.Println(r)
 		if r == '\n'{
-			fmt.Println("end of comment")
+			//fmt.Println("end of comment")
 			l.accept()
 			break
+		}else{
+			l.accept()
 		}
 	}
 
 	return
+}
+
+func (l *Lexer) lexOp(){
+
 }
 
 func (l *Lexer) Lex() (t Token, err error){
@@ -138,13 +144,13 @@ func (l *Lexer) Lex() (t Token, err error){
 		switch r{
 
 		case '+', '-', '*', '/', '>', '<': //operator or comment
-			fmt.Println("This is an operator or a comment")
+			//fmt.Println("This is an operator or a comment")
 			look_token := l.get()
 			if look_token == '/'{ //it's a comment
 				l.lexComment()
 			}else{ //not a comment so unget and continue
 				l.unget()
-				t.lexema = l.accept()
+				l.lexOp()
 				return t, nil
 			}
 
@@ -153,6 +159,12 @@ func (l *Lexer) Lex() (t Token, err error){
 			return t, nil
 
 		case '\n':
+			t.lexema = l.accept()
+			fmt.Println("Lexemma is line end")
+			return t, nil
+
+		default:
+			fmt.Println("Not an operator or eof or eol")
 			t.lexema = l.accept()
 			return t, nil
 		}
@@ -192,6 +204,14 @@ func main() {
 	reader := bufio.NewReader(file)
 	var myLexer *Lexer = NewLexer(reader, filename)
 	token, error := myLexer.Lex()
+	fmt.Println(token)
+	fmt.Println(error)
+
+	token, error = myLexer.Lex()
+	fmt.Println(token)
+	fmt.Println(error)
+
+	token, error = myLexer.Lex()
 	fmt.Println(token)
 	fmt.Println(error)
 
