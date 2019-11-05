@@ -132,7 +132,7 @@ func (l *Lexer) lexComment() {
 func (l *Lexer) lexOp() (t Token, err error) {
 
 	const (
-		ops = "+-*/><="
+		ops = "+-*/><=%|&!^"
 	)
 
 	r := l.get()
@@ -162,6 +162,7 @@ func (l *Lexer) lexOp() (t Token, err error) {
 		}
 
 	case '=':
+		//equality operator
 		look_token := l.get()
 		if look_token == '=' {
 			t.lexema = l.accept()
@@ -218,11 +219,15 @@ func (l *Lexer) Lex() (t Token, err error) {
 			t.lexema = l.accept()
 			fmt.Println("Lexemma is line end")
 			return t, nil
+		}
+
+		switch r {
 
 		default:
 			fmt.Println("Not an operator or eof or eol")
 			t.lexema = l.accept()
 			return t, nil
+
 		}
 	}
 }
