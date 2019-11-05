@@ -1,12 +1,12 @@
 package main
 
 import (
-	"flag"
-	"fmt"
-	"os"
 	"bufio"
 	"errors"
+	"flag"
+	"fmt"
 	"io"
+	"os"
 	"runtime/debug"
 	"strings"
 	"unicode"
@@ -25,11 +25,11 @@ type Lexer struct {
 	accepted []rune
 }
 
-type Token struct{
-	lexema string
+type Token struct {
+	lexema  string
 	tokType int
-	value int
-	line int
+	value   int
+	line    int
 }
 
 const RuneEOF rune = 'ᛯ'
@@ -92,8 +92,8 @@ func (l *Lexer) unget() {
 		l.line--
 	}
 	l.lastrune = unicode.ReplacementChar
-	if len(l.accepted) != 0{
-		l.accepted = l.accepted[0:len(l.accepted)-1]
+	if len(l.accepted) != 0 {
+		l.accepted = l.accepted[0 : len(l.accepted)-1]
 	}
 
 	if err != nil {
@@ -102,10 +102,10 @@ func (l *Lexer) unget() {
 
 }
 
-func (l *Lexer) accept() (tok string){
+func (l *Lexer) accept() (tok string) {
 
-	tok  = string(l.accepted)
-	if tok == "" && l.lastrune != RuneEOF{
+	tok = string(l.accepted)
+	if tok == "" && l.lastrune != RuneEOF {
 		panic(errors.New("empty token"))
 	}
 	l.accepted = nil
@@ -113,16 +113,15 @@ func (l *Lexer) accept() (tok string){
 
 }
 
+func (l *Lexer) lexComment() {
 
-func (l *Lexer) lexComment(){
-
-	for r := l.get(); ;r = l.get(){
+	for r := l.get(); ; r = l.get() {
 		//fmt.Println(r)
-		if r == '\n'{
+		if r == '\n' {
 			//fmt.Println("end of comment")
 			l.accept()
 			break
-		}else{
+		} else {
 			l.accept()
 		}
 	}
@@ -130,27 +129,84 @@ func (l *Lexer) lexComment(){
 	return
 }
 
-func (l *Lexer) lexOp(){
+func (l *Lexer) lexOp() (t Token, err error) {
+
+	const (
+		ops = "+-*/><="
+	)
+
+	r := l.get()
+
+	switch r {
+
+	case '*':
+		look_token := l.get()
+		if look_token == '*' {
+			//power operator
+			t.lexema = l.accept()
+
+		} else {
+			l.unget()
+			t.lexema = l.accept()
+		}
+
+	case '>', '<':
+		look_token := l.get()
+		if look_token == '=' {
+			//comparison operator
+			t.lexema = l.accept()
+
+		} else {
+			l.unget()
+			t.lexema = l.accept()
+		}
+
+	case '=':
+		look_token := l.get()
+		if look_token == '=' {
+			t.lexema = l.accept()
+		} else {
+			l.unget()
+			t.lexema = l.accept()
+		}
+
+	default:
+		if strings.ContainsRune(ops, r) {
+			//correct operator
+			t.lexema = l.accept()
+		} else {
+			panic(errors.New("Bad operator"))
+		}
+
+	}
+
+	return t, err
 
 }
 
-func (l *Lexer) Lex() (t Token, err error){
+func (l *Lexer) Lex() (t Token, err error) {
 
-	for r := l.get(); ; r = l.get(){
-		if unicode.IsSpace(r) && r != '\n'{
+	for r := l.get(); ; r = l.get() {
+		if unicode.IsSpace(r) && r != '\n' {
 			l.accept()
 			continue
 		}
-		switch r{
+		switch r {
 
 		case '+', '-', '*', '/', '>', '<': //operator or comment
-			//fmt.Println("This is an operator or a comment")
-			look_token := l.get()
-			if look_token == '/'{ //it's a comment
-				l.lexComment()
-			}else{ //not a comment so unget and continue
+
+			if r == '/' {
+				look_token := l.get()
+				if look_token == '/' { //it's a comment
+					l.lexComment()
+				} else { //not a comment so unget and continue
+					l.unget()
+					t, err = l.lexOp()
+					return t, nil
+				}
+			} else {
 				l.unget()
-				l.lexOp()
+				t, err = l.lexOp()
 				return t, nil
 			}
 
@@ -170,7 +226,6 @@ func (l *Lexer) Lex() (t Token, err error){
 		}
 	}
 }
-
 
 func main() {
 
@@ -203,16 +258,13 @@ func main() {
 
 	reader := bufio.NewReader(file)
 	var myLexer *Lexer = NewLexer(reader, filename)
-	token, error := myLexer.Lex()
+	token, _ := myLexer.Lex()
 	fmt.Println(token)
-	fmt.Println(error)
 
-	token, error = myLexer.Lex()
+	token, _ = myLexer.Lex()
 	fmt.Println(token)
-	fmt.Println(error)
 
-	token, error = myLexer.Lex()
+	token, _ = myLexer.Lex()
 	fmt.Println(token)
-	fmt.Println(error)
 
 }

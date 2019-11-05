@@ -1,11 +1,6 @@
 &{0xc000024240}
+{+ 0 0 0}
+{* 0 0 0}
 Lexemma is line end
 {
  0 0 0}
-<nil>
-Not an operator or eof or eol
-{t 0 0 0}
-<nil>
-Not an operator or eof or eol
-{y 0 0 0}
-<nil>
