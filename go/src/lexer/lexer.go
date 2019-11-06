@@ -12,6 +12,16 @@ import (
 	"unicode"
 )
 
+const(
+    TokId int = 0
+    TokInt int = 1
+    TokSep int = 2
+    TokOp int = 3
+    TokEol int = 4
+)
+
+
+
 type RuneScanner interface {
 	ReadRune() (r rune, size int, err error)
 	UnreadRune() error
@@ -132,7 +142,7 @@ func (l *Lexer) lexComment() {
 func (l *Lexer) lexOp() (t Token, err error) {
 
 	const (
-		ops = "+-*/><=%|&!^"
+		ops = "+-*/><=%|&!^="
 	)
 
 	r := l.get()
@@ -171,6 +181,15 @@ func (l *Lexer) lexOp() (t Token, err error) {
 			t.lexema = l.accept()
 		}
 
+    case ':':
+        look_token := l.get()
+		if look_token == '=' {
+			t.lexema = l.accept()
+		} else {
+			l.unget()
+			t.lexema = l.accept()
+		}
+
 	default:
 		if strings.ContainsRune(ops, r) {
 			//correct operator
@@ -185,13 +204,13 @@ func (l *Lexer) lexOp() (t Token, err error) {
 
 }
 
-func (l *Lexer) lexLetter() (t Token, err error) {
+func (l *Lexer) lexId() (t Token, err error) {
 
 	for r := l.get(); ; r = l.get() {
 
 		switch{
 
-		case unicode.IsLetter(r), strings.ContainsRune("_", r):
+		case unicode.IsLetter(r), strings.ContainsRune("_", r), unicode.IsNumber(r):
 
 			continue
 
@@ -202,18 +221,17 @@ func (l *Lexer) lexLetter() (t Token, err error) {
 			break
 
 		}
-		return t, nil
+        return t, nil
 	}
 }
 
 func (l *Lexer) lexSep() (t Token, err error) {
 
-	const sep = "(),;[]{}"
+	const sep = "(),;[]{}."
 
 	r := l.get()
 
 	if strings.ContainsRune(sep, r){
-
 		t.lexema = l.accept()
 		return t, nil
 
@@ -221,7 +239,43 @@ func (l *Lexer) lexSep() (t Token, err error) {
 		panic(errors.New("Bad separator"))
 	}
 
+}
 
+
+func (l *Lexer) lexNum() (t Token, err error) {
+
+    const validHex = "ABCDEFabcdef"
+
+    var isHex = false
+
+    for r := l.get(); ; r = l.get() {
+
+        switch{
+
+        case r == '0':
+            if !isHex{
+                //fmt.Println("Number is zero. Might be hexadecimal")
+                look_token := l.get()
+                if look_token == 'x'{
+                    //fmt.Println("Hexadecimal")
+                    isHex = true
+                }else{
+                    l.unget()
+                }
+            }
+
+        case unicode.IsNumber(r):
+            //fmt.Println("rune is an integer")
+
+        case strings.ContainsRune(validHex, r):
+            //fmt.Println("rune is a hexadecimal letrter")
+
+        default:
+            l.unget()
+            t.lexema = l.accept()
+            return t, nil
+        }
+    }
 }
 
 
@@ -234,7 +288,7 @@ func (l *Lexer) Lex() (t Token, err error) {
 		}
 		switch r {
 
-		case '+', '-', '*', '/', '>', '<': //operator or comment
+		case '+', '-', '*', '/', '>', '<', '=': //operator or comment
 
 			if r == '/' {
 				look_token := l.get()
@@ -244,31 +298,36 @@ func (l *Lexer) Lex() (t Token, err error) {
 					l.unget()
 					t, err = l.lexOp()
 					t.line = l.line
-					return t, nil
+					return t, err
 				}
 			} else {
 				l.unget()
 				t, err = l.lexOp()
 				t.line = l.line
-				return t, nil
+				return t, err
 			}
 
 		case RuneEOF:
-			l.accept()
+            fmt.Println("End of file")
+			t.lexema = l.accept()
+            t.tokType = TokEol
+            //fmt.Println(t.lexema)
 			return t, nil
 
 		case '\n':
-			t.lexema = l.accept()
-			t.line = l.line
+			//t.lexema = l.accept()
+			//t.line = l.line
+            l.accept()
 			//fmt.Println("Lexemma is line end")
-			return t, nil
+			//return t, nil
+            continue
 
-		case '(', ')', ',', ';', '[', ']', '{', '}':
+		case '(', ')', ',', ';', '[', ']', '{', '}', '.':
 
 			l.unget()
 			t, err = l.lexSep()
 			t.line = l.line
-			return t, nil
+			return t, err
 
 		default:
 			break
@@ -278,9 +337,15 @@ func (l *Lexer) Lex() (t Token, err error) {
 
 		case unicode.IsLetter(r):
 			l.unget()
-			t, err = l.lexLetter()
+			t, err = l.lexId()
 			t.line = l.line
-			return t, nil
+			return t, err
+
+        case unicode.IsNumber(r):
+            l.unget()
+            t, err = l.lexNum()
+            t.line = l.line
+            return t, err
 		}
 	}
 }
@@ -316,7 +381,7 @@ func main() {
 	reader := bufio.NewReader(file)
 	var myLexer *Lexer = NewLexer(reader, filename)
 
-	for i := 0; i <= 20; i++{
+	for i := 0; i <= 200; i++{
 		token, _ := myLexer.Lex()
 		fmt.Println(token)
 	}
