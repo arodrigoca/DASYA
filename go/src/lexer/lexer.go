@@ -12,14 +12,17 @@ import (
 	"unicode"
 )
 
+//token types
+
 const(
-    TokId int = 0
-    TokInt int = 1
-    TokSep int = 2
-    TokOp int = 3
-    TokEol int = 4
+    TokId TokType = unicode.MaxASCII + iota
+    TokValInt
+    TokSep
+    TokOp
+    TokEol
 )
 
+type TokType int
 
 
 type RuneScanner interface {
@@ -37,7 +40,7 @@ type Lexer struct {
 
 type Token struct {
 	lexema  string
-	tokType int
+	tokType TokType
 	value   int
 	line    int
 }

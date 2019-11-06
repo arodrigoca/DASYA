@@ -47,7 +47,7 @@ func main(){
 	}
 	line(v);
 	line(v);
-	iter (i := 0; 3, 1){		//loops 0 1 2 3
+	iter (i := 0, 3, 1){		//loops 0 1 2 3
 		rect(pp, 5, 0xff);
 	}
 }
