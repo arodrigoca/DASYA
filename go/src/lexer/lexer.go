@@ -185,6 +185,46 @@ func (l *Lexer) lexOp() (t Token, err error) {
 
 }
 
+func (l *Lexer) lexLetter() (t Token, err error) {
+
+	for r := l.get(); ; r = l.get() {
+
+		switch{
+
+		case unicode.IsLetter(r), strings.ContainsRune("_", r):
+
+			continue
+
+		default:
+
+			l.unget()
+			t.lexema = l.accept()
+			break
+
+		}
+		return t, nil
+	}
+}
+
+func (l *Lexer) lexSep() (t Token, err error) {
+
+	const sep = "(),;[]{}"
+
+	r := l.get()
+
+	if strings.ContainsRune(sep, r){
+
+		t.lexema = l.accept()
+		return t, nil
+
+	}else{
+		panic(errors.New("Bad separator"))
+	}
+
+
+}
+
+
 func (l *Lexer) Lex() (t Token, err error) {
 
 	for r := l.get(); ; r = l.get() {
@@ -203,11 +243,13 @@ func (l *Lexer) Lex() (t Token, err error) {
 				} else { //not a comment so unget and continue
 					l.unget()
 					t, err = l.lexOp()
+					t.line = l.line
 					return t, nil
 				}
 			} else {
 				l.unget()
 				t, err = l.lexOp()
+				t.line = l.line
 				return t, nil
 			}
 
@@ -217,17 +259,28 @@ func (l *Lexer) Lex() (t Token, err error) {
 
 		case '\n':
 			t.lexema = l.accept()
-			fmt.Println("Lexemma is line end")
+			t.line = l.line
+			//fmt.Println("Lexemma is line end")
 			return t, nil
-		}
 
-		switch r {
+		case '(', ')', ',', ';', '[', ']', '{', '}':
+
+			l.unget()
+			t, err = l.lexSep()
+			t.line = l.line
+			return t, nil
 
 		default:
-			fmt.Println("Not an operator or eof or eol")
-			t.lexema = l.accept()
-			return t, nil
+			break
+		}
 
+		switch{
+
+		case unicode.IsLetter(r):
+			l.unget()
+			t, err = l.lexLetter()
+			t.line = l.line
+			return t, nil
 		}
 	}
 }
@@ -255,7 +308,6 @@ func main() {
 	}()
 
 	file, err := os.Open(filename)
-	fmt.Println(file)
 	if err != nil {
 		fmt.Println("Error: No such file or directory.")
 		return
@@ -263,13 +315,10 @@ func main() {
 
 	reader := bufio.NewReader(file)
 	var myLexer *Lexer = NewLexer(reader, filename)
-	token, _ := myLexer.Lex()
-	fmt.Println(token)
 
-	token, _ = myLexer.Lex()
-	fmt.Println(token)
-
-	token, _ = myLexer.Lex()
-	fmt.Println(token)
+	for i := 0; i <= 20; i++{
+		token, _ := myLexer.Lex()
+		fmt.Println(token)
+	}
 
 }
