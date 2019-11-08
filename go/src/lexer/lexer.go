@@ -19,7 +19,17 @@ type TokType rune
 
 const (
 	RuneEOF = unicode.MaxRune + 1 + iota
+
+	//reserved words
 	TokFunc
+	TokMain
+	TokTypeDef
+	TokRecord
+	TokIf
+	TokElse
+	TokIter
+	//
+
 	TokId
 	TokValInt
 	TokValBool
@@ -28,29 +38,45 @@ const (
 	TokSmaller
 	TokEqual
 	TokDDEq
-	TokPercent = TokType('%')
-	TokVertBar = TokType('|')
-	TokAnd     = TokType('&')
-	TokExcla   = TokType('!')
-	TokPow     = TokType('^')
-	TokSemiCol = TokType(';')
-	TokLCurly  = TokType('{')
-	TokRCurly  = TokType('}')
-	TokComma   = TokType(',')
-	TokLBrack  = TokType('[')
-	TokRBrack  = TokType(']')
-	TokDot     = TokType('.')
-	TokEol     = TokType('\n')
-	TokLPar    = TokType('(')
-	TokRPar    = TokType(')')
-	TokAdd     = TokType('+')
-	TokMul     = TokType('*')
-	TokMin     = TokType('-')
-	TokDiv     = TokType('/')
-	TokEq      = TokType('=')
-	TokEof     = TokType(RuneEOF)
-	TokBad     = TokType(0)
+	TokEof = TokType(RuneEOF)
+	TokBad = TokType(0)
+	/*
+		    TokPercent = TokType('%')
+			TokVertBar = TokType('|')
+			TokAnd     = TokType('&')
+			TokExcla   = TokType('!')
+			TokPow     = TokType('^')
+			TokSemiCol = TokType(';')
+			TokLCurly  = TokType('{')
+			TokRCurly  = TokType('}')
+			TokComma   = TokType(',')
+			TokLBrack  = TokType('[')
+			TokRBrack  = TokType(']')
+			TokDot     = TokType('.')
+			TokEol     = TokType('\n')
+			TokLPar    = TokType('(')
+			TokRPar    = TokType(')')
+			TokAdd     = TokType('+')
+			TokMul     = TokType('*')
+			TokMin     = TokType('-')
+			TokDiv     = TokType('/')
+			TokEq      = TokType('=')
+	*/
 )
+
+//key is token lexema and value is the corrected token
+var reserved_words_map = map[string]Token{
+
+	"func":   Token{lexema: "func", Type: TokFunc},
+	"main":   Token{lexema: "main", Type: TokMain},
+	"type":   Token{lexema: "type", Type: TokTypeDef},
+	"if":     Token{lexema: "Rect", Type: TokIf},
+	"else":   Token{lexema: "else", Type: TokElse},
+	"iter":   Token{lexema: "iter", Type: TokIter},
+	"record": Token{lexema: "record", Type: TokRecord},
+	"True":   Token{lexema: "True", Type: TokValBool, TokValBool: true},
+	"False":  Token{lexema: "False", Type: TokValBool, TokValBool: false},
+}
 
 type Token struct {
 	lexema       string
@@ -265,6 +291,10 @@ func (l *Lexer) lexId() (t Token, err error) {
 			break
 
 		}
+
+		if value, found := reserved_words_map[t.lexema]; found {
+			t = value
+		}
 		return t, nil
 	}
 }
@@ -355,7 +385,7 @@ func (l *Lexer) Lex() (t Token, err error) {
 		case RuneEOF:
 			//fmt.Println("End of file")
 			t.lexema = l.accept()
-            t.Type = TokEof
+			t.Type = TokEof
 			//fmt.Println(t.lexema)
 			return t, nil
 
@@ -397,27 +427,63 @@ func (l *Lexer) Lex() (t Token, err error) {
 
 func (t *Token) printToken() {
 
+	if t.Type > unicode.MaxRune {
+		switch t.Type {
 
-	switch t.Type {
+		case TokEof:
+			fmt.Println("End of file token")
+			fmt.Printf("Token type: TokEof\n")
 
-    case TokEof:
-        fmt.Println("End of file token")
-        fmt.Printf("Token type: %v\n", t.Type)
+		case TokId:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokId\n")
+			fmt.Printf("Value: %s\n", t.TokValString)
 
-	case TokId:
-        fmt.Printf("Lexema: %s\n", t.lexema)
-    	fmt.Printf("Token type: %v\n", t.Type)
-		fmt.Printf("Value: %s\n", t.TokValString)
+		case TokValInt:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokValInt\n")
+			fmt.Printf("Value: %v\n", t.TokValInt)
 
-	case TokValInt:
-        fmt.Printf("Lexema: %s\n", t.lexema)
-    	fmt.Printf("Token type: %v\n", t.Type)
-		fmt.Printf("Value: %v\n", t.TokValInt)
+		case TokValBool:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokValBool\n")
+			fmt.Printf("Value: %v\n", t.TokValBool)
 
-	case TokValBool:
-        fmt.Printf("Lexema: %s\n", t.lexema)
-    	fmt.Printf("Token type: %v\n", t.Type)
-		fmt.Printf("Value: %v\n", t.TokValBool)
+		case TokFunc:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokFunc\n")
+
+		case TokMain:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokMain\n")
+
+		case TokTypeDef:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokTypeDef\n")
+
+		case TokRecord:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokRecord\n")
+
+		case TokIf:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokIf\n")
+
+		case TokElse:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokElse\n")
+
+		case TokIter:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokIter\n")
+
+		default:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: %v\n", t.Type)
+		}
+	} else {
+		fmt.Printf("Lexema: %s\n", t.lexema)
+		fmt.Printf("Token type: %c\n", t.Type)
 	}
 	fmt.Printf("Line: %v\n", t.line)
 	fmt.Printf("\n")
