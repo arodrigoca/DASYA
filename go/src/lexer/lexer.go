@@ -8,59 +8,58 @@ import (
 	"io"
 	"os"
 	"runtime/debug"
+	"strconv"
 	"strings"
 	"unicode"
-	"strconv"
 )
 
 //token types
 
 type TokType rune
 
-const(
-		RuneEOF = unicode.MaxRune + 1 + iota
-		TokFunc
-    TokId
-    TokValInt
-		TokValBool
-		TokDMul
-		TokGreater
-		TokSmaller
-		TokEqual
-		TokDDEq
-		TokPercent = TokType('%')
-		TokVertBar = TokType('|')
-		TokAnd = TokType('&')
-		TokExcla = TokType('!')
-		TokPow = TokType('^')
-		TokSemiCol = TokType(';')
-		TokLCurly = TokType('{')
-		TokRCurly = TokType('}')
-		TokComma = TokType(',')
-		TokLBrack = TokType('[')
-		TokRBrack = TokType(']')
-		TokDot = TokType('.')
-		TokEol = TokType('\n')
-		TokLPar = TokType('(')
-		TokRPar = TokType(')')
-		TokAdd = TokType('+')
-		TokMul = TokType('*')
-		TokMin = TokType('-')
-		TokDiv = TokType('/')
-		TokEq = TokType('=')
-		TokEof = TokType(RuneEOF)
-		TokBad = TokType(0)
+const (
+	RuneEOF = unicode.MaxRune + 1 + iota
+	TokFunc
+	TokId
+	TokValInt
+	TokValBool
+	TokDMul
+	TokGreater
+	TokSmaller
+	TokEqual
+	TokDDEq
+	TokPercent = TokType('%')
+	TokVertBar = TokType('|')
+	TokAnd     = TokType('&')
+	TokExcla   = TokType('!')
+	TokPow     = TokType('^')
+	TokSemiCol = TokType(';')
+	TokLCurly  = TokType('{')
+	TokRCurly  = TokType('}')
+	TokComma   = TokType(',')
+	TokLBrack  = TokType('[')
+	TokRBrack  = TokType(']')
+	TokDot     = TokType('.')
+	TokEol     = TokType('\n')
+	TokLPar    = TokType('(')
+	TokRPar    = TokType(')')
+	TokAdd     = TokType('+')
+	TokMul     = TokType('*')
+	TokMin     = TokType('-')
+	TokDiv     = TokType('/')
+	TokEq      = TokType('=')
+	TokEof     = TokType(RuneEOF)
+	TokBad     = TokType(0)
 )
 
 type Token struct {
-	lexema string
-	Type TokType
-	TokValInt int64
-	TokValBool bool
+	lexema       string
+	Type         TokType
+	TokValInt    int64
+	TokValBool   bool
 	TokValString string
-	line int
+	line         int
 }
-
 
 type RuneScanner interface {
 	ReadRune() (r rune, size int, err error)
@@ -74,7 +73,6 @@ type Lexer struct {
 	lastrune rune
 	accepted []rune
 }
-
 
 func parseArguments() (string, bool) {
 
@@ -199,9 +197,9 @@ func (l *Lexer) lexOp() (t Token, err error) {
 		if look_token == '=' {
 			//comparison operator
 			t.lexema = l.accept()
-			if r == '>'{
+			if r == '>' {
 				t.Type = TokGreater
-			}else{
+			} else {
 				t.Type = TokSmaller
 			}
 
@@ -223,8 +221,8 @@ func (l *Lexer) lexOp() (t Token, err error) {
 			t.Type = TokType(r)
 		}
 
-    case ':':
-        look_token := l.get()
+	case ':':
+		look_token := l.get()
 		if look_token == '=' {
 			t.lexema = l.accept()
 			t.Type = TokDDEq
@@ -252,7 +250,7 @@ func (l *Lexer) lexId() (t Token, err error) {
 
 	for r := l.get(); ; r = l.get() {
 
-		switch{
+		switch {
 
 		case unicode.IsLetter(r), strings.ContainsRune("_", r), unicode.IsNumber(r):
 
@@ -267,7 +265,7 @@ func (l *Lexer) lexId() (t Token, err error) {
 			break
 
 		}
-        return t, nil
+		return t, nil
 	}
 }
 
@@ -277,56 +275,54 @@ func (l *Lexer) lexSep() (t Token, err error) {
 
 	r := l.get()
 
-	if strings.ContainsRune(sep, r){
+	if strings.ContainsRune(sep, r) {
 		t.lexema = l.accept()
 		t.Type = TokType(r)
 		return t, nil
 
-	}else{
+	} else {
 		panic(errors.New("Bad separator"))
 	}
 
 }
 
-
 func (l *Lexer) lexNum() (t Token, err error) {
 
-    const validHex = "ABCDEFabcdef"
+	const validHex = "ABCDEFabcdef"
 
-    var isHex = false
+	var isHex = false
 
-    for r := l.get(); ; r = l.get() {
+	for r := l.get(); ; r = l.get() {
 
-        switch{
+		switch {
 
-        case r == '0':
-            if !isHex{
-                //fmt.Println("Number is zero. Might be hexadecimal")
-                look_token := l.get()
-                if look_token == 'x'{
-                    //fmt.Println("Hexadecimal")
-                    isHex = true
-                }else{
-                    l.unget()
-                }
-            }
+		case r == '0':
+			if !isHex {
+				//fmt.Println("Number is zero. Might be hexadecimal")
+				look_token := l.get()
+				if look_token == 'x' {
+					//fmt.Println("Hexadecimal")
+					isHex = true
+				} else {
+					l.unget()
+				}
+			}
 
-        case unicode.IsNumber(r):
-            //fmt.Println("rune is an integer")
+		case unicode.IsNumber(r):
+			//fmt.Println("rune is an integer")
 
-        case strings.ContainsRune(validHex, r):
-            //fmt.Println("rune is a hexadecimal letrter")
+		case strings.ContainsRune(validHex, r):
+			//fmt.Println("rune is a hexadecimal letrter")
 
-        default:
-            l.unget()
-            t.lexema = l.accept()
-						t.Type = TokValInt
-						t.TokValInt, err = strconv.ParseInt(t.lexema, 10, 64)
-            return t, nil
-        }
-    }
+		default:
+			l.unget()
+			t.lexema = l.accept()
+			t.Type = TokValInt
+			t.TokValInt, err = strconv.ParseInt(t.lexema, 10, 64)
+			return t, nil
+		}
+	}
 }
-
 
 func (l *Lexer) Lex() (t Token, err error) {
 
@@ -357,18 +353,19 @@ func (l *Lexer) Lex() (t Token, err error) {
 			}
 
 		case RuneEOF:
-      fmt.Println("End of file")
+			//fmt.Println("End of file")
 			t.lexema = l.accept()
-      //fmt.Println(t.lexema)
+            t.Type = TokEof
+			//fmt.Println(t.lexema)
 			return t, nil
 
 		case '\n':
 			//t.lexema = l.accept()
 			//t.line = l.line
-            l.accept()
+			l.accept()
 			//fmt.Println("Lexemma is line end")
 			//return t, nil
-            continue
+			continue
 
 		case '(', ')', ',', ';', '[', ']', '{', '}', '.':
 
@@ -381,7 +378,7 @@ func (l *Lexer) Lex() (t Token, err error) {
 			break
 		}
 
-		switch{
+		switch {
 
 		case unicode.IsLetter(r):
 			l.unget()
@@ -389,13 +386,42 @@ func (l *Lexer) Lex() (t Token, err error) {
 			t.line = l.line
 			return t, err
 
-        case unicode.IsNumber(r):
-            l.unget()
-            t, err = l.lexNum()
-            t.line = l.line
-            return t, err
+		case unicode.IsNumber(r):
+			l.unget()
+			t, err = l.lexNum()
+			t.line = l.line
+			return t, err
 		}
 	}
+}
+
+func (t *Token) printToken() {
+
+
+	switch t.Type {
+
+    case TokEof:
+        fmt.Println("End of file token")
+        fmt.Printf("Token type: %v\n", t.Type)
+
+	case TokId:
+        fmt.Printf("Lexema: %s\n", t.lexema)
+    	fmt.Printf("Token type: %v\n", t.Type)
+		fmt.Printf("Value: %s\n", t.TokValString)
+
+	case TokValInt:
+        fmt.Printf("Lexema: %s\n", t.lexema)
+    	fmt.Printf("Token type: %v\n", t.Type)
+		fmt.Printf("Value: %v\n", t.TokValInt)
+
+	case TokValBool:
+        fmt.Printf("Lexema: %s\n", t.lexema)
+    	fmt.Printf("Token type: %v\n", t.Type)
+		fmt.Printf("Value: %v\n", t.TokValBool)
+	}
+	fmt.Printf("Line: %v\n", t.line)
+	fmt.Printf("\n")
+
 }
 
 func main() {
@@ -429,9 +455,9 @@ func main() {
 	reader := bufio.NewReader(file)
 	var myLexer *Lexer = NewLexer(reader, filename)
 
-	for i := 0; i <= 200; i++{
+	for i := 0; i <= 200; i++ {
 		token, _ := myLexer.Lex()
-		fmt.Println(token)
+		token.printToken()
 	}
 
 }

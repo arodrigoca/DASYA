@@ -1,223 +1,707 @@
-{type 1114114 0 false type 11}
-{record 1114114 0 false record 11}
-{vector 1114114 0 false vector 11}
-{( 40 0 false  11}
-{int 1114114 0 false int 11}
-{x 1114114 0 false x 11}
-{, 44 0 false  11}
-{int 1114114 0 false int 11}
-{y 1114114 0 false y 11}
-{, 44 0 false  11}
-{int 1114114 0 false int 11}
-{z 1114114 0 false z 11}
-{) 41 0 false  11}
-{type 1114114 0 false type 12}
-{record 1114114 0 false record 12}
-{difficult 1114114 0 false difficult 12}
-{( 40 0 false  12}
-{vector 1114114 0 false vector 12}
-{v 1114114 0 false v 12}
-{, 44 0 false  12}
-{Coord 1114114 0 false Coord 12}
-{r 1114114 0 false r 12}
-{) 41 0 false  12}
-{func 1114114 0 false func 22}
-{line 1114114 0 false line 22}
-{( 40 0 false  22}
-{vector 1114114 0 false vector 22}
-{v 1114114 0 false v 22}
-{) 41 0 false  22}
-{{ 123 0 false  22}
-{Coord 1114114 0 false Coord 23}
-{p 1114114 0 false p 23}
-{; 59 0 false  23}
-{iter 1114114 0 false iter 26}
-{( 40 0 false  26}
-{i 1114114 0 false i 26}
-{:= 61 0 false  26}
-{0 1114115 0 false  26}
-{, 44 0 false  26}
-{v 1114114 0 false v 26}
-{. 46 0 false  26}
-{z 1114114 0 false z 26}
-{, 44 0 false  26}
-{2 1114115 2 false  26}
-{) 41 0 false  26}
-{{ 123 0 false  26}
-{p 1114114 0 false p 27}
-{. 46 0 false  27}
-{x 1114114 0 false x 27}
-{= 61 0 false  27}
-{v 1114114 0 false v 27}
-{. 46 0 false  27}
-{x 1114114 0 false x 27}
-{* 42 0 false  27}
-{i 1114114 0 false i 27}
-{; 59 0 false  27}
-{p 1114114 0 false p 28}
-{. 46 0 false  28}
-{y 1114114 0 false y 28}
-{= 61 0 false  28}
-{v 1114114 0 false v 28}
-{. 46 0 false  28}
-{y 1114114 0 false y 28}
-{* 42 0 false  28}
-{i 1114114 0 false i 28}
-{; 59 0 false  28}
-{circle 1114114 0 false circle 29}
-{( 40 0 false  29}
-{p 1114114 0 false p 29}
-{, 44 0 false  29}
-{2 1114115 2 false  29}
-{, 44 0 false  29}
-{1 1114115 1 false  29}
-{) 41 0 false  29}
-{; 59 0 false  29}
-{} 125 0 false  30}
-{} 125 0 false  31}
-{func 1114114 0 false func 34}
-{main 1114114 0 false main 34}
-{( 40 0 false  34}
-{) 41 0 false  34}
-{{ 123 0 false  34}
-{vector 1114114 0 false vector 35}
-{v 1114114 0 false v 35}
-{; 59 0 false  35}
-{Coord 1114114 0 false Coord 36}
-{pp 1114114 0 false pp 36}
-{; 59 0 false  36}
-{v 1114114 0 false v 38}
-{. 46 0 false  38}
-{x 1114114 0 false x 38}
-{= 61 0 false  38}
-{3 1114115 3 false  38}
-{; 59 0 false  38}
-{v 1114114 0 false v 39}
-{. 46 0 false  39}
-{y 1114114 0 false y 39}
-{= 61 0 false  39}
-{8 1114115 8 false  39}
-{; 59 0 false  39}
-{v 1114114 0 false v 40}
-{. 46 0 false  40}
-{z 1114114 0 false z 40}
-{= 61 0 false  40}
-{2 1114115 2 false  40}
-{; 59 0 false  40}
-{pp 1114114 0 false pp 41}
-{= 61 0 false  41}
-{[ 91 0 false  41}
-{4 1114115 4 false  41}
-{, 44 0 false  41}
-{45 1114115 45 false  41}
-{] 93 0 false  41}
-{; 59 0 false  41}
-{if 1114114 0 false if 42}
-{( 40 0 false  42}
-{v 1114114 0 false v 42}
-{. 46 0 false  42}
-{x 1114114 0 false x 42}
-{> 62 0 false  42}
-{3 1114115 3 false  42}
-{True 1114114 0 false True 42}
-{) 41 0 false  42}
-{{ 123 0 false  42}
-{circle 1114114 0 false circle 43}
-{( 40 0 false  43}
-{pp 1114114 0 false pp 43}
-{, 44 0 false  43}
-{2 1114115 2 false  43}
-{, 44 0 false  43}
-{0x1100001f 1114115 0 false  43}
-{) 41 0 false  43}
-{; 59 0 false  43}
-{} 125 0 false  44}
-{else 1114114 0 false else 44}
-{{ 123 0 false  44}
-{line 1114114 0 false line 45}
-{( 40 0 false  45}
-{v 1114114 0 false v 45}
-{) 41 0 false  45}
-{; 59 0 false  45}
-{line 1114114 0 false line 46}
-{( 40 0 false  46}
-{v 1114114 0 false v 46}
-{) 41 0 false  46}
-{; 59 0 false  46}
-{} 125 0 false  47}
-{line 1114114 0 false line 48}
-{( 40 0 false  48}
-{v 1114114 0 false v 48}
-{) 41 0 false  48}
-{; 59 0 false  48}
-{line 1114114 0 false line 49}
-{( 40 0 false  49}
-{v 1114114 0 false v 49}
-{) 41 0 false  49}
-{; 59 0 false  49}
-{iter 1114114 0 false iter 50}
-{( 40 0 false  50}
-{i 1114114 0 false i 50}
-{:= 61 0 false  50}
-{0 1114115 0 false  50}
-{, 44 0 false  50}
-{3 1114115 3 false  50}
-{, 44 0 false  50}
-{1 1114115 1 false  50}
-{) 41 0 false  50}
-{{ 123 0 false  50}
-{rect 1114114 0 false rect 51}
-{( 40 0 false  51}
-{pp 1114114 0 false pp 51}
-{, 44 0 false  51}
-{5 1114115 5 false  51}
-{, 44 0 false  51}
-{0xff 1114115 0 false  51}
-{) 41 0 false  51}
-{; 59 0 false  51}
-{} 125 0 false  52}
-{} 125 0 false  53}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
-End of file
-{ 0 0 false  0}
+Lexema: type
+Token type: 1114114
+Value: type
+Line: 11
+
+Lexema: record
+Token type: 1114114
+Value: record
+Line: 11
+
+Lexema: vector
+Token type: 1114114
+Value: vector
+Line: 11
+
+Line: 11
+
+Lexema: int
+Token type: 1114114
+Value: int
+Line: 11
+
+Lexema: x
+Token type: 1114114
+Value: x
+Line: 11
+
+Line: 11
+
+Lexema: int
+Token type: 1114114
+Value: int
+Line: 11
+
+Lexema: y
+Token type: 1114114
+Value: y
+Line: 11
+
+Line: 11
+
+Lexema: int
+Token type: 1114114
+Value: int
+Line: 11
+
+Lexema: z
+Token type: 1114114
+Value: z
+Line: 11
+
+Line: 11
+
+Lexema: type
+Token type: 1114114
+Value: type
+Line: 12
+
+Lexema: record
+Token type: 1114114
+Value: record
+Line: 12
+
+Lexema: difficult
+Token type: 1114114
+Value: difficult
+Line: 12
+
+Line: 12
+
+Lexema: vector
+Token type: 1114114
+Value: vector
+Line: 12
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 12
+
+Line: 12
+
+Lexema: Coord
+Token type: 1114114
+Value: Coord
+Line: 12
+
+Lexema: r
+Token type: 1114114
+Value: r
+Line: 12
+
+Line: 12
+
+Lexema: func
+Token type: 1114114
+Value: func
+Line: 22
+
+Lexema: line
+Token type: 1114114
+Value: line
+Line: 22
+
+Line: 22
+
+Lexema: vector
+Token type: 1114114
+Value: vector
+Line: 22
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 22
+
+Line: 22
+
+Line: 22
+
+Lexema: Coord
+Token type: 1114114
+Value: Coord
+Line: 23
+
+Lexema: p
+Token type: 1114114
+Value: p
+Line: 23
+
+Line: 23
+
+Lexema: iter
+Token type: 1114114
+Value: iter
+Line: 26
+
+Line: 26
+
+Lexema: i
+Token type: 1114114
+Value: i
+Line: 26
+
+Line: 26
+
+Lexema: 0
+Token type: 1114115
+Value: 0
+Line: 26
+
+Line: 26
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 26
+
+Line: 26
+
+Lexema: z
+Token type: 1114114
+Value: z
+Line: 26
+
+Line: 26
+
+Lexema: 2
+Token type: 1114115
+Value: 2
+Line: 26
+
+Line: 26
+
+Line: 26
+
+Lexema: p
+Token type: 1114114
+Value: p
+Line: 27
+
+Line: 27
+
+Lexema: x
+Token type: 1114114
+Value: x
+Line: 27
+
+Line: 27
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 27
+
+Line: 27
+
+Lexema: x
+Token type: 1114114
+Value: x
+Line: 27
+
+Line: 27
+
+Lexema: i
+Token type: 1114114
+Value: i
+Line: 27
+
+Line: 27
+
+Lexema: p
+Token type: 1114114
+Value: p
+Line: 28
+
+Line: 28
+
+Lexema: y
+Token type: 1114114
+Value: y
+Line: 28
+
+Line: 28
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 28
+
+Line: 28
+
+Lexema: y
+Token type: 1114114
+Value: y
+Line: 28
+
+Line: 28
+
+Lexema: i
+Token type: 1114114
+Value: i
+Line: 28
+
+Line: 28
+
+Lexema: circle
+Token type: 1114114
+Value: circle
+Line: 29
+
+Line: 29
+
+Lexema: p
+Token type: 1114114
+Value: p
+Line: 29
+
+Line: 29
+
+Lexema: 2
+Token type: 1114115
+Value: 2
+Line: 29
+
+Line: 29
+
+Lexema: 1
+Token type: 1114115
+Value: 1
+Line: 29
+
+Line: 29
+
+Line: 29
+
+Line: 30
+
+Line: 31
+
+Lexema: func
+Token type: 1114114
+Value: func
+Line: 34
+
+Lexema: main
+Token type: 1114114
+Value: main
+Line: 34
+
+Line: 34
+
+Line: 34
+
+Line: 34
+
+Lexema: vector
+Token type: 1114114
+Value: vector
+Line: 35
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 35
+
+Line: 35
+
+Lexema: Coord
+Token type: 1114114
+Value: Coord
+Line: 36
+
+Lexema: pp
+Token type: 1114114
+Value: pp
+Line: 36
+
+Line: 36
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 38
+
+Line: 38
+
+Lexema: x
+Token type: 1114114
+Value: x
+Line: 38
+
+Line: 38
+
+Lexema: 3
+Token type: 1114115
+Value: 3
+Line: 38
+
+Line: 38
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 39
+
+Line: 39
+
+Lexema: y
+Token type: 1114114
+Value: y
+Line: 39
+
+Line: 39
+
+Lexema: 8
+Token type: 1114115
+Value: 8
+Line: 39
+
+Line: 39
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 40
+
+Line: 40
+
+Lexema: z
+Token type: 1114114
+Value: z
+Line: 40
+
+Line: 40
+
+Lexema: 2
+Token type: 1114115
+Value: 2
+Line: 40
+
+Line: 40
+
+Lexema: pp
+Token type: 1114114
+Value: pp
+Line: 41
+
+Line: 41
+
+Line: 41
+
+Lexema: 4
+Token type: 1114115
+Value: 4
+Line: 41
+
+Line: 41
+
+Lexema: 45
+Token type: 1114115
+Value: 45
+Line: 41
+
+Line: 41
+
+Line: 41
+
+Lexema: if
+Token type: 1114114
+Value: if
+Line: 42
+
+Line: 42
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 42
+
+Line: 42
+
+Lexema: x
+Token type: 1114114
+Value: x
+Line: 42
+
+Line: 42
+
+Lexema: 3
+Token type: 1114115
+Value: 3
+Line: 42
+
+Lexema: True
+Token type: 1114114
+Value: True
+Line: 42
+
+Line: 42
+
+Line: 42
+
+Lexema: circle
+Token type: 1114114
+Value: circle
+Line: 43
+
+Line: 43
+
+Lexema: pp
+Token type: 1114114
+Value: pp
+Line: 43
+
+Line: 43
+
+Lexema: 2
+Token type: 1114115
+Value: 2
+Line: 43
+
+Line: 43
+
+Lexema: 0x1100001f
+Token type: 1114115
+Value: 0
+Line: 43
+
+Line: 43
+
+Line: 43
+
+Line: 44
+
+Lexema: else
+Token type: 1114114
+Value: else
+Line: 44
+
+Line: 44
+
+Lexema: line
+Token type: 1114114
+Value: line
+Line: 45
+
+Line: 45
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 45
+
+Line: 45
+
+Line: 45
+
+Lexema: line
+Token type: 1114114
+Value: line
+Line: 46
+
+Line: 46
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 46
+
+Line: 46
+
+Line: 46
+
+Line: 47
+
+Lexema: line
+Token type: 1114114
+Value: line
+Line: 48
+
+Line: 48
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 48
+
+Line: 48
+
+Line: 48
+
+Lexema: line
+Token type: 1114114
+Value: line
+Line: 49
+
+Line: 49
+
+Lexema: v
+Token type: 1114114
+Value: v
+Line: 49
+
+Line: 49
+
+Line: 49
+
+Lexema: iter
+Token type: 1114114
+Value: iter
+Line: 50
+
+Line: 50
+
+Lexema: i
+Token type: 1114114
+Value: i
+Line: 50
+
+Line: 50
+
+Lexema: 0
+Token type: 1114115
+Value: 0
+Line: 50
+
+Line: 50
+
+Lexema: 3
+Token type: 1114115
+Value: 3
+Line: 50
+
+Line: 50
+
+Lexema: 1
+Token type: 1114115
+Value: 1
+Line: 50
+
+Line: 50
+
+Line: 50
+
+Lexema: rect
+Token type: 1114114
+Value: rect
+Line: 51
+
+Line: 51
+
+Lexema: pp
+Token type: 1114114
+Value: pp
+Line: 51
+
+Line: 51
+
+Lexema: 5
+Token type: 1114115
+Value: 5
+Line: 51
+
+Line: 51
+
+Lexema: 0xff
+Token type: 1114115
+Value: 0
+Line: 51
+
+Line: 51
+
+Line: 51
+
+Line: 52
+
+Line: 53
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
+End of file token
+Token type: 1114112
+Line: 0
+
