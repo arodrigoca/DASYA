@@ -10,19 +10,56 @@ import (
 	"runtime/debug"
 	"strings"
 	"unicode"
+	"strconv"
 )
 
 //token types
 
+type TokType rune
+
 const(
-    TokId TokType = unicode.MaxASCII + iota
+		RuneEOF = unicode.MaxRune + 1 + iota
+		TokFunc
+    TokId
     TokValInt
-    TokSep
-    TokOp
-    TokEol
+		TokValBool
+		TokDMul
+		TokGreater
+		TokSmaller
+		TokEqual
+		TokDDEq
+		TokPercent = TokType('%')
+		TokVertBar = TokType('|')
+		TokAnd = TokType('&')
+		TokExcla = TokType('!')
+		TokPow = TokType('^')
+		TokSemiCol = TokType(';')
+		TokLCurly = TokType('{')
+		TokRCurly = TokType('}')
+		TokComma = TokType(',')
+		TokLBrack = TokType('[')
+		TokRBrack = TokType(']')
+		TokDot = TokType('.')
+		TokEol = TokType('\n')
+		TokLPar = TokType('(')
+		TokRPar = TokType(')')
+		TokAdd = TokType('+')
+		TokMul = TokType('*')
+		TokMin = TokType('-')
+		TokDiv = TokType('/')
+		TokEq = TokType('=')
+		TokEof = TokType(RuneEOF)
+		TokBad = TokType(0)
 )
 
-type TokType int
+type Token struct {
+	lexema string
+	Type TokType
+	TokValInt int64
+	TokValBool bool
+	TokValString string
+	line int
+}
 
 
 type RuneScanner interface {
@@ -38,14 +75,6 @@ type Lexer struct {
 	accepted []rune
 }
 
-type Token struct {
-	lexema  string
-	tokType TokType
-	value   int
-	line    int
-}
-
-const RuneEOF rune = 'ᛯ'
 
 func parseArguments() (string, bool) {
 
@@ -157,10 +186,12 @@ func (l *Lexer) lexOp() (t Token, err error) {
 		if look_token == '*' {
 			//power operator
 			t.lexema = l.accept()
+			t.Type = TokDMul
 
 		} else {
 			l.unget()
 			t.lexema = l.accept()
+			t.Type = TokType(r)
 		}
 
 	case '>', '<':
@@ -168,10 +199,16 @@ func (l *Lexer) lexOp() (t Token, err error) {
 		if look_token == '=' {
 			//comparison operator
 			t.lexema = l.accept()
+			if r == '>'{
+				t.Type = TokGreater
+			}else{
+				t.Type = TokSmaller
+			}
 
 		} else {
 			l.unget()
 			t.lexema = l.accept()
+			t.Type = TokType(r)
 		}
 
 	case '=':
@@ -179,30 +216,34 @@ func (l *Lexer) lexOp() (t Token, err error) {
 		look_token := l.get()
 		if look_token == '=' {
 			t.lexema = l.accept()
+			t.Type = TokEqual
 		} else {
 			l.unget()
 			t.lexema = l.accept()
+			t.Type = TokType(r)
 		}
 
     case ':':
         look_token := l.get()
 		if look_token == '=' {
 			t.lexema = l.accept()
+			t.Type = TokDDEq
 		} else {
 			l.unget()
 			t.lexema = l.accept()
+			t.Type = TokType(r)
 		}
 
 	default:
 		if strings.ContainsRune(ops, r) {
 			//correct operator
 			t.lexema = l.accept()
+			t.Type = TokType(r)
 		} else {
 			panic(errors.New("Bad operator"))
 		}
 
 	}
-
 	return t, err
 
 }
@@ -221,6 +262,8 @@ func (l *Lexer) lexId() (t Token, err error) {
 
 			l.unget()
 			t.lexema = l.accept()
+			t.Type = TokId
+			t.TokValString = t.lexema
 			break
 
 		}
@@ -236,6 +279,7 @@ func (l *Lexer) lexSep() (t Token, err error) {
 
 	if strings.ContainsRune(sep, r){
 		t.lexema = l.accept()
+		t.Type = TokType(r)
 		return t, nil
 
 	}else{
@@ -276,6 +320,8 @@ func (l *Lexer) lexNum() (t Token, err error) {
         default:
             l.unget()
             t.lexema = l.accept()
+						t.Type = TokValInt
+						t.TokValInt, err = strconv.ParseInt(t.lexema, 10, 64)
             return t, nil
         }
     }
@@ -311,10 +357,9 @@ func (l *Lexer) Lex() (t Token, err error) {
 			}
 
 		case RuneEOF:
-            fmt.Println("End of file")
+      fmt.Println("End of file")
 			t.lexema = l.accept()
-            t.tokType = TokEol
-            //fmt.Println(t.lexema)
+      //fmt.Println(t.lexema)
 			return t, nil
 
 		case '\n':
