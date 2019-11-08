@@ -1,3 +1,7 @@
+Lexema: bool
+Token type: TokDefBool
+Line: 10
+
 Lexema: type
 Token type: TokTypeDef
 Line: 11
@@ -16,8 +20,7 @@ Token type: (
 Line: 11
 
 Lexema: int
-Token type: TokId
-Value: int
+Token type: TokDefInt
 Line: 11
 
 Lexema: x
@@ -30,8 +33,7 @@ Token type: ,
 Line: 11
 
 Lexema: int
-Token type: TokId
-Value: int
+Token type: TokDefInt
 Line: 11
 
 Lexema: y
@@ -44,8 +46,7 @@ Token type: ,
 Line: 11
 
 Lexema: int
-Token type: TokId
-Value: int
+Token type: TokDefInt
 Line: 11
 
 Lexema: z
@@ -161,7 +162,7 @@ Value: i
 Line: 26
 
 Lexema: :=
-Token type: =
+Token type: TokDDEq
 Line: 26
 
 Lexema: 0
@@ -708,7 +709,7 @@ Value: i
 Line: 50
 
 Lexema: :=
-Token type: =
+Token type: TokDDEq
 Line: 50
 
 Lexema: 0
@@ -792,89 +793,5 @@ Line: 53
 
 End of file token
 Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
-
-End of file token
-Token type: TokEof
-Line: 0
+Line: 54
 

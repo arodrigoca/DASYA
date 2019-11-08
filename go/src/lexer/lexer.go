@@ -28,6 +28,8 @@ const (
 	TokIf
 	TokElse
 	TokIter
+	TokDefInt
+	TokDefBool
 	//
 
 	TokId
@@ -76,6 +78,8 @@ var reserved_words_map = map[string]Token{
 	"record": Token{lexema: "record", Type: TokRecord},
 	"True":   Token{lexema: "True", Type: TokValBool, TokValBool: true},
 	"False":  Token{lexema: "False", Type: TokValBool, TokValBool: false},
+	"int":    Token{lexema: "int", Type: TokDefInt},
+	"bool":   Token{lexema: "bool", Type: TokDefBool},
 }
 
 type Token struct {
@@ -198,7 +202,7 @@ func (l *Lexer) lexComment() {
 func (l *Lexer) lexOp() (t Token, err error) {
 
 	const (
-		ops = "+-*/><=%|&!^="
+		ops = "+-*/><=%|&!^=:"
 	)
 
 	r := l.get()
@@ -363,7 +367,7 @@ func (l *Lexer) Lex() (t Token, err error) {
 		}
 		switch r {
 
-		case '+', '-', '*', '/', '>', '<', '=': //operator or comment
+		case '+', '-', '*', '/', '>', '<', '=', ':': //operator or comment
 
 			if r == '/' {
 				look_token := l.get()
@@ -386,6 +390,7 @@ func (l *Lexer) Lex() (t Token, err error) {
 			//fmt.Println("End of file")
 			t.lexema = l.accept()
 			t.Type = TokEof
+			t.line = l.line
 			//fmt.Println(t.lexema)
 			return t, nil
 
@@ -477,6 +482,34 @@ func (t *Token) printToken() {
 			fmt.Printf("Lexema: %s\n", t.lexema)
 			fmt.Printf("Token type: TokIter\n")
 
+		case TokDMul:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokDMul\n")
+
+		case TokGreater:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokGreater\n")
+
+		case TokSmaller:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokSmaller\n")
+
+		case TokEqual:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokEqual\n")
+
+		case TokDDEq:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokDDEq\n")
+
+		case TokDefInt:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokDefInt\n")
+
+		case TokDefBool:
+			fmt.Printf("Lexema: %s\n", t.lexema)
+			fmt.Printf("Token type: TokDefBool\n")
+
 		default:
 			fmt.Printf("Lexema: %s\n", t.lexema)
 			fmt.Printf("Token type: %v\n", t.Type)
@@ -524,6 +557,9 @@ func main() {
 	for i := 0; i <= 200; i++ {
 		token, _ := myLexer.Lex()
 		token.printToken()
+		if token.Type == TokEof {
+			break
+		}
 	}
 
 }
