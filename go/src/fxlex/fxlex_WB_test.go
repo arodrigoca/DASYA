@@ -1,19 +1,10 @@
-package main
+package fxlex
 
 import (
 	"bufio"
 	"os"
 	"testing"
 )
-
-func TestCMDline(t *testing.T) {
-
-	os.Args = []string{"cmd", "-file ../../bin/lang.fx", "-debug"}
-	filename, Dflag := parseArguments()
-	t.Log(filename)
-	t.Log(Dflag)
-
-}
 
 func TestLexOp(t *testing.T) {
 

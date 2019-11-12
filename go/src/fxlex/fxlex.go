@@ -1,7 +1,6 @@
-package main
+package fxlex
 
 import (
-	"bufio"
 	"errors"
 	"flag"
 	"fmt"
@@ -102,6 +101,7 @@ type Lexer struct {
 	rs       RuneScanner
 	lastrune rune
 	accepted []rune
+	dflag bool
 }
 
 func parseArguments() (string, bool) {
@@ -117,10 +117,15 @@ func parseArguments() (string, bool) {
 	return *filenamePtr, *dflagPtr
 }
 
-func NewLexer(rs RuneScanner, filename string) (l *Lexer) {
+func NewLexer(rs RuneScanner, filename string, debug ...bool) (l *Lexer) {
 	l = &Lexer{line: 1}
 	l.file = filename
 	l.rs = rs
+	if v := len(debug); v > 0{
+		if debug[0]{
+			l.dflag = true
+		}
+	}
 	return l
 }
 
@@ -360,6 +365,24 @@ func (l *Lexer) lexNum() (t Token, err error) {
 
 func (l *Lexer) Lex() (t Token, err error) {
 
+	const (
+		BugMsg = "compiler error:"
+		RunMsg = "runtime error:"
+	)
+
+	defer func() {
+		if e := recover(); e != nil {
+			errs := fmt.Sprint(e)
+			if strings.HasPrefix(errs, "runtime error:") {
+				errs = strings.Replace(errs, RunMsg, BugMsg, 1)
+			}
+			err := errors.New(errs)
+			if l.dflag {
+				fmt.Fprintf(os.Stderr, "%s\n%s", err, debug.Stack())
+			}
+		}
+	}()
+
 	for r := l.get(); ; r = l.get() {
 		if unicode.IsSpace(r) && r != '\n' {
 			l.accept()
@@ -430,7 +453,7 @@ func (l *Lexer) Lex() (t Token, err error) {
 	}
 }
 
-func (t *Token) printToken() {
+func (t *Token) PrintToken() {
 
 	if t.Type > unicode.MaxRune {
 		switch t.Type {
@@ -520,46 +543,5 @@ func (t *Token) printToken() {
 	}
 	fmt.Printf("Line: %v\n", t.line)
 	fmt.Printf("\n")
-
-}
-
-func main() {
-
-	const (
-		BugMsg = "compiler error:"
-		RunMsg = "runtime error:"
-	)
-
-	filename, Dflag := parseArguments()
-
-	defer func() {
-		if r := recover(); r != nil {
-			errs := fmt.Sprint(r)
-			if strings.HasPrefix(errs, "runtime error:") {
-				errs = strings.Replace(errs, RunMsg, BugMsg, 1)
-			}
-			err := errors.New(errs)
-			if Dflag {
-				fmt.Fprintf(os.Stderr, "%s\n%s", err, debug.Stack())
-			}
-		}
-	}()
-
-	file, err := os.Open(filename)
-	if err != nil {
-		fmt.Println("Error: No such file or directory.")
-		return
-	}
-
-	reader := bufio.NewReader(file)
-	var myLexer *Lexer = NewLexer(reader, filename)
-
-	for i := 0; i <= 200; i++ {
-		token, _ := myLexer.Lex()
-		token.printToken()
-		if token.Type == TokEof {
-			break
-		}
-	}
 
 }
