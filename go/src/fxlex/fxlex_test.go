@@ -5,12 +5,14 @@ import(
   "os"
   . "fxlex"
   "bufio"
+  "flag"
 )
 
-func TestLexer(t *testing.T) {
+var filename = flag.String("file", "", "file to read")
 
-  filename := "../../bin/lang.fx"
+func TestLexerBasic(t *testing.T) {
 
+  filename := *filename
   file, err := os.Open(filename)
 	if err != nil {
 		t.Log("Error: No such file or directory.")
@@ -18,11 +20,11 @@ func TestLexer(t *testing.T) {
 	}
 
 	reader := bufio.NewReader(file)
-	var myLexer *Lexer = NewLexer(reader, filename)
+	var myLexer *Lexer = NewLexer(reader, filename, true)
 
-	for i := 0; i <= 200; i++ {
+	for{
 		token, _ := myLexer.Lex()
-		//token.PrintToken()
+		token.PrintToken()
 		if token.Type == TokEof {
 			break
 		}
