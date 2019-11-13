@@ -191,17 +191,13 @@ func (l *Lexer) accept() (tok string) {
 func (l *Lexer) lexComment() {
 
 	for r := l.get(); ; r = l.get() {
-		//fmt.Println(r)
-		if r == '\n' {
-			//fmt.Println("end of comment")
+		switch r{
+		case '\n':
+			l.unget()
 			l.accept()
-			break
-		} else {
-			l.accept()
+			return
 		}
 	}
-
-	return
 }
 
 func (l *Lexer) lexOp() (t Token, err error) {
@@ -209,6 +205,15 @@ func (l *Lexer) lexOp() (t Token, err error) {
 	const (
 		ops = "+-*/><=%|&!^=:"
 	)
+
+	//special case. RuneScanner doesn't allow to use unget() twice in a row (line 403), so
+	//the lookahead rune and the rune before that cannot be ungetted (comment case).
+
+	if string(l.accepted) == "/"{
+		t.lexema = l.accept()
+		t.Type = TokType('/')
+		return t, nil
+	}
 
 	r := l.get()
 
@@ -384,13 +389,13 @@ func (l *Lexer) Lex() (t Token, err error) {
 	}()
 
 	for r := l.get(); ; r = l.get() {
-		if unicode.IsSpace(r) && r != '\n' {
+		if unicode.IsSpace(r){
 			l.accept()
 			continue
 		}
 		switch r {
 
-		case '+', '-', '*', '/', '>', '<', '=', ':': //operator or comment
+		case '+', '-', '*', '/', '>', '<', '=', ':', '%', '|', '&', '!', '^': //operator or comment
 
 			if r == '/' {
 				look_token := l.get()

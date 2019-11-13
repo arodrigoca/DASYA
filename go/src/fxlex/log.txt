@@ -1,0 +1,1045 @@
+=== RUN   TestLexerBasic
+Lexema: type
+Token type: TokTypeDef
+Line: 11
+
+Lexema: record
+Token type: TokRecord
+Line: 11
+
+Lexema: vector
+Token type: TokId
+Value: vector
+Line: 11
+
+Lexema: (
+Token type: (
+Line: 11
+
+Lexema: int
+Token type: TokDefInt
+Line: 11
+
+Lexema: x
+Token type: TokId
+Value: x
+Line: 11
+
+Lexema: ,
+Token type: ,
+Line: 11
+
+Lexema: int
+Token type: TokDefInt
+Line: 11
+
+Lexema: y
+Token type: TokId
+Value: y
+Line: 11
+
+Lexema: ,
+Token type: ,
+Line: 11
+
+Lexema: int
+Token type: TokDefInt
+Line: 11
+
+Lexema: z
+Token type: TokId
+Value: z
+Line: 11
+
+Lexema: )
+Token type: )
+Line: 11
+
+Lexema: type
+Token type: TokTypeDef
+Line: 12
+
+Lexema: record
+Token type: TokRecord
+Line: 12
+
+Lexema: difficult
+Token type: TokId
+Value: difficult
+Line: 12
+
+Lexema: (
+Token type: (
+Line: 12
+
+Lexema: vector
+Token type: TokId
+Value: vector
+Line: 12
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 12
+
+Lexema: ,
+Token type: ,
+Line: 12
+
+Lexema: Coord
+Token type: TokId
+Value: Coord
+Line: 12
+
+Lexema: r
+Token type: TokId
+Value: r
+Line: 12
+
+Lexema: )
+Token type: )
+Line: 12
+
+Lexema: func
+Token type: TokFunc
+Line: 22
+
+Lexema: line
+Token type: TokId
+Value: line
+Line: 22
+
+Lexema: (
+Token type: (
+Line: 22
+
+Lexema: vector
+Token type: TokId
+Value: vector
+Line: 22
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 22
+
+Lexema: )
+Token type: )
+Line: 22
+
+Lexema: {
+Token type: {
+Line: 22
+
+Lexema: Coord
+Token type: TokId
+Value: Coord
+Line: 23
+
+Lexema: p
+Token type: TokId
+Value: p
+Line: 23
+
+Lexema: ;
+Token type: ;
+Line: 23
+
+Lexema: iter
+Token type: TokIter
+Line: 26
+
+Lexema: (
+Token type: (
+Line: 26
+
+Lexema: i
+Token type: TokId
+Value: i
+Line: 26
+
+Lexema: :=
+Token type: TokDDEq
+Line: 26
+
+Lexema: 0
+Token type: TokValInt
+Value: 0
+Line: 26
+
+Lexema: ,
+Token type: ,
+Line: 26
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 26
+
+Lexema: .
+Token type: .
+Line: 26
+
+Lexema: z
+Token type: TokId
+Value: z
+Line: 26
+
+Lexema: ,
+Token type: ,
+Line: 26
+
+Lexema: 2
+Token type: TokValInt
+Value: 2
+Line: 26
+
+Lexema: )
+Token type: )
+Line: 26
+
+Lexema: {
+Token type: {
+Line: 26
+
+Lexema: p
+Token type: TokId
+Value: p
+Line: 27
+
+Lexema: .
+Token type: .
+Line: 27
+
+Lexema: x
+Token type: TokId
+Value: x
+Line: 27
+
+Lexema: =
+Token type: =
+Line: 27
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 27
+
+Lexema: .
+Token type: .
+Line: 27
+
+Lexema: x
+Token type: TokId
+Value: x
+Line: 27
+
+Lexema: *
+Token type: *
+Line: 27
+
+Lexema: i
+Token type: TokId
+Value: i
+Line: 27
+
+Lexema: ;
+Token type: ;
+Line: 27
+
+Lexema: p
+Token type: TokId
+Value: p
+Line: 28
+
+Lexema: .
+Token type: .
+Line: 28
+
+Lexema: y
+Token type: TokId
+Value: y
+Line: 28
+
+Lexema: =
+Token type: =
+Line: 28
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 28
+
+Lexema: .
+Token type: .
+Line: 28
+
+Lexema: y
+Token type: TokId
+Value: y
+Line: 28
+
+Lexema: *
+Token type: *
+Line: 28
+
+Lexema: i
+Token type: TokId
+Value: i
+Line: 28
+
+Lexema: ;
+Token type: ;
+Line: 28
+
+Lexema: circle
+Token type: TokId
+Value: circle
+Line: 29
+
+Lexema: (
+Token type: (
+Line: 29
+
+Lexema: p
+Token type: TokId
+Value: p
+Line: 29
+
+Lexema: ,
+Token type: ,
+Line: 29
+
+Lexema: 2
+Token type: TokValInt
+Value: 2
+Line: 29
+
+Lexema: ,
+Token type: ,
+Line: 29
+
+Lexema: 1
+Token type: TokValInt
+Value: 1
+Line: 29
+
+Lexema: )
+Token type: )
+Line: 29
+
+Lexema: ;
+Token type: ;
+Line: 29
+
+Lexema: }
+Token type: }
+Line: 30
+
+Lexema: }
+Token type: }
+Line: 31
+
+Lexema: func
+Token type: TokFunc
+Line: 34
+
+Lexema: main
+Token type: TokMain
+Line: 34
+
+Lexema: (
+Token type: (
+Line: 34
+
+Lexema: )
+Token type: )
+Line: 34
+
+Lexema: {
+Token type: {
+Line: 34
+
+Lexema: vector
+Token type: TokId
+Value: vector
+Line: 35
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 35
+
+Lexema: ;
+Token type: ;
+Line: 35
+
+Lexema: Coord
+Token type: TokId
+Value: Coord
+Line: 36
+
+Lexema: pp
+Token type: TokId
+Value: pp
+Line: 36
+
+Lexema: ;
+Token type: ;
+Line: 36
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 38
+
+Lexema: .
+Token type: .
+Line: 38
+
+Lexema: x
+Token type: TokId
+Value: x
+Line: 38
+
+Lexema: =
+Token type: =
+Line: 38
+
+Lexema: 3
+Token type: TokValInt
+Value: 3
+Line: 38
+
+Lexema: ;
+Token type: ;
+Line: 38
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 39
+
+Lexema: .
+Token type: .
+Line: 39
+
+Lexema: y
+Token type: TokId
+Value: y
+Line: 39
+
+Lexema: =
+Token type: =
+Line: 39
+
+Lexema: 8
+Token type: TokValInt
+Value: 8
+Line: 39
+
+Lexema: ;
+Token type: ;
+Line: 39
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 40
+
+Lexema: .
+Token type: .
+Line: 40
+
+Lexema: z
+Token type: TokId
+Value: z
+Line: 40
+
+Lexema: =
+Token type: =
+Line: 40
+
+Lexema: 2
+Token type: TokValInt
+Value: 2
+Line: 40
+
+Lexema: ;
+Token type: ;
+Line: 40
+
+Lexema: pp
+Token type: TokId
+Value: pp
+Line: 41
+
+Lexema: =
+Token type: =
+Line: 41
+
+Lexema: [
+Token type: [
+Line: 41
+
+Lexema: 4
+Token type: TokValInt
+Value: 4
+Line: 41
+
+Lexema: ,
+Token type: ,
+Line: 41
+
+Lexema: 45
+Token type: TokValInt
+Value: 45
+Line: 41
+
+Lexema: ]
+Token type: ]
+Line: 41
+
+Lexema: ;
+Token type: ;
+Line: 41
+
+Lexema: Rect
+Token type: TokIf
+Line: 42
+
+Lexema: (
+Token type: (
+Line: 42
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 42
+
+Lexema: .
+Token type: .
+Line: 42
+
+Lexema: x
+Token type: TokId
+Value: x
+Line: 42
+
+Lexema: >
+Token type: >
+Line: 42
+
+Lexema: 3
+Token type: TokValInt
+Value: 3
+Line: 42
+
+Lexema: |
+Token type: |
+Line: 42
+
+Lexema: True
+Token type: TokValBool
+Value: true
+Line: 42
+
+Lexema: )
+Token type: )
+Line: 42
+
+Lexema: {
+Token type: {
+Line: 42
+
+Lexema: circle
+Token type: TokId
+Value: circle
+Line: 43
+
+Lexema: (
+Token type: (
+Line: 43
+
+Lexema: pp
+Token type: TokId
+Value: pp
+Line: 43
+
+Lexema: ,
+Token type: ,
+Line: 43
+
+Lexema: 2
+Token type: TokValInt
+Value: 2
+Line: 43
+
+Lexema: ,
+Token type: ,
+Line: 43
+
+Lexema: 0x1100001f
+Token type: TokValInt
+Value: 0
+Line: 43
+
+Lexema: )
+Token type: )
+Line: 43
+
+Lexema: ;
+Token type: ;
+Line: 43
+
+Lexema: }
+Token type: }
+Line: 44
+
+Lexema: else
+Token type: TokElse
+Line: 44
+
+Lexema: {
+Token type: {
+Line: 44
+
+Lexema: line
+Token type: TokId
+Value: line
+Line: 45
+
+Lexema: (
+Token type: (
+Line: 45
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 45
+
+Lexema: )
+Token type: )
+Line: 45
+
+Lexema: ;
+Token type: ;
+Line: 45
+
+Lexema: line
+Token type: TokId
+Value: line
+Line: 46
+
+Lexema: (
+Token type: (
+Line: 46
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 46
+
+Lexema: )
+Token type: )
+Line: 46
+
+Lexema: ;
+Token type: ;
+Line: 46
+
+Lexema: }
+Token type: }
+Line: 47
+
+Lexema: line
+Token type: TokId
+Value: line
+Line: 48
+
+Lexema: (
+Token type: (
+Line: 48
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 48
+
+Lexema: )
+Token type: )
+Line: 48
+
+Lexema: ;
+Token type: ;
+Line: 48
+
+Lexema: line
+Token type: TokId
+Value: line
+Line: 49
+
+Lexema: (
+Token type: (
+Line: 49
+
+Lexema: v
+Token type: TokId
+Value: v
+Line: 49
+
+Lexema: )
+Token type: )
+Line: 49
+
+Lexema: ;
+Token type: ;
+Line: 49
+
+Lexema: iter
+Token type: TokIter
+Line: 50
+
+Lexema: (
+Token type: (
+Line: 50
+
+Lexema: i
+Token type: TokId
+Value: i
+Line: 50
+
+Lexema: :=
+Token type: TokDDEq
+Line: 50
+
+Lexema: 0
+Token type: TokValInt
+Value: 0
+Line: 50
+
+Lexema: ,
+Token type: ,
+Line: 50
+
+Lexema: 3
+Token type: TokValInt
+Value: 3
+Line: 50
+
+Lexema: ,
+Token type: ,
+Line: 50
+
+Lexema: 1
+Token type: TokValInt
+Value: 1
+Line: 50
+
+Lexema: )
+Token type: )
+Line: 50
+
+Lexema: {
+Token type: {
+Line: 50
+
+Lexema: rect
+Token type: TokId
+Value: rect
+Line: 51
+
+Lexema: (
+Token type: (
+Line: 51
+
+Lexema: pp
+Token type: TokId
+Value: pp
+Line: 51
+
+Lexema: ,
+Token type: ,
+Line: 51
+
+Lexema: 5
+Token type: TokValInt
+Value: 5
+Line: 51
+
+Lexema: ,
+Token type: ,
+Line: 51
+
+Lexema: 0xff
+Token type: TokValInt
+Value: 0
+Line: 51
+
+Lexema: )
+Token type: )
+Line: 51
+
+Lexema: ;
+Token type: ;
+Line: 51
+
+Lexema: }
+Token type: }
+Line: 52
+
+Lexema: }
+Token type: }
+Line: 53
+
+Token type: TokEof
+Line: 54
+
+--- PASS: TestLexerBasic (0.00s)
+=== RUN   TestVoidFile
+Token type: TokEof
+Line: 1
+
+--- PASS: TestVoidFile (0.00s)
+=== RUN   TestStringFile
+Lexema: type
+Token type: TokTypeDef
+Line: 2
+
+Lexema: record
+Token type: TokRecord
+Line: 2
+
+Lexema: vector
+Token type: TokId
+Value: vector
+Line: 2
+
+Lexema: (
+Token type: (
+Line: 2
+
+Lexema: int
+Token type: TokDefInt
+Line: 2
+
+Lexema: x
+Token type: TokId
+Value: x
+Line: 2
+
+Lexema: ,
+Token type: ,
+Line: 2
+
+Lexema: int
+Token type: TokDefInt
+Line: 2
+
+Lexema: y
+Token type: TokId
+Value: y
+Line: 2
+
+Lexema: ,
+Token type: ,
+Line: 2
+
+Lexema: int
+Token type: TokDefInt
+Line: 2
+
+Lexema: z
+Token type: TokId
+Value: z
+Line: 2
+
+Lexema: )
+Token type: )
+Line: 2
+
+Lexema: tpe
+Token type: TokId
+Value: tpe
+Line: 3
+
+Lexema: recrd
+Token type: TokId
+Value: recrd
+Line: 3
+
+Lexema: vector
+Token type: TokId
+Value: vector
+Line: 3
+
+Lexema: intx
+Token type: TokId
+Value: intx
+Line: 3
+
+Lexema: int
+Token type: TokDefInt
+Line: 3
+
+Lexema: ,
+Token type: ,
+Line: 3
+
+Lexema: y
+Token type: TokId
+Value: y
+Line: 3
+
+Lexema: ,
+Token type: ,
+Line: 3
+
+Lexema: intz
+Token type: TokId
+Value: intz
+Line: 3
+
+Token type: TokEof
+Line: 3
+
+--- PASS: TestStringFile (0.00s)
+=== RUN   TestLexOp
+Lexema: +
+Token type: +
+Line: 1
+
+Lexema: -
+Token type: -
+Line: 1
+
+Lexema: *
+Token type: *
+Line: 1
+
+Lexema: /
+Token type: /
+Line: 1
+
+Lexema: >
+Token type: >
+Line: 1
+
+Lexema: <=
+Token type: TokSmaller
+Line: 1
+
+Lexema: %
+Token type: %
+Line: 1
+
+Lexema: |
+Token type: |
+Line: 1
+
+Lexema: &
+Token type: &
+Line: 1
+
+Lexema: !
+Token type: !
+Line: 1
+
+Lexema: ^
+Token type: ^
+Line: 1
+
+Lexema: =
+Token type: =
+Line: 1
+
+Lexema: :
+Token type: :
+Line: 1
+
+Lexema: <=
+Token type: TokSmaller
+Line: 1
+
+Lexema: >=
+Token type: TokGreater
+Line: 1
+
+Lexema: :=
+Token type: TokDDEq
+Line: 1
+
+Token type: TokEof
+Line: 1
+
+--- PASS: TestLexOp (0.00s)
+=== RUN   TestLexNum
+Lexema: 0xff
+Token type: TokValInt
+Value: 0
+Line: 1
+
+Lexema: 48
+Token type: TokValInt
+Value: 48
+Line: 1
+
+Token type: TokEof
+Line: 1
+
+--- PASS: TestLexNum (0.00s)
+=== RUN   TestLexSep
+Lexema: (
+Token type: (
+Line: 1
+
+Lexema: )
+Token type: )
+Line: 1
+
+Lexema: ,
+Token type: ,
+Line: 1
+
+Lexema: ;
+Token type: ;
+Line: 1
+
+Lexema: [
+Token type: [
+Line: 1
+
+Lexema: ]
+Token type: ]
+Line: 1
+
+Lexema: {
+Token type: {
+Line: 1
+
+Lexema: }
+Token type: }
+Line: 1
+
+Lexema: .
+Token type: .
+Line: 1
+
+Token type: TokEof
+Line: 1
+
+--- PASS: TestLexSep (0.00s)
+=== RUN   TestLexComment
+--- PASS: TestLexComment (0.00s)
+=== RUN   TestLexId
+Lexema: abcd1234_0xff
+Token type: TokId
+Value: abcd1234_0xff
+Line: 1
+
+Token type: TokEof
+Line: 1
+
+--- PASS: TestLexId (0.00s)
+PASS
+ok  	fxlex	0.004s
