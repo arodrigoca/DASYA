@@ -1,4 +1,4 @@
-To test the lexer, it can by:
+To test the lexer, it can be done by:
 
 1-Run all tests, incluiding the one using a file:
 
