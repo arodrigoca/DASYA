@@ -79,7 +79,7 @@ type Lexer struct {
 	rs       RuneScanner
 	lastrune rune
 	accepted []rune
-	dflag bool
+	dflag    bool
 }
 
 func parseArguments() (string, bool) {
@@ -99,8 +99,8 @@ func NewLexer(rs RuneScanner, filename string, debug ...bool) (l *Lexer) {
 	l = &Lexer{line: 1}
 	l.file = filename
 	l.rs = rs
-	if v := len(debug); v > 0{
-		if debug[0]{
+	if v := len(debug); v > 0 {
+		if debug[0] {
 			l.dflag = true
 		}
 	}
@@ -169,7 +169,7 @@ func (l *Lexer) accept() (tok string) {
 func (l *Lexer) lexComment() {
 
 	for r := l.get(); ; r = l.get() {
-		switch r{
+		switch r {
 		case '\n':
 			l.unget()
 			l.accept()
@@ -187,7 +187,7 @@ func (l *Lexer) lexOp() (t Token, err error) {
 	//special case. RuneScanner doesn't allow to use unget() twice in a row (line 403), so
 	//the lookahead rune and the rune before that cannot be ungetted (comment case).
 
-	if string(l.accepted) == "/"{
+	if string(l.accepted) == "/" {
 		t.lexema = l.accept()
 		t.Type = TokType('/')
 		return t, nil
@@ -367,7 +367,7 @@ func (l *Lexer) Lex() (t Token, err error) {
 	}()
 
 	for r := l.get(); ; r = l.get() {
-		if unicode.IsSpace(r){
+		if unicode.IsSpace(r) {
 			l.accept()
 			continue
 		}
