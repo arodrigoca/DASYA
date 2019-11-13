@@ -13,6 +13,10 @@ var filename = flag.String("file", "", "file to read")
 
 func TestLexerBasic(t *testing.T) {
 
+  //to run this test:
+  //go test -run TestLexerBasic -v -args -file "../../bin/lang.fx"
+  //otherwise, it won't do anything
+
   filename := *filename
   file, err := os.Open(filename)
 	if err != nil {
