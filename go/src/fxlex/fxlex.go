@@ -41,28 +41,6 @@ const (
 	TokDDEq
 	TokEof = TokType(RuneEOF)
 	TokBad = TokType(0)
-	/*
-		    TokPercent = TokType('%')
-			TokVertBar = TokType('|')
-			TokAnd     = TokType('&')
-			TokExcla   = TokType('!')
-			TokPow     = TokType('^')
-			TokSemiCol = TokType(';')
-			TokLCurly  = TokType('{')
-			TokRCurly  = TokType('}')
-			TokComma   = TokType(',')
-			TokLBrack  = TokType('[')
-			TokRBrack  = TokType(']')
-			TokDot     = TokType('.')
-			TokEol     = TokType('\n')
-			TokLPar    = TokType('(')
-			TokRPar    = TokType(')')
-			TokAdd     = TokType('+')
-			TokMul     = TokType('*')
-			TokMin     = TokType('-')
-			TokDiv     = TokType('/')
-			TokEq      = TokType('=')
-	*/
 )
 
 //key is token lexema and value is the corrected token
@@ -423,11 +401,7 @@ func (l *Lexer) Lex() (t Token, err error) {
 			return t, nil
 
 		case '\n':
-			//t.lexema = l.accept()
-			//t.line = l.line
 			l.accept()
-			//fmt.Println("Lexemma is line end")
-			//return t, nil
 			continue
 
 		case '(', ')', ',', ';', '[', ']', '{', '}', '.':
