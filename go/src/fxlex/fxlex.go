@@ -459,7 +459,7 @@ func (t *Token) PrintToken() {
 		switch t.Type {
 
 		case TokEof:
-			fmt.Println("End of file token")
+			//fmt.Println("End of file token")
 			fmt.Printf("Token type: TokEof\n")
 
 		case TokId:

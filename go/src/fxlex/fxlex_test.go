@@ -6,6 +6,7 @@ import(
   . "fxlex"
   "bufio"
   "flag"
+  "strings"
 )
 
 var filename = flag.String("file", "", "file to read")
@@ -20,7 +21,7 @@ func TestLexerBasic(t *testing.T) {
 	}
 
 	reader := bufio.NewReader(file)
-	var myLexer *Lexer = NewLexer(reader, filename, true)
+	var myLexer *Lexer = NewLexer(reader, filename, true)//true indicates if debug is activated
 
 	for{
 		token, _ := myLexer.Lex()
@@ -30,4 +31,33 @@ func TestLexerBasic(t *testing.T) {
 		}
 	}
 
+}
+
+func TestVoidFile(t *testing.T) {
+
+  const filename = "testfile"
+  reader := bufio.NewReader(strings.NewReader(""))
+  var myLexer *Lexer = NewLexer(reader, filename, true)//true indicates if debug is activated
+  for{
+    token, _ := myLexer.Lex()
+    token.PrintToken()
+    if token.Type == TokEof {
+      break
+    }
+  }
+
+}
+
+func TestStringFile(t *testing.T) {
+
+  const filename = "testfile"
+  reader := bufio.NewReader(strings.NewReader("//comment\ntype record vector(int x, int y, int z)\ntpe recrd vector intx int,y, intz"))
+  var myLexer *Lexer = NewLexer(reader, filename, true)//true indicates if debug is activated
+  for{
+    token, _ := myLexer.Lex()
+    token.PrintToken()
+    if token.Type == TokEof {
+      break
+    }
+  }
 }
