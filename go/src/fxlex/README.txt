@@ -4,6 +4,6 @@ To test the lexer, it can be done by:
 
   go test -v -args -file "<filepath>"
 
-2-Run all test, except for the one using file:
+2-Run all tests, except for the one using file:
 
   go test -v
