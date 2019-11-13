@@ -1,0 +1,24 @@
+//la asignación no es una expresión en este caso
+//un programa es PROG , una o varias sentencias y un final de fichero
+//<PROG>, <SENT>, <EOF>
+//las sentencias son expresiones con final de línea o asignaciones con final de línea
+//<EXPR>, <ASIG>
+//las expresiones pueden tener más expresiones dentro
+//
+
+<PROG> ::= <PROG> <SENT> |
+           <SENT> <EOF> |
+           <EOF>
+
+<SENT> ::= <EXPR> <EOL>|
+           <ASIG> <EOL>
+
+<EXPR> ::= <EXPR> <EXPR>
+           <EXPR> '|' <EXPR> |
+           <EXPR> '&' <EXPR> |
+           <EXPR> 'then' <EXPR> |
+           '(' <EXPR> ')' |
+           <ID> |
+           bool
+
+<ASIG> ::= <ID> ':' <EXPR>
