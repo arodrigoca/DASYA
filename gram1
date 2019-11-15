@@ -9,14 +9,11 @@
 //<ID>
 
 
-<PROG> ::= <PROG> <SENT> |
+<PROG> ::= <SENT> <PROG> |
            <SENT> <EOF> |
            <EOF>
 
-
-<PROG> ::= <SENT> <PROG> |
-           <SENT> <EOF>
-
+//Esta regla NO permite que una sentencia NO termine en un final de línea
 
 <SENT> ::= <EXPR> <EOL>|
            <ASIG> <EOL>|
@@ -28,14 +25,8 @@
            <EXPR> 'then' <EXPR> |
            '(' <EXPR> ')' |
            'not' <ID>|
-           bool
+           boolVal
 
 
 <ASIG> ::= <ID> ':' <EXPR> |
            <ID>
-
-
-<ID> ::= char num <ID> |
-         char <ID> |
-         char |
-         'false'
