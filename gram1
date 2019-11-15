@@ -4,7 +4,10 @@
 //las sentencias son expresiones con final de línea o asignaciones con final de línea
 //<EXPR>, <ASIG>
 //las expresiones pueden tener más expresiones dentro
-//
+//las asignaciones no son expresiones ya que las expresiones devuelven valor
+//los ID pueden ser alfanuméricos seguidos de números y luego más alfanuméricos y números...etc
+//<ID>
+
 
 <PROG> ::= <PROG> <SENT> |
            <SENT> <EOF> |
@@ -13,12 +16,17 @@
 <SENT> ::= <EXPR> <EOL>|
            <ASIG> <EOL>
 
-<EXPR> ::= <EXPR> <EXPR>
-           <EXPR> '|' <EXPR> |
+<EXPR> ::= <EXPR> '|' <EXPR> |
            <EXPR> '&' <EXPR> |
            <EXPR> 'then' <EXPR> |
            '(' <EXPR> ')' |
-           <ID> |
+           'not' <ID>|
            bool
 
-<ASIG> ::= <ID> ':' <EXPR>
+<ASIG> ::= <ID> ':' <EXPR> |
+           <ID>
+
+<ID> ::= char num <ID> |
+         char <ID> |
+         char |
+         'false'
