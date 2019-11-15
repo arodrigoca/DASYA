@@ -13,8 +13,15 @@
            <SENT> <EOF> |
            <EOF>
 
+
+<PROG> ::= <SENT> <PROG> |
+           <SENT> <EOF>
+
+
 <SENT> ::= <EXPR> <EOL>|
-           <ASIG> <EOL>
+           <ASIG> <EOL>|
+           <EOL>
+
 
 <EXPR> ::= <EXPR> '|' <EXPR> |
            <EXPR> '&' <EXPR> |
@@ -23,8 +30,10 @@
            'not' <ID>|
            bool
 
+
 <ASIG> ::= <ID> ':' <EXPR> |
            <ID>
+
 
 <ID> ::= char num <ID> |
          char <ID> |
