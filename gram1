@@ -31,14 +31,14 @@
 //La anterior gramática es ambigua, así hay que arreglarla
 //Ahora:
 
-<EXPR> ::= <NOT> '|' <EXPR> |
-           <NOT> '&' <EXPR> |
-           <NOT> 'then' <EXPR> |
+<EXPR>* ::= <EXPR> '|' <EXPR> |
+            <EXPR> '&' <EXPR> |
+            <EXPR> 'then' <EXPR> |
+            not <ATOM>
+            <ATOM>
+
+<ATOM> ::= not <ID> |
+           not boolVal |
            <ID> |
-           boolVal
-
-<NOT> ::= <NOT> <ELEM> |
-          <ELEM>
-
-<ELEM> ::= boolVal |
-          '(' <EXPR> ')'
+           boolVal |
+           '(' <EXPR> ')'
