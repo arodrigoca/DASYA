@@ -8,7 +8,6 @@
 //los ID pueden ser alfanuméricos seguidos de números y luego más alfanuméricos y números...etc
 //<ID>
 
-
 <PROG> ::= <SENT> <PROG> |
            <SENT> <EOF> |
            <EOF>
@@ -19,14 +18,27 @@
            <ASIG> <EOL>|
            <EOL>
 
-
 <EXPR> ::= <EXPR> '|' <EXPR> |
            <EXPR> '&' <EXPR> |
            <EXPR> 'then' <EXPR> |
            '(' <EXPR> ')' |
-           'not' <ID>|
+           'not' <EXPR>|
            <ID> |
            boolVal
 
-
 <ASIG> ::= <ID> ':' <EXPR>
+
+//La anterior gramática es ambigua, así hay que arreglarla
+//Ahora:
+
+<EXPR> ::= <NOT> '|' <EXPR> |
+           <NOT> '&' <EXPR> |
+           <NOT> 'then' <EXPR> |
+           <ID> |
+           boolVal
+
+<NOT> ::= <NOT> <ELEM> |
+          <ELEM>
+
+<ELEM> ::= boolVal |
+          '(' <EXPR> ')'
