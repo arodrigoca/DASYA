@@ -68,9 +68,7 @@
             <IMPL> |
             not <IMPL> |
             <IMPL>
-            //not <ATOM>
-            //<ATOM>
-
+            
 <IMPL> :: = <ATOM> 'then' <IMPL> |
             <ATOM>
 
@@ -83,4 +81,4 @@
 <ASIG> ::= <ID> ':' <EXPR>
 
 //En este momento, la gramática ya especifica la precedencia de operadores y no es recursiva por la izquierda.
-//No hay backtracking posible, así que la gramática ya es LL(1)
+//Comprobar backtracking
