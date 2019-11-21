@@ -18,9 +18,9 @@
            <ASIG> <EOL>|
            <EOL>
 
-<EXPR> ::= <EXPR> '|' <EXPR> |
+<EXPR> ::= <EXPR> 'then' <EXPR> |
+           <EXPR> '|' <EXPR> |
            <EXPR> '&' <EXPR> |
-           <EXPR> 'then' <EXPR> |
            '(' <EXPR> ')' |
            'not' <EXPR>|
            <ID> |
@@ -29,11 +29,19 @@
 <ASIG> ::= <ID> ':' <EXPR>
 
 //La anterior gramática es ambigua, así hay que arreglarla
-//Ahora:
+//Se arregla el NOT:
 
-<EXPR>* ::= <EXPR> '|' <EXPR> |
+<PROG> ::= <SENT> <PROG> |
+           <SENT> <EOF> |
+           <EOF>
+
+<SENT> ::= <EXPR> <EOL>|
+           <ASIG> <EOL>|
+           <EOL>
+
+<EXPR> ::=  <EXPR> 'then' <EXPR> |
+            <EXPR> '|' <EXPR> |
             <EXPR> '&' <EXPR> |
-            <EXPR> 'then' <EXPR> |
             not <ATOM>
             <ATOM>
 
@@ -42,3 +50,37 @@
            <ID> |
            boolVal |
            '(' <EXPR> ')'
+
+<ASIG> ::= <ID> ':' <EXPR>
+
+//Se arregla el THEN y la gramática queda como:
+
+<PROG> ::= <SENT> <PROG> |
+           <SENT> <EOF> |
+           <EOF>
+
+<SENT> ::= <EXPR> <EOL>|
+           <ASIG> <EOL>|
+           <EOL>
+
+<EXPR> ::=  <IMPL> '|' <EXPR> |
+            <IMPL> '&' <EXPR> |
+            <IMPL> |
+            not <IMPL> |
+            <IMPL>
+            //not <ATOM>
+            //<ATOM>
+
+<IMPL> :: = <ATOM> 'then' <IMPL> |
+            <ATOM>
+
+<ATOM> ::= not <ID> |
+           not boolVal |
+           <ID> |
+           boolVal |
+           '(' <EXPR> ')'
+
+<ASIG> ::= <ID> ':' <EXPR>
+
+//En este momento, la gramática ya especifica la precedencia de operadores y no es recursiva por la izquierda.
+//No hay backtracking posible, así que la gramática ya es LL(1)
