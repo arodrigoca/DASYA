@@ -17,6 +17,7 @@ func TestLexer(t *testing.T) {
 	//go test -v -args -file "<filepath>"
 	//otherwise, if this test file is ran with go test, the rest of the
 	//test file will be executed
+	//this test will print the token obtained with lex and then the token obtained with peek
 
 	filename := *filename
 	file, err := os.Open(filename)
@@ -30,7 +31,9 @@ func TestLexer(t *testing.T) {
 
 	for {
 		token, _ := myLexer.Lex()
+		token_l, _ := myLexer.Peek()
 		token.PrintToken()
+		token_l.PrintToken()
 		if token.Type == TokEof {
 			break
 		}

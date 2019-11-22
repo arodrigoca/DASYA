@@ -79,6 +79,7 @@ type Lexer struct {
 	rs       RuneScanner
 	lastrune rune
 	accepted []rune
+	tokSaved *Token
 	dflag    bool
 }
 
@@ -346,6 +347,16 @@ func (l *Lexer) lexNum() (t Token, err error) {
 	}
 }
 
+func (l *Lexer) Peek() (t Token, err error) {
+
+	t, err = l.Lex()
+	if err == nil {
+		l.tokSaved = &t
+	}
+	return t, nil
+
+}
+
 func (l *Lexer) Lex() (t Token, err error) {
 
 	const (
@@ -365,6 +376,12 @@ func (l *Lexer) Lex() (t Token, err error) {
 			}
 		}
 	}()
+
+	if l.tokSaved != nil {
+		t = *l.tokSaved
+		l.tokSaved = nil
+		return t, nil
+	}
 
 	for r := l.get(); ; r = l.get() {
 		if unicode.IsSpace(r) {
