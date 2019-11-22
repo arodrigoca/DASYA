@@ -42,11 +42,10 @@
 <EXPR> ::=  <EXPR> 'then' <EXPR> |
             <EXPR> '|' <EXPR> |
             <EXPR> '&' <EXPR> |
-            not <ATOM>
             <ATOM>
 
-<ATOM> ::= not <ID> |
-           not boolVal |
+<ATOM> ::=
+           not <EXPR>
            <ID> |
            boolVal |
            '(' <EXPR> ')'
