@@ -10,8 +10,15 @@
            <FUNC> <EOF> |
            <EOF>
 
-<FUNC> :: = 'func' '_' 'main' '(' ')' '{' <FCONTENT> '}'
-             <FDEC> '{' <FCONTENT> '}' |
+//Una función es su declaración y su contenido
+
+<FUNC> :: = <FDEC> '{' <FCONTENT> '}'
+
+//La declaración de una función es o func main() o bien func id 
+
+<FDEC> = 'func' '_' 'main' '(' ')' |
+         'func' '_' <FUNCID> '(' ')'
 
 
-<FDEC> = 'func' '_' <FUNCID> '(' ')'
+//El contenido de una función pueden ser más funciones, declaraciones, etc
+<FCONTENT> :: = <FUNC>
