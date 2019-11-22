@@ -89,3 +89,12 @@
 //
 //          <ATOM> 'then' <IMPL> |
 //          <ATOM>
+
+<OR> ::= '|' <ATOM> <OR> |
+          <EMPTY>
+
+<AND> ::= '&' <ATOM> <AND> |
+         <EMPTY>
+
+<THEN> :: = 'then' <ATOM> <THEN> |
+            <EMPTY>
