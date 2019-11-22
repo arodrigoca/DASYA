@@ -14,7 +14,7 @@
 
 <FUNC> :: = <FDEC> '{' <FCONTENT> '}'
 
-//La declaración de una función es o func main() o bien func id 
+//La declaración de una función es o func main() o bien func id ( cosas )
 
 <FDEC> = 'func' '_' 'main' '(' ')' |
          'func' '_' <FUNCID> '(' ')'
