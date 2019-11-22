@@ -1,0 +1,9 @@
+//gramática para FX simplificado
+//no hay operadores, expresiones , etc..
+//solo hay declaraciones y controles
+
+<PROG> ::= <STMNT> <PROG> |
+           <STMNT> <EOF> |
+           <EOF>
+
+<STMNT>
