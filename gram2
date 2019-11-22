@@ -2,8 +2,16 @@
 //no hay operadores, expresiones , etc..
 //solo hay declaraciones y controles
 
-<PROG> ::= <STMNT> <PROG> |
-           <STMNT> <EOF> |
+//Símbolo inicial: <PROG>
+//Un programa son una o varias funciones
+//En esta gramática en particular voy a permitir que haya un programa vacío y sin main
+
+<PROG> ::= <FUNC> <PROG> |
+           <FUNC> <EOF> |
            <EOF>
 
-<STMNT>
+<FUNC> :: = 'func' '_' 'main' '(' ')' '{' <FCONTENT> '}'
+             <FDEC> '{' <FCONTENT> '}' |
+
+
+<FDEC> = 'func' '_' <FUNCID> '(' ')'
