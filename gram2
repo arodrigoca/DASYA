@@ -35,6 +35,13 @@
 
 
 //El contenido de una función pueden ser más funciones, declaraciones, bucle
-<FCONTENT> :: = <FUNC> <FCONTENT> |
 
-                
+<FCONTENT> ::= <FUNC> <FCONTENT> |
+               <ITER> <FCONTENT> |
+               <DEC> <FCONTENT>
+
+<ATOM> ::= <ID> |
+          intval
+
+<DEC> ::= 'rect' '(' <ATOM>, <ATOM>, <ATOM>, <ATOM> ')' |
+          'circle' '(' <ATOM>, <ATOM>, <ATOM>, <ATOM> ')'
