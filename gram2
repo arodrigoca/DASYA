@@ -14,11 +14,27 @@
 
 <FUNC> :: = <FDEC> '{' <FCONTENT> '}'
 
-//La declaración de una función es o func main() o bien func id ( cosas )
+//La declaración de una función es o func main() o bien func id ( argumentos )
 
-<FDEC> = 'func' '_' 'main' '(' ')' |
-         'func' '_' <FUNCID> '(' ')'
+<FDEC> ::= 'func' '_' 'main' '(' ')' |
+         'func' '_' <FUNCID> '(' <FARGS> ')'
+
+//Los argumentos son <tipo de datos> <espacio> identificador
+//puede haber solo un argumento o varios, separado por ,
+
+<FARGS> ::= <DATATYPE> '_' <ID>  ',' <FARGS> |
+            <DATATYPE> '_' <ID>
 
 
-//El contenido de una función pueden ser más funciones, declaraciones, etc
-<FCONTENT> :: = <FUNC>
+//El tipo de datos es un literal de string que puede ser circle, rect o int
+
+
+<DATATYPE> ::= 'circle' |
+               'rect' |
+               'int'
+
+
+//El contenido de una función pueden ser más funciones, declaraciones, bucle
+<FCONTENT> :: = <FUNC> <FCONTENT> |
+
+                
