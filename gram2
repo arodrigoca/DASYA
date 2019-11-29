@@ -44,7 +44,7 @@
 
 //<Atom tiene que ser en realidad una expresión>
 
-<DEC> ::= <ID> '(' <ATOM>, <ATOM>, <ATOM>, <ATOM> ')'
+<DEC> ::= <ID> '(' <ATOM>, <ATOM>, <ATOM>, <ATOM> ')' ";"
 
 <ATOM> ::= <ID> |
            intval
