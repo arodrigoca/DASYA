@@ -17,7 +17,7 @@
 //La declaración de una función es o func main() o bien func id ( argumentos )
 
 <FDEC> ::= 'func' '_' 'main' '(' ')' |
-         'func' '_' <FUNCID> '(' <FARGS> ')'
+         'func' '_' <ID> '(' <FARGS> ')'
 
 //Los argumentos son <tipo de datos> <espacio> identificador
 //puede haber solo un argumento o varios, separado por ','
@@ -44,10 +44,9 @@
 
 //<Atom tiene que ser en realidad una expresión>
 
-<DEC> ::= 'rect' '(' <ATOM>, <ATOM>, <ATOM>, <ATOM> ')' |
-          'circle' '(' <ATOM>, <ATOM>, <ATOM>, <ATOM> ')'
+<DEC> ::= <ID> '(' <ATOM>, <ATOM>, <ATOM>, <ATOM> ')'
 
 <ATOM> ::= <ID> |
            intval
 
-<ITER> ::= //TODO
+<ITER> ::= 'iter' '(' <ID> ':=' <ATOM> ';' <ATOM> ',' <ATOM> ')' '{' <BODY> '}'
