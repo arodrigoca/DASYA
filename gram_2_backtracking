@@ -1,0 +1,51 @@
+//gramática para FX simplificado
+//no hay operadores, expresiones , etc..
+
+
+//Símbolo inicial: <PROG>
+//Un programa son una o varias funciones
+//En esta gramática en particular voy a permitir que haya un programa vacío y sin main
+
+<PROG> ::= <FUNC> <PROG> |
+           <FUNC> <EOF> |
+           <EOF>
+
+//Una función es su firma y el cuerpo
+
+<FUNC> ::= <FSIG> '{' <BODY> '}'
+
+//La firma de una función es func id ( argumentos )
+//en este caso no existe el retorno de valores
+
+<FSIG> ::= 'func' '_' <ID> '(' <FARGS> ')'
+
+//Los argumentos son <tipo de datos> <espacio> identificador
+//puede haber solo un argumento o varios, separado por ','
+//puede no haber argumentos
+//los argumentos solo pueden ser enteros con su identificador
+
+<FARGS> ::= <DATATYPE> '_' <ID>  ',' <FARGS> |
+            <DATATYPE> '_' <ID> |
+            <EMPTY>
+
+//El tipo de dato es un literal de string que puede ser int
+
+<DATATYPE> ::=  'int'
+
+//El body pueden ser más funciones, declaraciones, bucle
+
+<BODY> ::= <FUNC> <BODY> |
+           <DEC> <BODY> |
+           <ITER> <BODY> |
+           <EMPTY>
+
+//la declaración puede ser del tipo rect(bla,bla,bla)
+//o bien puede ser declarar una variable como int x = 4
+
+<DEC> ::= <ID> '(' <ATOM>, <ATOM>, <ATOM>, <ATOM> ')' ";" |
+          'int' '_' <ID> '=' intval ';'
+
+<ATOM> ::= <ID> |
+           intval
+
+<ITER> ::= 'iter' '(' <ID> ':=' <ATOM> ';' <ATOM> ',' <ATOM> ')' '{' <BODY> '}'
