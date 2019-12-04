@@ -54,6 +54,7 @@
 <STMNTEND> ::= <BODY> |
                <EMPTY>
 
+
 ///////////////////////////////////////////////////////////////////////
 
 //Siguiente, arreglar esto
@@ -79,6 +80,8 @@
 <END> ::= <PROG> |
           <EOF>
 
+<FUNC> ::= <FSIG> '{' <BODY> '}'
+
 <FSIG> :: = 'func' ID '(' <FINSIDE>
 
 <FINSIDE> :: = <FDECARGS> ')' |
@@ -93,9 +96,20 @@
 <STMNTEND> ::= <BODY> |
                <EMPTY>
 
+<STMNT> ::= <FUNCALL> |
+            <ITER>
+
 <FARGS> ::= <EXPR> <EXPREND>
 
 <EXPREND> ::= ',' |
               <EMPTY>
+
+<EXPR> :: = <ATOM>
+
+<ATOM> ::= ID |
+           intval |
+           boolVal
+
+<ITER> ::= 'iter' '(' <ID> ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
 
 ///////////////////////////////////////////////////////////////////////
