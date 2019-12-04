@@ -45,9 +45,26 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool){
 }
 
 func (p *Parser) Prog() error{
-  
+  //<PROG> ::= <FUNC> <END> | <EOF>
   p.pushTrace("PROG")
-  return nil
+
+  _, err, isEOF := p.match(fxlex.TokEof)
+
+  if err != nil{
+    return err
+  }
+
+  if isEOF{
+    p.pushTrace("EOF")
+    return nil
+  }
+
+  if err := p.Func(); err != nil{
+    return err
+  }
+
+  return p.End()
+
 }
 
 func (p *Parser) Parse() error{
