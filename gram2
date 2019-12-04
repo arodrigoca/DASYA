@@ -4,23 +4,29 @@
 
 <FUNC> ::= <FSIG> '{' <BODY> '}'
 
-<FSIG> ::= 'func' <ID> '(' <FARGS> ')' |
+<FSIG> ::= 'func' <ID> '(' <FDECARGS> ')' |
            'func' <ID> '(' ')'
 
-<FARGS> ::= 'int' <ID>  ',' <FARGS> |
-            'int' <ID> |
+<FDECARGS> ::= <DTYPE> <ID>  ',' <FARGS> |
+               <DTYPE> <ID> |
 
 <BODY> ::= <STMNT> <BODY> |
            <STMNT>
 
-<STMNT> :: = <FUNC>
-             <DEC>
-             <ITER>
+<STMNT> ::= <FCALL>
+            <DECL>
+            <ITER>
 
-<DEC> ::= <ID> '(' <ATOM>, <ATOM>, <ATOM>, <ATOM> ')' ";" |
-          'int' <ID> '=' <ATOM> ';'
+<FCALL> ::= <ID> '(' <FARGS> ')' ";"
+
+<FARGS> ::= <EXPR> ',' <FARGS> |
+            <EXPR>
+
+<DECL> ::= <DTYPE> <ID> '=' <EXPR> ';'
+
+<EXPR> :: = <ATOM>
 
 <ATOM> ::= <ID> |
            intval
 
-<ITER> ::= 'iter' '(' <ID> ':=' <ATOM> ';' <ATOM> ',' <ATOM> ')' '{' <BODY> '}'
+<ITER> ::= 'iter' '(' <ID> ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
