@@ -30,6 +30,26 @@ func (p *Parser) popTrace(){
   p.depth--
 }
 
+func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool){
+
+  t, err := p.l.Peek()
+  if err != nil{
+    return fxlex.Token{}, err, false
+  }
+  if t.Type != tT{
+    return t, nil, false
+  }
+  t, err = p.l.Lex()
+  return t, nil, true
+
+}
+
+func (p *Parser) Prog() error{
+  
+  p.pushTrace("PROG")
+  return nil
+}
+
 func (p *Parser) Parse() error{
   p.pushTrace("Parse")
   defer p.popTrace()
