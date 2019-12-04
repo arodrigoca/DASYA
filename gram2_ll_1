@@ -1,0 +1,32 @@
+<PROG> ::= <FUNC> <PROG> |
+           <FUNC> <EOF> |
+           <EOF>
+
+<FUNC> ::= <FSIG> '{' <BODY> '}'
+
+<FSIG> ::= 'func' <ID> '(' <FDECARGS> ')' |
+           'func' <ID> '(' ')'
+
+<FDECARGS> ::= <DTYPE> <ID>  ',' <FARGS> |
+               <DTYPE> <ID> |
+
+<BODY> ::= <STMNT> <BODY> |
+           <STMNT>
+
+<STMNT> ::= <FUNCALL>
+            <DECL>
+            <ITER>
+
+<FUNCALL> ::= <ID> '(' <FARGS> ')' ";"
+
+<FARGS> ::= <EXPR> ',' <FARGS> |
+            <EXPR>
+
+<DECL> ::= <DTYPE> <ID> '=' <EXPR> ';'
+
+<EXPR> :: = <ATOM>
+
+<ATOM> ::= <ID> |
+           intval
+
+<ITER> ::= 'iter' '(' <ID> ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
