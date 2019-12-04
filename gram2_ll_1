@@ -1,3 +1,4 @@
+////////////////////////////////////////////////////////////////////////
 //Primero, arreglar el problema de los 2 FUNC a la izquierda, factorizar
 
 <PROG> ::= <FUNC> <PROG> |
@@ -6,8 +7,95 @@
 
 // Se arregla así
 
-<PROG> ::= <FUNC> <X> |
+<PROG> ::= <FUNC> <END> |
            <EOF>
 
-<X> ::= <PROG> |
-        <EOF>
+<END> ::= <PROG> |
+          <EOF>
+
+////////////////////////////////////////////////////////////////////////
+
+//siguiente, arreglar esto
+
+<FSIG> ::= 'func' ID '(' <FDECARGS> ')' |
+           'func' ID '(' ')'
+
+//Se arregla así
+
+<FSIG> :: = 'func' ID '(' <FINSIDE>
+
+<FINSIDE> :: = <FDECARGS> ')' |
+               ')'
+
+////////////////////////////////////////////////////////////////////////
+
+//Siguiente, arreglar esto
+
+<FDECARGS> ::= DTYPE ID  ',' <FDECARGS> |
+               DTYPE ID
+
+//Se arregla así
+
+<FDECARGS> ::= ',' DTYPE ID <FDECARGS> |
+               DTYPE ID <FDECARGS> |
+               <EMPTY>
+
+///////////////////////////////////////////////////////////////////////
+
+//Siguiente, arreglar esto
+
+<BODY> ::= <STMNT> <BODY> |
+           <STMNT>
+
+//Se arregla así
+
+<BODY> ::= <STMNT> <STMNTEND>
+
+<STMNTEND> ::= <BODY> |
+               <EMPTY>
+
+///////////////////////////////////////////////////////////////////////
+
+//Siguiente, arreglar esto
+
+<FARGS> ::= <EXPR> ',' <FARGS> |
+            <EXPR>
+
+//Se arregla así
+
+<FARGS> ::= <EXPR> <EXPREND>
+
+<EXPREND> ::= ',' |
+          <EMPTY>
+
+
+///////////////////////////////////////////////////////////////////////
+
+//La gramática quedaría así
+
+<PROG> ::= <FUNC> <END> |
+           <EOF>
+
+<END> ::= <PROG> |
+          <EOF>
+
+<FSIG> :: = 'func' ID '(' <FINSIDE>
+
+<FINSIDE> :: = <FDECARGS> ')' |
+               ')'
+
+<FDECARGS> ::= ',' DTYPE ID <FDECARGS> |
+               DTYPE ID <FDECARGS> |
+               <EMPTY>
+
+<BODY> ::= <STMNT> <STMNTEND>
+
+<STMNTEND> ::= <BODY> |
+               <EMPTY>
+
+<FARGS> ::= <EXPR> <EXPREND>
+
+<EXPREND> ::= ',' |
+              <EMPTY>
+
+///////////////////////////////////////////////////////////////////////
