@@ -1,32 +1,13 @@
+//Primero, arreglar el problema de los 2 FUNC a la izquierda, factorizar
+
 <PROG> ::= <FUNC> <PROG> |
            <FUNC> <EOF> |
            <EOF>
 
-<FUNC> ::= <FSIG> '{' <BODY> '}'
+// Se arregla así
 
-<FSIG> ::= 'func' <ID> '(' <FDECARGS> ')' |
-           'func' <ID> '(' ')'
+<PROG> ::= <FUNC> <X> |
+           <EOF>
 
-<FDECARGS> ::= <DTYPE> <ID>  ',' <FARGS> |
-               <DTYPE> <ID> |
-
-<BODY> ::= <STMNT> <BODY> |
-           <STMNT>
-
-<STMNT> ::= <FUNCALL>
-            <DECL>
-            <ITER>
-
-<FUNCALL> ::= <ID> '(' <FARGS> ')' ";"
-
-<FARGS> ::= <EXPR> ',' <FARGS> |
-            <EXPR>
-
-<DECL> ::= <DTYPE> <ID> '=' <EXPR> ';'
-
-<EXPR> :: = <ATOM>
-
-<ATOM> ::= <ID> |
-           intval
-
-<ITER> ::= 'iter' '(' <ID> ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
+<X> ::= <PROG> |
+        <EOF>
