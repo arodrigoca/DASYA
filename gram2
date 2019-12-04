@@ -13,11 +13,11 @@
 <BODY> ::= <STMNT> <BODY> |
            <STMNT>
 
-<STMNT> ::= <FCALL>
+<STMNT> ::= <FUNCALL>
             <DECL>
             <ITER>
 
-<FCALL> ::= <ID> '(' <FARGS> ')' ";"
+<FUNCALL> ::= <ID> '(' <FARGS> ')' ";"
 
 <FARGS> ::= <EXPR> ',' <FARGS> |
             <EXPR>
