@@ -48,13 +48,44 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 
 }
 
+func (p *Parser) Stmnt() error {
+  //TODO
+  //<STMNT> ::= id <FUNCALL> |
+  //            <ITER>
+  p.pushTrace("STMNT")
+	defer p.popTrace()
+  _, _ = p.l.Lex()
+
+  return nil
+}
+
+func (p *Parser) Stmntend() error {
+  //TODO
+  //<STMNTEND> ::= <BODY> |
+  //               <EMPTY>
+  p.pushTrace("STMNTEND")
+	defer p.popTrace()
+  return nil
+}
+
 func (p *Parser) Body() error {
 
   //TODO
+
+  //<BODY> ::= <STMNT> <STMNTEND>
+
 	p.pushTrace("BODY")
 	defer p.popTrace()
-	_, _ = p.l.Lex()
-	return nil
+
+  if err := p.Stmnt(); err != nil {
+		return err
+	}
+
+  if err := p.Stmntend(); err != nil {
+		return err
+	}
+
+  return nil
 
 }
 
