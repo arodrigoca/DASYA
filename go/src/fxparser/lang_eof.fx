@@ -1,1 +1,1 @@
-func hola(int x){hello}
+func hola(int x, int z){hello}

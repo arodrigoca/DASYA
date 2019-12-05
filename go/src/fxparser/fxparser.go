@@ -49,6 +49,8 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 }
 
 func (p *Parser) Body() error {
+
+  //TODO
 	p.pushTrace("BODY")
 	defer p.popTrace()
 	_, _ = p.l.Lex()
@@ -63,7 +65,8 @@ func (p *Parser) Fdecargs() error {
 
 	p.pushTrace("FDECARGS")
 	defer p.popTrace()
-
+  //fmt.Println(fxlex.TokDefInt)
+  //fmt.Println(p.l.Peek())
   _, err, isComma := p.match(fxlex.TokType(','))
 
   if err != nil {
@@ -74,13 +77,15 @@ func (p *Parser) Fdecargs() error {
     //Es la primera regla
     //comprobar todos los componentes de la primera regla
     //comprobar el primer ID
-    _, err, isId := p.match(fxlex.TokId)
-    if err != nil || !isId {
+    //fmt.Println("ES LA PRIMERA REGLA")
+    _, err, isInt := p.match(fxlex.TokDefInt)
+    _, err1, isBool := p.match(fxlex.TokDefBool)
+    if err != nil || err1 != nil || (isInt||isBool) == false{
   		err = errors.New("Missing Id on function arguments")
   		return err
   	}
     //comprobar el segundo id
-    _, err, isId = p.match(fxlex.TokId)
+    _, err, isId := p.match(fxlex.TokId)
     if err != nil || !isId {
   		err = errors.New("Missing Id on function arguments")
   		return err
@@ -89,16 +94,19 @@ func (p *Parser) Fdecargs() error {
 	}
 
   //comprobar si es la segunda regla
-  _, err, isId := p.match(fxlex.TokId)
-  if err != nil {
+  _, err, isInt := p.match(fxlex.TokDefInt)
+  _, err1, isBool := p.match(fxlex.TokDefBool)
+
+  if err != nil || err1 != nil || (isInt||isBool) == false{
 		return err
 	}
 
-	if isId {
+	if isInt || isBool {
     //Es la segunda regla
     //Comprobar todos los componentes de la segunda regla
     //comprobar el segundo id
-    _, err, isId = p.match(fxlex.TokId)
+    //fmt.Println("ES LA SEGUNDA REGLA")
+    _, err, isId := p.match(fxlex.TokId)
     if err != nil || !isId {
   		err = errors.New("Missing Id on function arguments")
   		return err
@@ -107,6 +115,7 @@ func (p *Parser) Fdecargs() error {
 	}
 
   //es la tercera regla, con lo cual empty
+  //fmt.Println("ES LA TERCERA REGLA")
 	return nil
 
 }
@@ -131,7 +140,6 @@ func (p *Parser) Finside() error {
 		return err
 	}
 
-  fmt.Println(p.l.Peek())
   _, err, isRpar = p.match(fxlex.TokType(')'))
 
   if err != nil || !isRpar {
