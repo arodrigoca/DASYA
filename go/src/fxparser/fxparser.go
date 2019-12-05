@@ -5,6 +5,7 @@ import(
         "strings"
         "fmt"
         "os"
+        "errors"
 )
 
 type Parser struct{
@@ -47,15 +48,81 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool){
 
 }
 
-func (p *Parser) Func() error{
+func (p *Parser) Finside() error{
+//<FINSIDE> :: = <FDECARGS> ')' |')'
+
+  p.pushTrace("FINSIDE")
+  _, _ = p.l.Lex()
+  return nil
+
+}
+
+func (p *Parser) Fsig() error{
   //<FSIG> :: = 'func' ID '(' <FINSIDE>
-  
+  p.pushTrace("FSIG")
+  _, err, isFunc := p.match(fxlex.TokFunc)
+
+  if err != nil || !isFunc{
+    err = errors.New("Missing 'func' token on function definition")
+    return err
+  }
+
+  _, err, isId := p.match(fxlex.TokId)
+
+  if err != nil || !isId{
+    err = errors.New("Missing function id on function definition")
+    return err
+  }
+
+  _, err, isLpar := p.match(fxlex.TokType('('))
+
+  if err != nil || !isLpar{
+    err = errors.New("Missing '(' token on function definition")
+    return err
+  }
+
+  if err := p.Finside(); err != nil{
+    return err
+  }
+
+  return nil
+}
+
+func (p *Parser) Body() error{
+  p.pushTrace("BODY")
+  _, _ = p.l.Lex()
+  return nil
+
 }
 
 func (p *Parser) Func() error{
   //<FUNC> ::= <FSIG> '{' <BODY> '}'
   p.pushTrace("FUNC")
-  _, _ = p.l.Lex()
+  defer p.popTrace()
+
+  if err := p.Fsig(); err != nil{
+    return err
+  }
+
+  _, err, isLbra := p.match(fxlex.TokType('{'))
+
+  if err != nil || !isLbra{
+    err = errors.New("Missing '{' token on function")
+    return err
+  }
+
+  if err := p.Body(); err != nil{
+    return err
+  }
+
+  _, err, isRbra := p.match(fxlex.TokType('}'))
+
+  if err != nil || !isRbra{
+    err = errors.New("Missing '}' token on function")
+    return err
+  }
+  fmt.Println(isRbra)
+
   return nil
 
 }

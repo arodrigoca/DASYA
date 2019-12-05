@@ -17,12 +17,12 @@
 
 //siguiente, arreglar esto
 
-<FSIG> ::= 'func' ID '(' <FDECARGS> ')' |
-           'func' ID '(' ')'
+<FSIG> ::= 'func' id '(' <FDECARGS> ')' |
+           'func' id '(' ')'
 
 //Se arregla así
 
-<FSIG> :: = 'func' ID '(' <FINSIDE>
+<FSIG> :: = 'func' id '(' <FINSIDE>
 
 <FINSIDE> :: = <FDECARGS> ')' |
                ')'
@@ -31,13 +31,13 @@
 
 //Siguiente, arreglar esto
 
-<FDECARGS> ::= DTYPE ID  ',' <FDECARGS> |
-               DTYPE ID
+<FDECARGS> ::= id id  ',' <FDECARGS> |
+               id id
 
 //Se arregla así
 
-<FDECARGS> ::= ',' DTYPE ID <FDECARGS> |
-               DTYPE ID <FDECARGS> |
+<FDECARGS> ::= ',' id id <FDECARGS> |
+               id id <FDECARGS> |
                <EMPTY>
 
 ///////////////////////////////////////////////////////////////////////
@@ -59,8 +59,8 @@
 
 //Siguiente, arreglar esto
 
-<FUNCALL> ::= ID '(' <FARGS> ')' ";" |
-              ID '(' ')' ";"
+<FUNCALL> ::= id '(' <FARGS> ')' ";" |
+              id '(' ')' ";"
 
 //Se arregla así
 
@@ -74,7 +74,7 @@
 
 <FUNCALL> ::= '(' <RFUNCALL>
 
-<ITER> ::= 'iter' '(' <ID> ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
+<ITER> ::= 'iter' '(' <id> ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -104,13 +104,13 @@
 
 <FUNC> ::= <FSIG> '{' <BODY> '}'
 
-<FSIG> :: = 'func' ID '(' <FINSIDE>
+<FSIG> :: = 'func' id '(' <FINSIDE>
 
 <FINSIDE> :: = <FDECARGS> ')' |
                ')'
 
-<FDECARGS> ::= ',' DTYPE ID <FDECARGS> |
-               DTYPE ID <FDECARGS> |
+<FDECARGS> ::= ',' id id <FDECARGS> |
+               id id <FDECARGS> |
                <EMPTY>
 
 <BODY> ::= <STMNT> <STMNTEND>
@@ -132,10 +132,10 @@
 
 <EXPR> :: = <ATOM>
 
-<ATOM> ::= ID |
+<ATOM> ::= id |
            intval |
            boolVal
 
-<ITER> ::= 'iter' '(' <ID> ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
+<ITER> ::= 'iter' '(' <id> ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
 
 ///////////////////////////////////////////////////////////////////////

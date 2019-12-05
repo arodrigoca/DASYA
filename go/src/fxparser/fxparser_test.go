@@ -7,7 +7,6 @@ import (
 	"os"
 	"testing"
   "flag"
-  "fmt"
 )
 
 var filename = flag.String("file", "", "file to read")
@@ -25,6 +24,8 @@ func TestLexer(t *testing.T) {
 	var myLexer *Lexer = NewLexer(reader, filename, true) //true indicates if debug is activated
   var myParser *Parser = NewParser(myLexer)
   parseerror := myParser.Parse()
-  fmt.Println(parseerror)
+	if parseerror != nil{
+  	t.Error(parseerror)
+	}
 
 }
