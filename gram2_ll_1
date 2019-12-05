@@ -68,6 +68,14 @@
 
 <RFUNCALL> := <FARGS> ')' ';' | '(' ')' ';'
 
+//Y luego así
+
+<STMNT> ::= id <FUNCALL> | <ITER>
+
+<FUNCALL> ::= '(' <RFUNCALL>
+
+<ITER> ::= 'iter' '(' <ID> ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
+
 
 ///////////////////////////////////////////////////////////////////////
 
