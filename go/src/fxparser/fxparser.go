@@ -33,6 +33,8 @@ func (p *Parser) popTrace(){
 func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool){
 
   t, err := p.l.Peek()
+  //fmt.Print("Peek says: ")
+  //t.PrintToken()
   if err != nil{
     return fxlex.Token{}, err, false
   }
@@ -40,8 +42,40 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool){
     return t, nil, false
   }
   t, err = p.l.Lex()
+  //fmt.Print("LEXED: ")
   return t, nil, true
 
+}
+
+func (p *Parser) Func() error{
+  //<FSIG> :: = 'func' ID '(' <FINSIDE>
+  
+}
+
+func (p *Parser) Func() error{
+  //<FUNC> ::= <FSIG> '{' <BODY> '}'
+  p.pushTrace("FUNC")
+  _, _ = p.l.Lex()
+  return nil
+
+}
+
+func (p *Parser) End() error{
+  //<END> ::= <PROG> | <EOF>
+  p.pushTrace("END")
+
+  _, err, isEOF := p.match(fxlex.TokEof)
+
+  if err != nil{
+    return err
+  }
+
+  if isEOF{
+    p.pushTrace("EOF")
+    return nil
+  }
+
+  return p.Prog()
 }
 
 func (p *Parser) Prog() error{
@@ -61,12 +95,8 @@ func (p *Parser) Prog() error{
 
   if err := p.Func(); err != nil{
     return err
-  }
-
-  if err := p.End(); err != nil{
-    return err
   }else{
-    return nil
+    return p.End()
   }
 
 }

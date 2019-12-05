@@ -31,8 +31,8 @@ func TestLexer(t *testing.T) {
 
 	for {
 		token, _ := myLexer.Lex()
-		token_l, _ := myLexer.Peek()
 		token.PrintToken()
+		token_l, _ := myLexer.Peek()
 		token_l.PrintToken()
 		if token.Type == TokEof {
 			break

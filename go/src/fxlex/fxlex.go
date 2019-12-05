@@ -365,6 +365,7 @@ func (l *Lexer) Lex() (t Token, err error) {
 	)
 
 	defer func() {
+		//fmt.Fprintf(os.Stderr, "Lex: %s\n", t.lexema)
 		if e := recover(); e != nil {
 			errs := fmt.Sprint(e)
 			if strings.HasPrefix(errs, "runtime error:") {
