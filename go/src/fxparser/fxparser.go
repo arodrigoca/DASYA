@@ -63,7 +63,50 @@ func (p *Parser) Fdecargs() error {
 
 	p.pushTrace("FDECARGS")
 	defer p.popTrace()
-	_, _ = p.l.Lex()
+
+  _, err, isComma := p.match(fxlex.TokType(','))
+
+  if err != nil {
+		return err
+	}
+
+	if isComma {
+    //Es la primera regla
+    //comprobar todos los componentes de la primera regla
+    //comprobar el primer ID
+    _, err, isId := p.match(fxlex.TokId)
+    if err != nil || !isId {
+  		err = errors.New("Missing Id on function arguments")
+  		return err
+  	}
+    //comprobar el segundo id
+    _, err, isId = p.match(fxlex.TokId)
+    if err != nil || !isId {
+  		err = errors.New("Missing Id on function arguments")
+  		return err
+  	}
+    return p.Fdecargs()
+	}
+
+  //comprobar si es la segunda regla
+  _, err, isId := p.match(fxlex.TokId)
+  if err != nil {
+		return err
+	}
+
+	if isId {
+    //Es la segunda regla
+    //Comprobar todos los componentes de la segunda regla
+    //comprobar el segundo id
+    _, err, isId = p.match(fxlex.TokId)
+    if err != nil || !isId {
+  		err = errors.New("Missing Id on function arguments")
+  		return err
+  	}
+    return p.Fdecargs()
+	}
+
+  //es la tercera regla, con lo cual empty
 	return nil
 
 }
@@ -88,6 +131,7 @@ func (p *Parser) Finside() error {
 		return err
 	}
 
+  fmt.Println(p.l.Peek())
   _, err, isRpar = p.match(fxlex.TokType(')'))
 
   if err != nil || !isRpar {
