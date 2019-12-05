@@ -59,6 +59,20 @@
 
 //Siguiente, arreglar esto
 
+<FUNCALL> ::= ID '(' <FARGS> ')' ";" |
+              ID '(' ')' ";"
+
+//Se arregla así
+
+<FUNCALL> ::= id '(' <RFUNCALL>
+
+<RFUNCALL> := <FARGS> ')' ';' | '(' ')' ';'
+
+
+///////////////////////////////////////////////////////////////////////
+
+//Siguiente, arreglar esto
+
 <FARGS> ::= <EXPR> ',' <FARGS> |
             <EXPR>
 
@@ -98,6 +112,10 @@
 
 <STMNT> ::= <FUNCALL> |
             <ITER>
+
+<FUNCALL> ::= id '(' <RFUNCALL>
+
+<RFUNCALL> := <FARGS> ')' ';' | '(' ')' ';'
 
 <FARGS> ::= <EXPR> <EXPREND>
 
