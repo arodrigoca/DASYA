@@ -123,7 +123,7 @@
 
 <FUNCALL> ::= '(' <RFUNCALL>
 
-<RFUNCALL> := <FARGS> ')' ';' | '(' ')' ';'
+<RFUNCALL> := <FARGS> ')' ';' | ')' ';'
 
 <FARGS> ::= <EXPR> <EXPREND>
 

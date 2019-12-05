@@ -48,15 +48,52 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 
 }
 
+func (p *Parser) Rfuncall() error {
+//TODO
+//<RFUNCALL> := <FARGS> ')' ';' | ')' ';'
+
+  p.pushTrace("RFUNCALL")
+	defer p.popTrace()
+  _, _ = p.l.Lex()
+  return nil
+}
+
+func (p *Parser) Funcall() error {
+//TODO
+//<FUNCALL> ::= '(' <RFUNCALL>
+
+  p.pushTrace("FUNCALL")
+	defer p.popTrace()
+  _, _ = p.l.Lex()
+  return nil
+}
+
+func (p *Parser) Iter() error {
+//TODO
+//<ITER> ::= 'iter' '(' <id> ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
+  p.pushTrace("ITER")
+	defer p.popTrace()
+  _, _ = p.l.Lex()
+  return nil
+}
+
 func (p *Parser) Stmnt() error {
-  //TODO
   //<STMNT> ::= id <FUNCALL> |
   //            <ITER>
   p.pushTrace("STMNT")
 	defer p.popTrace()
-  _, _ = p.l.Lex()
 
-  return nil
+  _, err, isId := p.match(fxlex.TokId)
+  if err != nil{
+    return err
+  }
+
+  if isId {
+    //es la primera regla
+    return p.Funcall()
+  }
+  //es la segunda regla
+  return p.Iter()
 }
 
 func (p *Parser) Stmntend() error {
@@ -65,7 +102,17 @@ func (p *Parser) Stmntend() error {
   //               <EMPTY>
   p.pushTrace("STMNTEND")
 	defer p.popTrace()
-  return nil
+
+  t, err := p.l.Peek()
+  if err != nil{
+    return err
+  }
+  if t.Type == fxlex.TokType('}'){
+    //ha acabado el body, por lo tanto empty
+    return nil
+  }
+  return p.Body()
+
 }
 
 func (p *Parser) Body() error {
@@ -235,7 +282,6 @@ func (p *Parser) Func() error {
 	}
 
 	_, err, isRbra := p.match(fxlex.TokType('}'))
-
 	if err != nil || !isRbra {
 		err = errors.New("Missing '}' token on function")
 		return err
