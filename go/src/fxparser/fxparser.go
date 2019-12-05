@@ -63,7 +63,11 @@ func (p *Parser) Prog() error{
     return err
   }
 
-  return p.End()
+  if err := p.End(); err != nil{
+    return err
+  }else{
+    return nil
+  }
 
 }
 
