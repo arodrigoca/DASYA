@@ -2,11 +2,11 @@ package fxparser_test
 
 import (
 	"bufio"
+	"flag"
 	. "fxlex"
-  . "fxparser"
+	. "fxparser"
 	"os"
 	"testing"
-  "flag"
 )
 
 var filename = flag.String("file", "", "file to read")
@@ -22,10 +22,10 @@ func TestLexer(t *testing.T) {
 
 	reader := bufio.NewReader(file)
 	var myLexer *Lexer = NewLexer(reader, filename, true) //true indicates if debug is activated
-  var myParser *Parser = NewParser(myLexer)
-  parseerror := myParser.Parse()
-	if parseerror != nil{
-  	t.Error(parseerror)
+	var myParser *Parser = NewParser(myLexer)
+	parseerror := myParser.Parse()
+	if parseerror != nil {
+		t.Error(parseerror)
 	}
 
 }

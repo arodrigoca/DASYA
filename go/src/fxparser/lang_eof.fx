@@ -1,1 +1,1 @@
-func hola(){hello}
+func hola(hola){hello}
