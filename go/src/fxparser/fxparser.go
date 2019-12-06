@@ -48,6 +48,42 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 
 }
 
+func (p *Parser) Exprend() error {
+	//<EXPREND> ::= ',' | <EMPTY>
+	p.pushTrace("EXPREND")
+	defer p.popTrace()
+	t, err := p.l.Peek()
+	if err != nil{
+		return err
+	}
+
+	if t.Type == fxlex.TokType(','){
+		//Es la primera regla
+		t, err = p.l.Lex()
+		if err != nil{
+			return err
+		}
+		return nil
+	}
+
+	//es la segunda regla
+	return nil
+}
+
+func (p *Parser) Fargs() error {
+	//<FARGS> ::= <EXPR> <EXPREND>
+	p.pushTrace("FARGS")
+	defer p.popTrace()
+	if err := p.Expr(); err != nil{
+		return err
+	}
+	if err := p.Exprend(); err != nil{
+		return err
+	}
+
+	return nil
+}
+
 func (p *Parser) Rfuncall() error {
 //TODO
 //<RFUNCALL> := <FARGS> ')' ';' | ')' ';'
@@ -61,15 +97,33 @@ func (p *Parser) Rfuncall() error {
 
 	if isRpar{
 		//es la segunda regla
-		_, err, isRpar := p.match(fxlex.TokType(';'))
-		if err != nil || !isRpar {
+		_, err, isSemic := p.match(fxlex.TokType(';'))
+		if err != nil || !isSemic {
 			err = errors.New("Missing ';' token on function call")
 			return err
 		}
 		return nil
 	}
-	//es la primera regla
-  return nil
+
+	if err = p.Fargs(); err != nil{
+		return err
+	}
+
+	t, err := p.l.Peek()
+	fmt.Println(t)
+	_, err, isRpar = p.match(fxlex.TokType(')'))
+	if err != nil || !isRpar {
+		err = errors.New("Missing ')' token on function call")
+		return err
+	}
+
+	_, err, isSemic := p.match(fxlex.TokType(';'))
+	if err != nil || !isSemic {
+		err = errors.New("Missing ';' token on function call")
+		return err
+	}
+
+	return nil
 }
 
 func (p *Parser) Funcall() error {
@@ -88,7 +142,8 @@ func (p *Parser) Funcall() error {
 }
 
 func (p *Parser) Expr() error {
-
+	p.pushTrace("EXPR")
+	defer p.popTrace()
 	_, _ = p.l.Lex()
 	return nil
 }
