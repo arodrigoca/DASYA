@@ -1,4 +1,9 @@
 func hola(int x, int x){
-  hello
-  hello
+  iter (i := 0; 3 , 1){
+    rect();
+  }
+  iter (i := 0; 3 , 1){
+    rect();
+  }
+  rect();
 }

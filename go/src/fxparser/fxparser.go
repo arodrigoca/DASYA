@@ -54,7 +54,21 @@ func (p *Parser) Rfuncall() error {
 
   p.pushTrace("RFUNCALL")
 	defer p.popTrace()
-  _, _ = p.l.Lex()
+	_, err, isRpar := p.match(fxlex.TokType(')'))
+	if err != nil{
+		return err
+	}
+
+	if isRpar{
+		//es la segunda regla
+		_, err, isRpar := p.match(fxlex.TokType(';'))
+		if err != nil || !isRpar {
+			err = errors.New("Missing ';' token on function call")
+			return err
+		}
+		return nil
+	}
+	//es la primera regla
   return nil
 }
 
@@ -64,16 +78,101 @@ func (p *Parser) Funcall() error {
 
   p.pushTrace("FUNCALL")
 	defer p.popTrace()
-  _, _ = p.l.Lex()
-  return nil
+	_, err, isLpar := p.match(fxlex.TokType('('))
+	if err != nil || !isLpar {
+		err = errors.New("Missing '(' on function call")
+		return err
+	}
+
+  return p.Rfuncall()
+}
+
+func (p *Parser) Expr() error {
+
+	_, _ = p.l.Lex()
+	return nil
 }
 
 func (p *Parser) Iter() error {
 //TODO
-//<ITER> ::= 'iter' '(' <id> ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
+//<ITER> ::= 'iter' '(' id ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
   p.pushTrace("ITER")
 	defer p.popTrace()
-  _, _ = p.l.Lex()
+
+	_, err, isIter := p.match(fxlex.TokIter)
+	if err != nil || !isIter {
+		err = errors.New("Missing 'iter' on iter definition")
+		return err
+	}
+
+	_, err, isLpar := p.match(fxlex.TokType('('))
+	if err != nil || !isLpar {
+		err = errors.New("Missing '(' token on iter definition")
+		return err
+	}
+
+	_, err, isId := p.match(fxlex.TokId)
+	if err != nil || !isId {
+		err = errors.New("Missing id on iter definition")
+		return err
+	}
+
+	_, err, isDDEq := p.match(fxlex.TokDDEq)
+	if err != nil || !isDDEq {
+		err = errors.New("Missing ':=' token on iter definition")
+		return err
+	}
+
+	err = p.Expr()
+	if err != nil{
+		return err
+	}
+
+	_, err, isSemic := p.match(fxlex.TokType(';'))
+	if err != nil || !isSemic {
+		err = errors.New("Missing ';' token on iter definition")
+		return err
+	}
+
+	err = p.Expr()
+	if err != nil{
+		return err
+	}
+
+	_, err, isComma := p.match(fxlex.TokType(','))
+	if err != nil || !isComma {
+		err = errors.New("Missing '(' token on iter definition")
+		return err
+	}
+
+	err = p.Expr()
+	if err != nil{
+		return err
+	}
+
+	_, err, isRpar := p.match(fxlex.TokType(')'))
+	if err != nil || !isRpar {
+		err = errors.New("Missing ')' token on iter definition")
+		return err
+	}
+
+	_, err, isLbra := p.match(fxlex.TokType('{'))
+	if err != nil || !isLbra {
+		err = errors.New("Missing '{' token on iter definition")
+		return err
+	}
+
+	err = p.Body()
+	if err != nil{
+		return err
+	}
+
+	_, err, isRbra := p.match(fxlex.TokType('}'))
+	if err != nil || !isRbra {
+		err = errors.New("Missing '}' token on iter definition")
+		return err
+	}
+
   return nil
 }
 
@@ -97,7 +196,6 @@ func (p *Parser) Stmnt() error {
 }
 
 func (p *Parser) Stmntend() error {
-  //TODO
   //<STMNTEND> ::= <BODY> |
   //               <EMPTY>
   p.pushTrace("STMNTEND")
@@ -110,8 +208,13 @@ func (p *Parser) Stmntend() error {
   if t.Type == fxlex.TokType('}'){
     //ha acabado el body, por lo tanto empty
     return nil
-  }
-  return p.Body()
+  }else{
+		//hay más sentencias
+  	return p.Body()
+	}
+
+	err = errors.New("Unkown or malformed statement")
+	return err
 
 }
 
