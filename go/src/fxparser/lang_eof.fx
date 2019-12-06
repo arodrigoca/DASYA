@@ -1,3 +1,9 @@
+func line ( int x , int y ){
+  iter (i := 0; x , 1){
+    circle (2 , 3, y , 5);
+    }
+}
+
 func hola(int x, int x){
   iter (i := 0; 3 , 1){
     rect (i);

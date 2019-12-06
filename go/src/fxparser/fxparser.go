@@ -515,6 +515,7 @@ func (p *Parser) Parse() error {
 	p.pushTrace("Parse")
 	defer p.popTrace()
 	if err := p.Prog(); err != nil {
+		fmt.Println("SYNTAX ERROR")
 		return err
 	}
 
