@@ -139,17 +139,38 @@ func (p *Parser) Funcall() error {
   return p.Rfuncall()
 }
 
+func (p *Parser) Atom() error {
+	//<ATOM> ::= id | intval | boolVal
+	p.pushTrace("ATOM")
+	defer p.popTrace()
+	t, err := p.l.Peek()
+  if err != nil{
+    return err
+  }
+	if ((t.Type == fxlex.TokId) || (t.Type == fxlex.TokValInt) || (t.Type == fxlex.TokValBool)) != false{
+		_, err = p.l.Lex()
+		if err != nil{
+			return err
+		}
+		return nil
+	}
+	err = errors.New("Bad atom")
+	return err
+}
+
 func (p *Parser) Expr() error {
 	//TODO
 	//<EXPR> :: = <ATOM>
 	p.pushTrace("EXPR")
 	defer p.popTrace()
-	_, _ = p.l.Lex()
+	err := p.Atom()
+	if err != nil{
+		return err
+	}
 	return nil
 }
 
 func (p *Parser) Iter() error {
-//TODO
 //<ITER> ::= 'iter' '(' id ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
   p.pushTrace("ITER")
 	defer p.popTrace()

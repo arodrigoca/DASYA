@@ -4,7 +4,7 @@ func hola(int x, int x){
   }
 
     iter (j := 0; 8 , 2){ // loops 0 2 4 6 8
-      rect (j , j , 8 , 0xf);
+      rect (8 , j , 8 , 0xf);
     }
 
     circle (4 , 5, 2, 0xf);
