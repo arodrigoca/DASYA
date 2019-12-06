@@ -49,21 +49,22 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 }
 
 func (p *Parser) Exprend() error {
-	//<EXPREND> ::= ',' | <EMPTY>
+	//<EXPREND> ::= ',' <FARGS> | <EMPTY>
+
 	p.pushTrace("EXPREND")
 	defer p.popTrace()
 	t, err := p.l.Peek()
 	if err != nil{
 		return err
 	}
-
 	if t.Type == fxlex.TokType(','){
 		//Es la primera regla
 		t, err = p.l.Lex()
 		if err != nil{
 			return err
 		}
-		return nil
+
+		return p.Fargs()
 	}
 
 	//es la segunda regla
@@ -85,7 +86,6 @@ func (p *Parser) Fargs() error {
 }
 
 func (p *Parser) Rfuncall() error {
-//TODO
 //<RFUNCALL> := <FARGS> ')' ';' | ')' ';'
 
   p.pushTrace("RFUNCALL")
@@ -105,12 +105,11 @@ func (p *Parser) Rfuncall() error {
 		return nil
 	}
 
-	if err = p.Fargs(); err != nil{
+	err = p.Fargs()
+	if err != nil{
 		return err
 	}
 
-	t, err := p.l.Peek()
-	fmt.Println(t)
 	_, err, isRpar = p.match(fxlex.TokType(')'))
 	if err != nil || !isRpar {
 		err = errors.New("Missing ')' token on function call")
@@ -127,7 +126,6 @@ func (p *Parser) Rfuncall() error {
 }
 
 func (p *Parser) Funcall() error {
-//TODO
 //<FUNCALL> ::= '(' <RFUNCALL>
 
   p.pushTrace("FUNCALL")
@@ -142,6 +140,8 @@ func (p *Parser) Funcall() error {
 }
 
 func (p *Parser) Expr() error {
+	//TODO
+	//<EXPR> :: = <ATOM>
 	p.pushTrace("EXPR")
 	defer p.popTrace()
 	_, _ = p.l.Lex()

@@ -1,3 +1,11 @@
 func hola(int x, int x){
-  rect(int x);
+  iter (i := 0; 3 , 1){
+    rect (i);
+  }
+
+    iter (j := 0; 8 , 2){ // loops 0 2 4 6 8
+      rect (j , j , 8 , 0xf);
+    }
+
+    circle (4 , 5, 2, 0xf);
 }

@@ -127,7 +127,7 @@
 
 <FARGS> ::= <EXPR> <EXPREND>
 
-<EXPREND> ::= ',' |
+<EXPREND> ::= ',' <FARGS> |
               <EMPTY>
 
 <EXPR> :: = <ATOM>
