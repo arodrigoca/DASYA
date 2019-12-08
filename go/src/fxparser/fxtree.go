@@ -23,12 +23,12 @@ type StatementNode struct {
 }
 
 type FuncallNode struct {
-	Id   fxlex.Token
-	Args []*fxlex.Token
+	Id   string
+	Args []fxlex.Token
 }
 
 type IterNode struct {
-	Params     []*fxlex.Token
+	Params     []fxlex.Token
 	Statements []*StatementNode
 }
 
@@ -42,5 +42,20 @@ func NewDecFuncNode(id string) *DecFuncNode {
 }
 
 func NewStatementNode(iter *IterNode, funcall *FuncallNode) *StatementNode {
+
 	return &StatementNode{Iter: iter, Funcall: funcall}
+}
+
+func NewFuncallNode(id string, args []fxlex.Token) *FuncallNode {
+
+	return &FuncallNode{Id: id, Args: args}
+}
+
+func NewIterNode(params []fxlex.Token, stat []*StatementNode) *IterNode {
+
+	return &IterNode{Params: params, Statements: stat}
+}
+
+func (t *AST) PrintAST() {
+	//
 }
