@@ -6,18 +6,19 @@ import (
 	"fxlex"
 	"os"
 	"strings"
+	//"reflect"
 )
 
 type Parser struct {
 	l         *fxlex.Lexer
 	depth     int
 	DebugDesc bool
-	Ast *AST
+	Ast       *AST
 }
 
 func NewParser(l *fxlex.Lexer) *Parser {
-	tree := NewAST()
-	return &Parser{l, 0, true, tree}
+
+	return &Parser{l, 0, true, NewAST()}
 }
 
 func (p *Parser) pushTrace(tag string) {
@@ -344,11 +345,13 @@ func (p *Parser) Fdecargs() error {
 			return err
 		}
 		//comprobar el segundo id
-		_, err, isId := p.match(fxlex.TokId)
+		arg_id, err, isId := p.match(fxlex.TokId)
 		if err != nil || !isId {
 			err = errors.New("Missing Id on function arguments")
 			return err
 		}
+		p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Arguments = append(p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Arguments, arg_id.Lexema)
+
 		return p.Fdecargs()
 	}
 
@@ -365,16 +368,16 @@ func (p *Parser) Fdecargs() error {
 		//Comprobar todos los componentes de la segunda regla
 		//comprobar el segundo id
 		//fmt.Println("ES LA SEGUNDA REGLA")
-		_, err, isId := p.match(fxlex.TokId)
+		arg_id, err, isId := p.match(fxlex.TokId)
 		if err != nil || !isId {
 			err = errors.New("Missing Id on function arguments")
 			return err
 		}
+		p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Arguments = append(p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Arguments, arg_id.Lexema)
 		return p.Fdecargs()
 	}
 
 	//es la tercera regla, con lo cual empty
-	//fmt.Println("ES LA TERCERA REGLA")
 	return nil
 
 }
@@ -421,7 +424,9 @@ func (p *Parser) Fsig() error {
 		return err
 	}
 
-	_, err, isId := p.match(fxlex.TokId)
+	f_id, err, isId := p.match(fxlex.TokId)
+	p.Ast.FirstNode.FuncNodes = append(p.Ast.FirstNode.FuncNodes, NewDecFuncNode(f_id.Lexema))
+	//fmt.Println(p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Id)
 
 	if err != nil || !isId {
 		err = errors.New("Missing function id on function definition")
@@ -467,6 +472,7 @@ func (p *Parser) Func() error {
 		err = errors.New("Missing '}' token on function")
 		return err
 	}
+
 
 	return nil
 
@@ -516,6 +522,8 @@ func (p *Parser) Prog() error {
 func (p *Parser) Parse() error {
 	p.pushTrace("Parse")
 	defer p.popTrace()
+	var f_nodes []*DecFuncNode
+	p.Ast.FirstNode.FuncNodes = f_nodes
 	if err := p.Prog(); err != nil {
 		fmt.Println("SYNTAX ERROR")
 		return err

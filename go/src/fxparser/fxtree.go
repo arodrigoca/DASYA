@@ -14,6 +14,7 @@ type ProgNode struct {
 
 type DecFuncNode struct {
 	Id         string
+	Arguments []string
 	Statements []*StatementNode
 }
 
@@ -38,7 +39,8 @@ func NewAST() (tree *AST) {
 
 func NewDecFuncNode(id string) *DecFuncNode {
 
-	return &DecFuncNode{Id: id}
+	var stringarray []string
+	return &DecFuncNode{Id: id, Arguments: stringarray}
 }
 
 func NewStatementNode(iter *IterNode, funcall *FuncallNode) *StatementNode {
