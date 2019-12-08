@@ -54,13 +54,13 @@ func (p *Parser) Exprend() error {
 	p.pushTrace("EXPREND")
 	defer p.popTrace()
 	t, err := p.l.Peek()
-	if err != nil{
+	if err != nil {
 		return err
 	}
-	if t.Type == fxlex.TokType(','){
+	if t.Type == fxlex.TokType(',') {
 		//Es la primera regla
 		t, err = p.l.Lex()
-		if err != nil{
+		if err != nil {
 			return err
 		}
 
@@ -75,10 +75,10 @@ func (p *Parser) Fargs() error {
 	//<FARGS> ::= <EXPR> <EXPREND>
 	p.pushTrace("FARGS")
 	defer p.popTrace()
-	if err := p.Expr(); err != nil{
+	if err := p.Expr(); err != nil {
 		return err
 	}
-	if err := p.Exprend(); err != nil{
+	if err := p.Exprend(); err != nil {
 		return err
 	}
 
@@ -86,16 +86,16 @@ func (p *Parser) Fargs() error {
 }
 
 func (p *Parser) Rfuncall() error {
-//<RFUNCALL> := <FARGS> ')' ';' | ')' ';'
+	//<RFUNCALL> := <FARGS> ')' ';' | ')' ';'
 
-  p.pushTrace("RFUNCALL")
+	p.pushTrace("RFUNCALL")
 	defer p.popTrace()
 	_, err, isRpar := p.match(fxlex.TokType(')'))
-	if err != nil{
+	if err != nil {
 		return err
 	}
 
-	if isRpar{
+	if isRpar {
 		//es la segunda regla
 		_, err, isSemic := p.match(fxlex.TokType(';'))
 		if err != nil || !isSemic {
@@ -106,7 +106,7 @@ func (p *Parser) Rfuncall() error {
 	}
 
 	err = p.Fargs()
-	if err != nil{
+	if err != nil {
 		return err
 	}
 
@@ -126,9 +126,9 @@ func (p *Parser) Rfuncall() error {
 }
 
 func (p *Parser) Funcall() error {
-//<FUNCALL> ::= '(' <RFUNCALL>
+	//<FUNCALL> ::= '(' <RFUNCALL>
 
-  p.pushTrace("FUNCALL")
+	p.pushTrace("FUNCALL")
 	defer p.popTrace()
 	_, err, isLpar := p.match(fxlex.TokType('('))
 	if err != nil || !isLpar {
@@ -136,7 +136,7 @@ func (p *Parser) Funcall() error {
 		return err
 	}
 
-  return p.Rfuncall()
+	return p.Rfuncall()
 }
 
 func (p *Parser) Atom() error {
@@ -144,12 +144,12 @@ func (p *Parser) Atom() error {
 	p.pushTrace("ATOM")
 	defer p.popTrace()
 	t, err := p.l.Peek()
-  if err != nil{
-    return err
-  }
-	if ((t.Type == fxlex.TokId) || (t.Type == fxlex.TokValInt) || (t.Type == fxlex.TokValBool)) != false{
+	if err != nil {
+		return err
+	}
+	if ((t.Type == fxlex.TokId) || (t.Type == fxlex.TokValInt) || (t.Type == fxlex.TokValBool)) != false {
 		_, err = p.l.Lex()
-		if err != nil{
+		if err != nil {
 			return err
 		}
 		return nil
@@ -164,15 +164,15 @@ func (p *Parser) Expr() error {
 	p.pushTrace("EXPR")
 	defer p.popTrace()
 	err := p.Atom()
-	if err != nil{
+	if err != nil {
 		return err
 	}
 	return nil
 }
 
 func (p *Parser) Iter() error {
-//<ITER> ::= 'iter' '(' id ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
-  p.pushTrace("ITER")
+	//<ITER> ::= 'iter' '(' id ':=' <EXPR> ';' <EXPR> ',' <EXPR> ')' '{' <BODY> '}'
+	p.pushTrace("ITER")
 	defer p.popTrace()
 
 	_, err, isIter := p.match(fxlex.TokIter)
@@ -200,7 +200,7 @@ func (p *Parser) Iter() error {
 	}
 
 	err = p.Expr()
-	if err != nil{
+	if err != nil {
 		return err
 	}
 
@@ -211,7 +211,7 @@ func (p *Parser) Iter() error {
 	}
 
 	err = p.Expr()
-	if err != nil{
+	if err != nil {
 		return err
 	}
 
@@ -222,7 +222,7 @@ func (p *Parser) Iter() error {
 	}
 
 	err = p.Expr()
-	if err != nil{
+	if err != nil {
 		return err
 	}
 
@@ -239,7 +239,7 @@ func (p *Parser) Iter() error {
 	}
 
 	err = p.Body()
-	if err != nil{
+	if err != nil {
 		return err
 	}
 
@@ -249,44 +249,44 @@ func (p *Parser) Iter() error {
 		return err
 	}
 
-  return nil
+	return nil
 }
 
 func (p *Parser) Stmnt() error {
-  //<STMNT> ::= id <FUNCALL> |
-  //            <ITER>
-  p.pushTrace("STMNT")
+	//<STMNT> ::= id <FUNCALL> |
+	//            <ITER>
+	p.pushTrace("STMNT")
 	defer p.popTrace()
 
-  _, err, isId := p.match(fxlex.TokId)
-  if err != nil{
-    return err
-  }
+	_, err, isId := p.match(fxlex.TokId)
+	if err != nil {
+		return err
+	}
 
-  if isId {
-    //es la primera regla
-    return p.Funcall()
-  }
-  //es la segunda regla
-  return p.Iter()
+	if isId {
+		//es la primera regla
+		return p.Funcall()
+	}
+	//es la segunda regla
+	return p.Iter()
 }
 
 func (p *Parser) Stmntend() error {
-  //<STMNTEND> ::= <BODY> |
-  //               <EMPTY>
-  p.pushTrace("STMNTEND")
+	//<STMNTEND> ::= <BODY> |
+	//               <EMPTY>
+	p.pushTrace("STMNTEND")
 	defer p.popTrace()
 
-  t, err := p.l.Peek()
-  if err != nil{
-    return err
-  }
-  if t.Type == fxlex.TokType('}'){
-    //ha acabado el body, por lo tanto empty
-    return nil
-  }else{
+	t, err := p.l.Peek()
+	if err != nil {
+		return err
+	}
+	if t.Type == fxlex.TokType('}') {
+		//ha acabado el body, por lo tanto empty
+		return nil
+	} else {
 		//hay más sentencias
-  	return p.Body()
+		return p.Body()
 	}
 
 	err = errors.New("Unkown or malformed statement")
@@ -296,83 +296,83 @@ func (p *Parser) Stmntend() error {
 
 func (p *Parser) Body() error {
 
-  //TODO
+	//TODO
 
-  //<BODY> ::= <STMNT> <STMNTEND>
+	//<BODY> ::= <STMNT> <STMNTEND>
 
 	p.pushTrace("BODY")
 	defer p.popTrace()
 
-  if err := p.Stmnt(); err != nil {
+	if err := p.Stmnt(); err != nil {
 		return err
 	}
 
-  if err := p.Stmntend(); err != nil {
+	if err := p.Stmntend(); err != nil {
 		return err
 	}
 
-  return nil
+	return nil
 
 }
 
 func (p *Parser) Fdecargs() error {
-  //<FDECARGS> ::= ',' id id <FDECARGS> |
-  //               id id <FDECARGS> |
-  //               <EMPTY>
+	//<FDECARGS> ::= ',' id id <FDECARGS> |
+	//               id id <FDECARGS> |
+	//               <EMPTY>
 
 	p.pushTrace("FDECARGS")
 	defer p.popTrace()
-  //fmt.Println(fxlex.TokDefInt)
-  //fmt.Println(p.l.Peek())
-  _, err, isComma := p.match(fxlex.TokType(','))
+	//fmt.Println(fxlex.TokDefInt)
+	//fmt.Println(p.l.Peek())
+	_, err, isComma := p.match(fxlex.TokType(','))
 
-  if err != nil {
+	if err != nil {
 		return err
 	}
 
 	if isComma {
-    //Es la primera regla
-    //comprobar todos los componentes de la primera regla
-    //comprobar el primer ID
-    //fmt.Println("ES LA PRIMERA REGLA")
-    _, err, isInt := p.match(fxlex.TokDefInt)
-    _, err1, isBool := p.match(fxlex.TokDefBool)
-    if err != nil || err1 != nil || (isInt||isBool) == false{
-  		err = errors.New("Missing Id on function arguments")
-  		return err
-  	}
-    //comprobar el segundo id
-    _, err, isId := p.match(fxlex.TokId)
-    if err != nil || !isId {
-  		err = errors.New("Missing Id on function arguments")
-  		return err
-  	}
-    return p.Fdecargs()
+		//Es la primera regla
+		//comprobar todos los componentes de la primera regla
+		//comprobar el primer ID
+		//fmt.Println("ES LA PRIMERA REGLA")
+		_, err, isInt := p.match(fxlex.TokDefInt)
+		_, err1, isBool := p.match(fxlex.TokDefBool)
+		if err != nil || err1 != nil || (isInt || isBool) == false {
+			err = errors.New("Missing Id on function arguments")
+			return err
+		}
+		//comprobar el segundo id
+		_, err, isId := p.match(fxlex.TokId)
+		if err != nil || !isId {
+			err = errors.New("Missing Id on function arguments")
+			return err
+		}
+		return p.Fdecargs()
 	}
 
-  //comprobar si es la segunda regla
-  _, err, isInt := p.match(fxlex.TokDefInt)
-  _, err1, isBool := p.match(fxlex.TokDefBool)
+	//comprobar si es la segunda regla
+	_, err, isInt := p.match(fxlex.TokDefInt)
+	_, err1, isBool := p.match(fxlex.TokDefBool)
 
-  if err != nil || err1 != nil || (isInt||isBool) == false{
+	if err != nil || err1 != nil || (isInt || isBool) == false {
 		return err
 	}
 
 	if isInt || isBool {
-    //Es la segunda regla
-    //Comprobar todos los componentes de la segunda regla
-    //comprobar el segundo id
-    //fmt.Println("ES LA SEGUNDA REGLA")
-    _, err, isId := p.match(fxlex.TokId)
-    if err != nil || !isId {
-  		err = errors.New("Missing Id on function arguments")
-  		return err
-  	}
-    return p.Fdecargs()
+		//Es la segunda regla
+		//Comprobar todos los componentes de la segunda regla
+		//comprobar el segundo id
+		//fmt.Println("ES LA SEGUNDA REGLA")
+		_, err, isId := p.match(fxlex.TokId)
+		if err != nil || !isId {
+			err = errors.New("Missing Id on function arguments")
+			return err
+		}
+		return p.Fdecargs()
 	}
 
-  //es la tercera regla, con lo cual empty
-  //fmt.Println("ES LA TERCERA REGLA")
+	//es la tercera regla, con lo cual empty
+	//fmt.Println("ES LA TERCERA REGLA")
 	return nil
 
 }
@@ -383,9 +383,9 @@ func (p *Parser) Finside() error {
 	p.pushTrace("FINSIDE")
 	defer p.popTrace()
 
-  _, err, isRpar := p.match(fxlex.TokType(')'))
+	_, err, isRpar := p.match(fxlex.TokType(')'))
 
-  if err != nil {
+	if err != nil {
 		return err
 	}
 
@@ -393,13 +393,13 @@ func (p *Parser) Finside() error {
 		return nil
 	}
 
-  if err := p.Fdecargs(); err != nil {
+	if err := p.Fdecargs(); err != nil {
 		return err
 	}
 
-  _, err, isRpar = p.match(fxlex.TokType(')'))
+	_, err, isRpar = p.match(fxlex.TokType(')'))
 
-  if err != nil || !isRpar {
+	if err != nil || !isRpar {
 		err = errors.New("Missing ')' token on function definition")
 		return err
 	}
