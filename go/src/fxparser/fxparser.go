@@ -12,10 +12,11 @@ type Parser struct {
 	l         *fxlex.Lexer
 	depth     int
 	DebugDesc bool
+	Ast *AST
 }
 
 func NewParser(l *fxlex.Lexer) *Parser {
-	return &Parser{l, 0, true}
+	return &Parser{l, 0, true, nil}
 }
 
 func (p *Parser) pushTrace(tag string) {
