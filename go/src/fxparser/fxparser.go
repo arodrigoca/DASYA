@@ -16,7 +16,8 @@ type Parser struct {
 }
 
 func NewParser(l *fxlex.Lexer) *Parser {
-	return &Parser{l, 0, true, nil}
+	tree := NewAST()
+	return &Parser{l, 0, true, tree}
 }
 
 func (p *Parser) pushTrace(tag string) {
