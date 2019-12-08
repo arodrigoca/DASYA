@@ -40,3 +40,7 @@ func NewDecFuncNode(id string) *DecFuncNode {
 
 	return &DecFuncNode{Id: id}
 }
+
+func NewStatementNode(iter *IterNode, funcall *FuncallNode) *StatementNode {
+	return &StatementNode{Iter: iter, Funcall: funcall}
+}
