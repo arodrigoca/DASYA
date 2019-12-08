@@ -48,9 +48,9 @@ func NewStatementNode(iter *IterNode, funcall *FuncallNode) *StatementNode {
 	return &StatementNode{Iter: iter, Funcall: funcall}
 }
 
-func NewFuncallNode(id string, args []fxlex.Token) *FuncallNode {
+func NewFuncallNode(id string) *FuncallNode {
 
-	return &FuncallNode{Id: id, Args: args}
+	return &FuncallNode{Id: id}
 }
 
 func NewIterNode(params []fxlex.Token, stat []*StatementNode) *IterNode {

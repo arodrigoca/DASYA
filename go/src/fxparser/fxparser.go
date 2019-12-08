@@ -266,9 +266,14 @@ func (p *Parser) Stmnt() error {
 		return err
 	}
 
+	var stat []*StatementNode
+	p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements = stat
+
 	if isId {
 		//es la primera regla
 		return p.Funcall()
+		//var statement_node
+		//p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements = append(p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements, NewFuncallNode(funcall_id.Lexema))
 	}
 	//es la segunda regla
 	return p.Iter()
@@ -298,8 +303,6 @@ func (p *Parser) Stmntend() error {
 }
 
 func (p *Parser) Body() error {
-
-	//TODO
 
 	//<BODY> ::= <STMNT> <STMNTEND>
 
