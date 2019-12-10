@@ -261,21 +261,21 @@ func (p *Parser) Stmnt() error {
 	p.pushTrace("STMNT")
 	defer p.popTrace()
 
-	_, err, isId := p.match(fxlex.TokId)
+	funcall_id, err, isId := p.match(fxlex.TokId)
 	if err != nil {
 		return err
 	}
 
-	var stat []*StatementNode
-	p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements = stat
+	p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements = append(p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements, NewStatementNode())
 
 	if isId {
 		//es la primera regla
+		p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements[len(p.Ast.FirstNode.FuncNodes)-1].Funcall = NewFuncallNode(funcall_id.Lexema)
 		return p.Funcall()
-		//var statement_node
-		//p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements = append(p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements, NewFuncallNode(funcall_id.Lexema))
+
 	}
 	//es la segunda regla
+	p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements[len(p.Ast.FirstNode.FuncNodes)-1].Iter = NewIterNode()
 	return p.Iter()
 }
 

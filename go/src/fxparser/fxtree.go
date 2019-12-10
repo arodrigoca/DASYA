@@ -40,12 +40,13 @@ func NewAST() (tree *AST) {
 func NewDecFuncNode(id string) *DecFuncNode {
 
 	var stringarray []string
-	return &DecFuncNode{Id: id, Arguments: stringarray}
+	var stat []*StatementNode
+	return &DecFuncNode{Id: id, Arguments: stringarray, Statements: stat}
 }
 
-func NewStatementNode(iter *IterNode, funcall *FuncallNode) *StatementNode {
+func NewStatementNode() *StatementNode {
 
-	return &StatementNode{Iter: iter, Funcall: funcall}
+	return &StatementNode{}
 }
 
 func NewFuncallNode(id string) *FuncallNode {
@@ -53,9 +54,10 @@ func NewFuncallNode(id string) *FuncallNode {
 	return &FuncallNode{Id: id}
 }
 
-func NewIterNode(params []fxlex.Token, stat []*StatementNode) *IterNode {
+func NewIterNode() *IterNode {
 
-	return &IterNode{Params: params, Statements: stat}
+	var stat []*StatementNode
+	return &IterNode{Statements: stat}
 }
 
 func (t *AST) PrintAST() {
