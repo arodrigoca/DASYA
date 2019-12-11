@@ -6,19 +6,17 @@ import (
 	"fxlex"
 	"os"
 	"strings"
-	//"reflect"
 )
 
 type Parser struct {
 	l         *fxlex.Lexer
 	depth     int
 	DebugDesc bool
-	Ast       *AST
 }
 
 func NewParser(l *fxlex.Lexer) *Parser {
 
-	return &Parser{l, 0, true, NewAST()}
+	return &Parser{l, 0, true}
 }
 
 func (p *Parser) pushTrace(tag string) {
@@ -261,21 +259,18 @@ func (p *Parser) Stmnt() error {
 	p.pushTrace("STMNT")
 	defer p.popTrace()
 
-	funcall_id, err, isId := p.match(fxlex.TokId)
+	_, err, isId := p.match(fxlex.TokId)
 	if err != nil {
 		return err
 	}
 
-	p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements = append(p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements, NewStatementNode())
 
 	if isId {
 		//es la primera regla
-		p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements[len(p.Ast.FirstNode.FuncNodes)-1].Funcall = NewFuncallNode(funcall_id.Lexema)
 		return p.Funcall()
 
 	}
 	//es la segunda regla
-	p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Statements[len(p.Ast.FirstNode.FuncNodes)-1].Iter = NewIterNode()
 	return p.Iter()
 }
 
@@ -348,12 +343,11 @@ func (p *Parser) Fdecargs() error {
 			return err
 		}
 		//comprobar el segundo id
-		arg_id, err, isId := p.match(fxlex.TokId)
+		_, err, isId := p.match(fxlex.TokId)
 		if err != nil || !isId {
 			err = errors.New("Missing Id on function arguments")
 			return err
 		}
-		p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Arguments = append(p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Arguments, arg_id.Lexema)
 
 		return p.Fdecargs()
 	}
@@ -371,12 +365,12 @@ func (p *Parser) Fdecargs() error {
 		//Comprobar todos los componentes de la segunda regla
 		//comprobar el segundo id
 		//fmt.Println("ES LA SEGUNDA REGLA")
-		arg_id, err, isId := p.match(fxlex.TokId)
+		_, err, isId := p.match(fxlex.TokId)
 		if err != nil || !isId {
 			err = errors.New("Missing Id on function arguments")
 			return err
 		}
-		p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Arguments = append(p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Arguments, arg_id.Lexema)
+
 		return p.Fdecargs()
 	}
 
@@ -427,9 +421,7 @@ func (p *Parser) Fsig() error {
 		return err
 	}
 
-	f_id, err, isId := p.match(fxlex.TokId)
-	p.Ast.FirstNode.FuncNodes = append(p.Ast.FirstNode.FuncNodes, NewDecFuncNode(f_id.Lexema))
-	//fmt.Println(p.Ast.FirstNode.FuncNodes[len(p.Ast.FirstNode.FuncNodes)-1].Id)
+	_, err, isId := p.match(fxlex.TokId)
 
 	if err != nil || !isId {
 		err = errors.New("Missing function id on function definition")
@@ -525,8 +517,6 @@ func (p *Parser) Prog() error {
 func (p *Parser) Parse() error {
 	p.pushTrace("Parse")
 	defer p.popTrace()
-	var f_nodes []*DecFuncNode
-	p.Ast.FirstNode.FuncNodes = f_nodes
 	if err := p.Prog(); err != nil {
 		fmt.Println("SYNTAX ERROR")
 		return err
