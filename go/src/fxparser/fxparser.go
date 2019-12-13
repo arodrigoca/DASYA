@@ -62,20 +62,22 @@ func (p *Parser) ConsumeUntilMarker(er error) error {
 	for t, _ := p.l.Peek(); ; t, _ = p.l.Peek() {
 
 		fmt.Println(t.Lexema)
+		if p.ErrorNumber < 5{
+			switch t.Lexema {
 
-		switch t.Lexema {
+			case ";", ")", "(":
 
-		case ";", ")", "(":
+				fmt.Println("Found sync token")
+				return nil
 
-			fmt.Println("Found sync token")
-			return nil
+			default:
+				_, _ = p.l.Lex()
 
-		default:
-			_, _ = p.l.Lex()
-
+			}
+		}else{
+			return errors.New("SYNTAX ERROR")
 		}
 	}
-	return nil
 }
 
 func (p *Parser) Exprend() error {
@@ -351,8 +353,6 @@ func (p *Parser) Fdecargs() error {
 
 	p.pushTrace("FDECARGS")
 	defer p.popTrace()
-	//fmt.Println(fxlex.TokDefInt)
-	//fmt.Println(p.l.Peek())
 	_, err, isComma := p.match(fxlex.TokType(','))
 
 	if err != nil {
@@ -363,7 +363,6 @@ func (p *Parser) Fdecargs() error {
 		//Es la primera regla
 		//comprobar todos los componentes de la primera regla
 		//comprobar el primer ID
-		//fmt.Println("ES LA PRIMERA REGLA")
 		_, err, isInt := p.match(fxlex.TokDefInt)
 		_, err1, isBool := p.match(fxlex.TokDefBool)
 		if err != nil || err1 != nil || (isInt || isBool) == false {
@@ -392,7 +391,6 @@ func (p *Parser) Fdecargs() error {
 		//Es la segunda regla
 		//Comprobar todos los componentes de la segunda regla
 		//comprobar el segundo id
-		//fmt.Println("ES LA SEGUNDA REGLA")
 		_, err, isId := p.match(fxlex.TokId)
 		if err != nil || !isId {
 			err = errors.New("Missing Id on function arguments")
