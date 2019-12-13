@@ -441,24 +441,24 @@ func (p *Parser) Fsig() error {
 	//<FSIG> :: = 'func' ID '(' <FINSIDE>
 	p.pushTrace("FSIG")
 	defer p.popTrace()
-	_, err, isFunc := p.match(fxlex.TokFunc)
+	tok_1, err, isFunc := p.match(fxlex.TokFunc)
 
 	if err != nil || !isFunc {
-		err = errors.New("Missing 'func' token on function definition")
+        err = p.ErrExpected("function declaration", tok_1, "func")
 		return err
 	}
 
-	_, err, isId := p.match(fxlex.TokId)
+	tok_2, err, isId := p.match(fxlex.TokId)
 
 	if err != nil || !isId {
-		err = errors.New("Missing function id on function definition")
+        err = p.ErrExpected("function declaration", tok_2, "id")
 		return err
 	}
 
-	_, err, isLpar := p.match(fxlex.TokType('('))
+	tok_3, err, isLpar := p.match(fxlex.TokType('('))
 
 	if err != nil || !isLpar {
-		err = errors.New("Missing '(' token on function definition")
+        err = p.ErrExpected("function declaration", tok_3, "(")
 		return err
 	}
 
@@ -489,9 +489,9 @@ func (p *Parser) Func() error {
 		return err
 	}
 
-	_, err, isRbra := p.match(fxlex.TokType('}'))
+	tok_2, err, isRbra := p.match(fxlex.TokType('}'))
 	if err != nil || !isRbra {
-		err = fmt.Errorf("Missing '}' on function, found ")
+		err = p.ErrExpected("function", tok_2, "}")
 		return err
 	}
 
