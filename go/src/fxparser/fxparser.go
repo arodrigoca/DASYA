@@ -49,6 +49,12 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 
 }
 
+
+func (p *Parser) ConsumeUntilMarker() error{
+	fmt.Println("hola")
+	return nil
+}
+
 func (p *Parser) Exprend() error {
 	//<EXPREND> ::= ',' <FARGS> | <EMPTY>
 
