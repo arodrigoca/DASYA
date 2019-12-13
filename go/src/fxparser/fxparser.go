@@ -49,10 +49,9 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 
 }
 
-func (p *Parser) ErrExpected(place string, found fxlex.Token, wanted fxlex.TokType) error{
+func (p *Parser) ErrExpected(place string, found fxlex.Token, wanted string) error{
 
-
-    err := fmt.Errorf("In file %s, line %d: Expected %v in %s, found %s", found.File, found.Line, wanted, place, found.Lexema)
+    err := fmt.Errorf("%s:%d: Expected %s in %s, found %s", found.File, found.Line, wanted, place, found.Lexema)
     return err
 }
 
@@ -482,7 +481,7 @@ func (p *Parser) Func() error {
 	tok_1, err, isLbra := p.match(fxlex.TokType('{'))
 
 	if err != nil || !isLbra {
-		err = p.ErrExpected("function", tok_1, fxlex.TokType('{'))
+		err = p.ErrExpected("function", tok_1, "{")
 		return err
 	}
 
