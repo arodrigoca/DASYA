@@ -1,19 +1,18 @@
 package fxparser_test
 
-import(
-  "testing"
-  "bufio"
-  . "fxlex"
-  . "fxparser"
-  "strings"
+import (
+	"bufio"
+	. "fxlex"
+	. "fxparser"
+	"strings"
+	"testing"
 )
 
+func TestConsumer(t *testing.T) {
 
-func TestConsumer(t *testing.T){
+	var test_text string = "circle();"
 
-  var test_text string = "circle();"
-
-  fake_reader := strings.NewReader(test_text)
+	fake_reader := strings.NewReader(test_text)
 
 	reader := bufio.NewReader(fake_reader)
 	var myLexer *Lexer = NewLexer(reader, "consumer_test.txt", true) //true indicates if debug is activated

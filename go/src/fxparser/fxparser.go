@@ -9,14 +9,15 @@ import (
 )
 
 type Parser struct {
-	l         *fxlex.Lexer
-	depth     int
-	DebugDesc bool
+	l           *fxlex.Lexer
+	depth       int
+	DebugDesc   bool
+	ErrorNumber int
 }
 
 func NewParser(l *fxlex.Lexer) *Parser {
 
-	return &Parser{l, 0, true}
+	return &Parser{l, 0, true, 0}
 }
 
 func (p *Parser) pushTrace(tag string) {
@@ -49,9 +50,26 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 
 }
 
+func (p *Parser) ConsumeUntilMarker() error {
 
-func (p *Parser) ConsumeUntilMarker() error{
-	fmt.Println("hola")
+	fmt.Println("Error while parsing, attemping to re-synchronize...")
+	
+	p.ErrorNumber += 1
+	for t, _ := p.l.Peek(); ; t, _ = p.l.Peek() {
+
+		fmt.Println(t.Lexema)
+
+		switch t.Lexema {
+
+		case ";", ")", "(":
+
+			return nil
+
+		default:
+			_, _ = p.l.Lex()
+
+		}
+	}
 	return nil
 }
 
@@ -270,7 +288,6 @@ func (p *Parser) Stmnt() error {
 		return err
 	}
 
-
 	if isId {
 		//es la primera regla
 		return p.Funcall()
@@ -473,7 +490,6 @@ func (p *Parser) Func() error {
 		err = errors.New("Missing '}' token on function")
 		return err
 	}
-
 
 	return nil
 
