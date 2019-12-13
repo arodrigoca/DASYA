@@ -38,8 +38,6 @@ func (p *Parser) popTrace() {
 func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) {
 
 	t, err := p.l.Peek()
-	//fmt.Print("Peek says: ")
-	//t.PrintToken()
 	if err != nil {
 		return fxlex.Token{}, err, false
 	}
@@ -47,27 +45,31 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 		return t, nil, false
 	}
 	t, err = p.l.Lex()
-	//fmt.Print("LEXED: ")
 	return t, nil, true
 
 }
 
+func (p *Parser) ErrExpected(place string, found fxlex.Token, wanted fxlex.TokType) error{
+
+
+    err := fmt.Errorf("In file %s, line %d: Expected %v in %s, found %s", found.File, found.Line, wanted, place, found.Lexema)
+    return err
+}
+
 func (p *Parser) ConsumeUntilMarker(er error) error {
 
-	fmt.Println("Error while parsing, attemping to re-synchronize...")
 
 	p.ErrorNumber += 1
 	p.Errors = append(p.Errors, er)
 
 	for t, _ := p.l.Peek(); ; t, _ = p.l.Peek() {
 
-		fmt.Println(t.Lexema)
 		if p.ErrorNumber < 5{
 			switch t.Lexema {
 
 			case ";", ")", "(":
 
-				fmt.Println("Found sync token")
+				//fmt.Println("Found sync token")
 				return nil
 
 			default:
@@ -477,10 +479,10 @@ func (p *Parser) Func() error {
 		return err
 	}
 
-	_, err, isLbra := p.match(fxlex.TokType('{'))
+	tok_1, err, isLbra := p.match(fxlex.TokType('{'))
 
 	if err != nil || !isLbra {
-		err = errors.New("Missing '{' token on function")
+		err = p.ErrExpected("function", tok_1, fxlex.TokType('{'))
 		return err
 	}
 
@@ -490,7 +492,7 @@ func (p *Parser) Func() error {
 
 	_, err, isRbra := p.match(fxlex.TokType('}'))
 	if err != nil || !isRbra {
-		err = errors.New("Missing '}' token on function")
+		err = fmt.Errorf("Missing '}' on function, found ")
 		return err
 	}
 

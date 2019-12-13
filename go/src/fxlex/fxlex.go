@@ -65,7 +65,8 @@ type Token struct {
 	TokValInt    int64
 	TokValBool   bool
 	TokValString string
-	line         int
+	Line         int
+    File         string
 }
 
 type RuneScanner interface {
@@ -365,7 +366,7 @@ func (l *Lexer) Lex() (t Token, err error) {
 	)
 
 	defer func() {
-		//fmt.Fprintf(os.Stderr, "Lex: %s\n", t.Lexema)
+
 		if e := recover(); e != nil {
 			errs := fmt.Sprint(e)
 			if strings.HasPrefix(errs, "runtime error:") {
@@ -400,22 +401,25 @@ func (l *Lexer) Lex() (t Token, err error) {
 				} else { //not a comment so unget and continue
 					l.unget()
 					t, err = l.lexOp()
-					t.line = l.line
+					t.Line = l.line
+                    t.File = l.file
 					return t, err
 				}
 			} else {
 				l.unget()
 				t, err = l.lexOp()
-				t.line = l.line
+				t.Line = l.line
+                t.File = l.file
 				return t, err
 			}
 
 		case RuneEOF:
-			//fmt.Println("End of file")
+
 			t.Lexema = l.accept()
 			t.Type = TokEof
-			t.line = l.line
-			//fmt.Println(t.Lexema)
+			t.Line = l.line
+            t.File = l.file
+
 			return t, nil
 
 		case '\n':
@@ -426,7 +430,8 @@ func (l *Lexer) Lex() (t Token, err error) {
 
 			l.unget()
 			t, err = l.lexSep()
-			t.line = l.line
+			t.Line = l.line
+            t.File = l.file
 			return t, err
 
 		default:
@@ -438,13 +443,15 @@ func (l *Lexer) Lex() (t Token, err error) {
 		case unicode.IsLetter(r):
 			l.unget()
 			t, err = l.lexId()
-			t.line = l.line
+			t.Line = l.line
+            t.File = l.file
 			return t, err
 
 		case unicode.IsNumber(r):
 			l.unget()
 			t, err = l.lexNum()
-			t.line = l.line
+			t.Line = l.line
+            t.File = l.file
 			return t, err
 		}
 	}
@@ -456,7 +463,7 @@ func (t *Token) PrintToken() {
 		switch t.Type {
 
 		case TokEof:
-			//fmt.Println("End of file token")
+
 			fmt.Printf("Token type: TokEof\n")
 
 		case TokId:
@@ -538,7 +545,7 @@ func (t *Token) PrintToken() {
 		fmt.Printf("Lexema: %s\n", t.Lexema)
 		fmt.Printf("Token type: %c\n", t.Type)
 	}
-	fmt.Printf("Line: %v\n", t.line)
+	fmt.Printf("Line: %v\n", t.Line)
 	fmt.Printf("\n")
 
 }
