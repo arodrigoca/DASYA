@@ -13,11 +13,13 @@ type Parser struct {
 	depth       int
 	DebugDesc   bool
 	ErrorNumber int
+	Errors      []error
 }
 
 func NewParser(l *fxlex.Lexer) *Parser {
 
-	return &Parser{l, 0, true, 0}
+	var erarray []error
+	return &Parser{l, 0, true, 0, erarray}
 }
 
 func (p *Parser) pushTrace(tag string) {
@@ -50,11 +52,13 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 
 }
 
-func (p *Parser) ConsumeUntilMarker() error {
+func (p *Parser) ConsumeUntilMarker(er error) error {
 
 	fmt.Println("Error while parsing, attemping to re-synchronize...")
-	
+
 	p.ErrorNumber += 1
+	p.Errors = append(p.Errors, er)
+
 	for t, _ := p.l.Peek(); ; t, _ = p.l.Peek() {
 
 		fmt.Println(t.Lexema)
@@ -63,6 +67,7 @@ func (p *Parser) ConsumeUntilMarker() error {
 
 		case ";", ")", "(":
 
+			fmt.Println("Found sync token")
 			return nil
 
 		default:
