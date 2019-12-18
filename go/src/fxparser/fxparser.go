@@ -51,34 +51,34 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 
 func (p *Parser) ErrExpected(place string, found fxlex.Token, wanted string) error{
 
+
     err := fmt.Errorf("%s:%d: Expected %s in %s, found %s", found.File, found.Line, wanted, place, found.Lexema)
+    p.ErrorNumber += 1
+	p.Errors = append(p.Errors, err)
+    if p.ErrorNumber > 5{
+        panic("Too many syntax errors")
+    }
+
     return err
 }
 
-func (p *Parser) ConsumeUntilMarker(er error) error {
+func (p *Parser) ConsumeUntilMarker(markers string) error {
 
 
-	p.ErrorNumber += 1
-	p.Errors = append(p.Errors, er)
 
 	for t, _ := p.l.Peek(); ; t, _ = p.l.Peek() {
 
-		if p.ErrorNumber < 5{
-			switch t.Lexema {
-
-			case ";", ")", "(":
-
-				//fmt.Println("Found sync token")
-				return nil
-
-			default:
-				_, _ = p.l.Lex()
-
-			}
-		}else{
-			return errors.New("SYNTAX ERROR")
-		}
+        if strings.Contains(markers, t.Lexema){
+            return nil
+        }else{
+            _, err := p.l.Lex()
+            if err != nil{
+                return err
+            }
+        }
 	}
+
+    return nil
 }
 
 func (p *Parser) Exprend() error {
