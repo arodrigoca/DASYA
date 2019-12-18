@@ -49,40 +49,38 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 
 }
 
-func (p *Parser) ErrExpected(place string, found fxlex.Token, wanted string){
+func (p *Parser) ErrExpected(place string, found fxlex.Token, wanted string) {
 
-
-    err := fmt.Errorf("%s:%d: Expected %s in %s, found %s", found.File, found.Line, wanted, place, found.Lexema)
-    fmt.Println(err)
-    p.ErrorNumber += 1
+	err := fmt.Errorf("%s:%d: Expected %s in %s, found %s", found.File, found.Line, wanted, place, found.Lexema)
+	fmt.Println(err)
+	p.ErrorNumber += 1
 	p.Errors = append(p.Errors, err)
-    if p.ErrorNumber > 5{
-        panic("Too many syntax errors")
-    }
+	if p.ErrorNumber > 5 {
+		panic("Too many syntax errors")
+	}
 
 }
 
 func (p *Parser) ConsumeUntilMarker(markers string) error {
 
-
-
 	for t, _ := p.l.Peek(); ; t, _ = p.l.Peek() {
-        t.PrintToken()
-        if t.Type != fxlex.TokEof{
-            if strings.Contains(markers, t.Lexema){
-                return nil
-            }else{
-                _, err := p.l.Lex()
-                if err != nil{
-                    return err
-                }
-            }
-        }else{
-            panic("Found EOF")
-        }
+		//t.PrintToken()
+		if t.Type != fxlex.TokEof {
+			if strings.Contains(markers, t.Lexema) {
+				_, _ = p.l.Lex()
+				return nil
+			} else {
+				_, err := p.l.Lex()
+				if err != nil {
+					return err
+				}
+			}
+		} else {
+			panic("Found EOF")
+		}
 	}
 
-    return nil
+	return nil
 }
 
 func (p *Parser) Exprend() error {
@@ -171,9 +169,9 @@ func (p *Parser) Funcall() error {
 	if err != nil || !isLpar {
 		//err = errors.New("Missing '(' on function call")
 		//return err
-        p.ErrExpected("function call", tok_1, "(")
-        p.ConsumeUntilMarker(")")
-        return nil
+		p.ErrExpected("function call", tok_1, "(")
+		p.ConsumeUntilMarker(";")
+		return nil
 	}
 
 	return p.Rfuncall()
@@ -219,15 +217,15 @@ func (p *Parser) Iter() error {
 	if err != nil || !isIter {
 		//err = errors.New("Missing 'iter' on iter definition")
 		//return err
-        p.ErrExpected("iter declaration", tok_1, "Iter")
+		p.ErrExpected("iter declaration", tok_1, "Iter")
 	}
 
 	tok_2, err, isLpar := p.match(fxlex.TokType('('))
 	if err != nil || !isLpar {
 		//err = errors.New("Missing '(' token on iter definition")
 		//return err
-        p.ErrExpected("iter declaration", tok_2, "(")
-        return nil
+		p.ErrExpected("iter declaration", tok_2, "(")
+		return nil
 	}
 
 	_, err, isId := p.match(fxlex.TokId)
@@ -379,16 +377,16 @@ func (p *Parser) Fdecargs() error {
 		if err != nil || err1 != nil || (isInt || isBool) == false {
 			//err = errors.New("Missing Id on function arguments")
 			//return err
-            p.ErrExpected("function declaration", tok_2, "Id")
-            return nil
+			p.ErrExpected("function declaration", tok_2, "Id")
+			return nil
 		}
 		//comprobar el segundo id
 		tok_1, err, isId := p.match(fxlex.TokId)
 		if err != nil || !isId {
 			//err = errors.New("Missing Id on function arguments")
 			//return err
-            p.ErrExpected("function declaration", tok_1, "Id")
-            return nil
+			p.ErrExpected("function declaration", tok_1, "Id")
+			return nil
 		}
 
 		return p.Fdecargs()
@@ -410,8 +408,8 @@ func (p *Parser) Fdecargs() error {
 		if err != nil || !isId {
 			//err = errors.New("Missing Id on function arguments")
 			//return err
-            p.ErrExpected("function declaration", tok_1, "Id")
-            return nil
+			p.ErrExpected("function declaration", tok_1, "Id")
+			return nil
 		}
 
 		return p.Fdecargs()
@@ -445,10 +443,10 @@ func (p *Parser) Finside() error {
 	tok_1, err, isRpar := p.match(fxlex.TokType(')'))
 
 	if err != nil || !isRpar {
-        p.ErrExpected("function declaration", tok_1, ")")
+		p.ErrExpected("function declaration", tok_1, ")")
 		//err = errors.New("Missing ')' token on function definition")
 		//return err
-        return nil
+		return nil
 	}
 
 	return nil
@@ -462,25 +460,25 @@ func (p *Parser) Fsig() error {
 	tok_1, err, isFunc := p.match(fxlex.TokFunc)
 
 	if err != nil || !isFunc {
-        p.ErrExpected("function declaration", tok_1, "func")
+		p.ErrExpected("function declaration", tok_1, "func")
 		//return err
-        return nil
+		return nil
 	}
 
 	tok_2, err, isId := p.match(fxlex.TokId)
 
 	if err != nil || !isId {
-        p.ErrExpected("function declaration", tok_2, "id")
+		p.ErrExpected("function declaration", tok_2, "id")
 		//return err
-        return nil
+		return nil
 	}
 
 	tok_3, err, isLpar := p.match(fxlex.TokType('('))
 
 	if err != nil || !isLpar {
-        p.ErrExpected("function declaration", tok_3, "(")
+		p.ErrExpected("function declaration", tok_3, "(")
 		//return err
-        return nil
+		return nil
 	}
 
 	if err := p.Finside(); err != nil {
@@ -504,7 +502,7 @@ func (p *Parser) Func() error {
 	if err != nil || !isLbra {
 		p.ErrExpected("function", tok_1, "{")
 		//return err
-        return nil
+		return nil
 	}
 
 	if err := p.Body(); err != nil {
@@ -515,7 +513,7 @@ func (p *Parser) Func() error {
 	if err != nil || !isRbra {
 		p.ErrExpected("function", tok_2, "}")
 		//return err
-        return nil
+		return nil
 	}
 
 	return nil
