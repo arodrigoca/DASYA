@@ -49,7 +49,7 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 
 }
 
-func (p *Parser) ErrExpected(place string, found fxlex.Token, wanted string) {
+func (p *Parser) ErrExpected(place string, found fxlex.Token, wanted string) error {
 
 	err := fmt.Errorf("%s:%d: Expected %s in %s, found %s", found.File, found.Line, wanted, place, found.Lexema)
 	fmt.Println(err)
@@ -58,7 +58,7 @@ func (p *Parser) ErrExpected(place string, found fxlex.Token, wanted string) {
 	if p.ErrorNumber > 5 {
 		panic("Too many syntax errors")
 	}
-
+	return err
 }
 
 func (p *Parser) ConsumeUntilMarker(markers string) error {
@@ -169,7 +169,7 @@ func (p *Parser) Funcall() error {
 	if err != nil || !isLpar {
 		//err = errors.New("Missing '(' on function call")
 		//return err
-		p.ErrExpected("function call", tok_1, "(")
+		_ = p.ErrExpected("function call", tok_1, "(")
 		p.ConsumeUntilMarker(";")
 		return nil
 	}
@@ -217,14 +217,14 @@ func (p *Parser) Iter() error {
 	if err != nil || !isIter {
 		//err = errors.New("Missing 'iter' on iter definition")
 		//return err
-		p.ErrExpected("iter declaration", tok_1, "Iter")
+		_ = p.ErrExpected("iter declaration", tok_1, "Iter")
 	}
 
 	tok_2, err, isLpar := p.match(fxlex.TokType('('))
 	if err != nil || !isLpar {
 		//err = errors.New("Missing '(' token on iter definition")
 		//return err
-		p.ErrExpected("iter declaration", tok_2, "(")
+		_ = p.ErrExpected("iter declaration", tok_2, "(")
 		return nil
 	}
 
@@ -377,7 +377,7 @@ func (p *Parser) Fdecargs() error {
 		if err != nil || err1 != nil || (isInt || isBool) == false {
 			//err = errors.New("Missing Id on function arguments")
 			//return err
-			p.ErrExpected("function declaration", tok_2, "Id")
+			_ = p.ErrExpected("function declaration", tok_2, "Id")
 			return nil
 		}
 		//comprobar el segundo id
@@ -385,7 +385,7 @@ func (p *Parser) Fdecargs() error {
 		if err != nil || !isId {
 			//err = errors.New("Missing Id on function arguments")
 			//return err
-			p.ErrExpected("function declaration", tok_1, "Id")
+			_ = p.ErrExpected("function declaration", tok_1, "Id")
 			return nil
 		}
 
@@ -408,7 +408,7 @@ func (p *Parser) Fdecargs() error {
 		if err != nil || !isId {
 			//err = errors.New("Missing Id on function arguments")
 			//return err
-			p.ErrExpected("function declaration", tok_1, "Id")
+			_ = p.ErrExpected("function declaration", tok_1, "Id")
 			return nil
 		}
 
@@ -443,7 +443,7 @@ func (p *Parser) Finside() error {
 	tok_1, err, isRpar := p.match(fxlex.TokType(')'))
 
 	if err != nil || !isRpar {
-		p.ErrExpected("function declaration", tok_1, ")")
+		_ = p.ErrExpected("function declaration", tok_1, ")")
 		//err = errors.New("Missing ')' token on function definition")
 		//return err
 		return nil
@@ -460,7 +460,7 @@ func (p *Parser) Fsig() error {
 	tok_1, err, isFunc := p.match(fxlex.TokFunc)
 
 	if err != nil || !isFunc {
-		p.ErrExpected("function declaration", tok_1, "func")
+		_ = p.ErrExpected("function declaration", tok_1, "func")
 		//return err
 		return nil
 	}
@@ -468,7 +468,7 @@ func (p *Parser) Fsig() error {
 	tok_2, err, isId := p.match(fxlex.TokId)
 
 	if err != nil || !isId {
-		p.ErrExpected("function declaration", tok_2, "id")
+		_ = p.ErrExpected("function declaration", tok_2, "id")
 		//return err
 		return nil
 	}
@@ -476,7 +476,7 @@ func (p *Parser) Fsig() error {
 	tok_3, err, isLpar := p.match(fxlex.TokType('('))
 
 	if err != nil || !isLpar {
-		p.ErrExpected("function declaration", tok_3, "(")
+		_ = p.ErrExpected("function declaration", tok_3, "(")
 		//return err
 		return nil
 	}
@@ -500,7 +500,7 @@ func (p *Parser) Func() error {
 	tok_1, err, isLbra := p.match(fxlex.TokType('{'))
 
 	if err != nil || !isLbra {
-		p.ErrExpected("function", tok_1, "{")
+		_ = p.ErrExpected("function", tok_1, "{")
 		p.ConsumeUntilMarker("}")
 		//return err
 		return nil
@@ -510,11 +510,9 @@ func (p *Parser) Func() error {
 		return err
 	}
 
-	tok_2, err, isRbra := p.match(fxlex.TokType('}'))
+	_, err, isRbra := p.match(fxlex.TokType('}'))
 	if err != nil || !isRbra {
-		p.ErrExpected("function", tok_2, "}")
-		//return err
-		return nil
+		return err
 	}
 
 	return nil
