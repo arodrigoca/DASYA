@@ -501,6 +501,7 @@ func (p *Parser) Func() error {
 
 	if err != nil || !isLbra {
 		p.ErrExpected("function", tok_1, "{")
+		p.ConsumeUntilMarker("}")
 		//return err
 		return nil
 	}
