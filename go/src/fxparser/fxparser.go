@@ -454,7 +454,9 @@ func (p *Parser) Finside() error {
 }
 
 func (p *Parser) Fsig() error {
-	//<FSIG> :: = 'func' ID '(' <FINSIDE>
+	//<FSIG> :: = 'func' ID '(' <FINSIDE> |
+	//						'func' main '(' <FINSIDE> |
+
 	p.pushTrace("FSIG")
 	defer p.popTrace()
 	tok_1, err, isFunc := p.match(fxlex.TokFunc)
@@ -466,23 +468,39 @@ func (p *Parser) Fsig() error {
 	}
 
 	tok_2, err, isId := p.match(fxlex.TokId)
+	tok_main, err_main, isMain := p.match(fxlex.TokMain)
 
-	if err != nil || !isId {
-		_ = p.ErrExpected("function declaration", tok_2, "id")
-		//return err
-		return nil
+
+	if err != nil || err_main != nil{
+
+		if err != nil{
+			_ = p.ErrExpected("function declaration", tok_2, "id")
+			//return err
+			return nil
+		}else if err_main != nil{
+			_ = p.ErrExpected("function declaration", tok_main, "id")
+			//return err
+			return nil
+		}
 	}
 
-	tok_3, err, isLpar := p.match(fxlex.TokType('('))
+	if isId || isMain{
 
-	if err != nil || !isLpar {
-		_ = p.ErrExpected("function declaration", tok_3, "(")
-		//return err
-		return nil
-	}
+		tok_3, err, isLpar := p.match(fxlex.TokType('('))
 
-	if err := p.Finside(); err != nil {
-		return err
+		if err != nil || !isLpar {
+			_ = p.ErrExpected("function declaration", tok_3, "(")
+			//return err
+			return nil
+		}
+
+		if err := p.Finside(); err != nil {
+			return err
+		}
+
+	}else{
+		tok_err, _, _ := p.match(fxlex.TokType('('))
+		_ = p.ErrExpected("function declaration", tok_err, "main or function id")
 	}
 
 	return nil

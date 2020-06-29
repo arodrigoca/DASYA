@@ -4,14 +4,14 @@ func line ( int x , int y ){
   }
 }
 
-func hola(int x, int x){
+func 1 (){
   iter (i := 0; 3 , 1){
-    rect (i);
+    rect (i , i , 3 , 0xf);
   }
 
   iter (j := 0; 8 , 2){ // loops 0 2 4 6 8
-    rect (8 , j , 8 , 0xf);
+    rect (j , j , 8 , 0xf);
   }
 
-  circle (4 , 5, 2, 0xf);
+  circle (4 , 5,  2 , 0xf);
 }
