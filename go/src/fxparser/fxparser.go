@@ -52,7 +52,7 @@ func (p *Parser) match(tT fxlex.TokType) (t fxlex.Token, e error, isMatch bool) 
 func (p *Parser) ErrExpected(place string, found fxlex.Token, wanted string) error {
 
 	err := fmt.Errorf("%s:%d: Expected %s in %s, found %s", found.File, found.Line, wanted, place, found.Lexema)
-	//fmt.Println(err)
+	fmt.Println(err)
 
 	if p.ErrorNumber >= 5 {
 		//panic("Too many syntax errors")
@@ -276,7 +276,9 @@ func (p *Parser) Iter() error {
 		//err = errors.New("Missing ';' token on iter definition")
 		//return err
 		err = p.ErrGeneric("Missing ';' token", tok.File, tok.Line, "on iter definiton")
-		return err
+		p.ConsumeUntilMarker("{")
+		//fmt.Println(p.l.Peek())
+		return nil
 	}
 
 	err = p.Expr()
