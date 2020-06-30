@@ -4,7 +4,7 @@ func line ( int x , int y ){
   }
 }
 
-func 1 (){
+func gg (){
   iter (i := 0; 3 , 1){
     rect (i , i , 3 , 0xf);
   }
