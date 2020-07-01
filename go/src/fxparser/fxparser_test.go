@@ -13,6 +13,7 @@ var filename = flag.String("file", "", "file to read")
 
 func TestLexer(t *testing.T) {
 
+	t.Error("dummy error")
 	filename := *filename
 	file, err := os.Open(filename)
 	if err != nil {

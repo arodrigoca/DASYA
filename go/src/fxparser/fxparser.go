@@ -155,9 +155,11 @@ func (p *Parser) Rfuncall() error {
 
 	if isRpar {
 		//es la segunda regla
-		_, err, isSemic := p.match(fxlex.TokType(';'))
+		tok, err, isSemic := p.match(fxlex.TokType(';'))
+		fmt.Println(tok)
 		if err != nil || !isSemic {
-			err = errors.New("Missing ';' token on function call")
+			//err = errors.New("Missing ';' token on function call")
+			err = p.ErrExpected("on function call", tok, ";")
 			return err
 		}
 		return nil
@@ -168,15 +170,18 @@ func (p *Parser) Rfuncall() error {
 		return err
 	}
 
-	_, err, isRpar = p.match(fxlex.TokType(')'))
+	tok, err, isRpar := p.match(fxlex.TokType(')'))
 	if err != nil || !isRpar {
-		err = errors.New("Missing ')' token on function call")
+		//err = errors.New("Missing ')' token on function call")
+		err := p.ErrGeneric("Missing ')' token", tok.File, tok.Line, "on function call")
 		return err
 	}
 
-	_, err, isSemic := p.match(fxlex.TokType(';'))
+	tok, err, isSemic := p.match(fxlex.TokType(';'))
 	if err != nil || !isSemic {
-		err = errors.New("Missing ';' token on function call")
+		//err = errors.New("Missing ';' token on function call")
+		err = p.ErrExpected("on function call", tok, ";")
+		//err = p.ErrGeneric("Missing ';' token", tok.File, tok.Line, "on function call")
 		return err
 	}
 
@@ -192,9 +197,9 @@ func (p *Parser) Funcall() error {
 	if err != nil || !isLpar {
 		//err = errors.New("Missing '(' on function call")
 		//return err
-		_= p.ErrExpected("function call", tok_1, "(")
+		err= p.ErrExpected("function call", tok_1, "(")
 		p.ConsumeUntilMarker(";")
-		return nil
+		return err
 	}
 
 	return p.Rfuncall()
@@ -240,27 +245,30 @@ func (p *Parser) Iter() error {
 	if err != nil || !isIter {
 		//err = errors.New("Missing 'iter' on iter definition")
 		//return err
-		_= p.ErrExpected("iter declaration", tok_1, "Iter")
-		return nil
+		//err= p.ErrExpected("iter declaration", tok_1, "Iter")
+		err = p.ErrGeneric("Bad function call or empty", tok_1.File, tok_1.Line, "on function body")
+		return err
 	}
 
 	tok_2, err, isLpar := p.match(fxlex.TokType('('))
 	if err != nil || !isLpar {
 		//err = errors.New("Missing '(' token on iter definition")
 		//return err
-		_= p.ErrExpected("iter declaration", tok_2, "(")
-		return nil
-	}
-
-	_, err, isId := p.match(fxlex.TokId)
-	if err != nil || !isId {
-		err = errors.New("Missing id on iter definition")
+		err= p.ErrExpected("iter declaration", tok_2, "(")
 		return err
 	}
 
-	_, err, isDDEq := p.match(fxlex.TokDDEq)
+	tok, err, isId := p.match(fxlex.TokId)
+	if err != nil || !isId {
+		//err = errors.New("Missing id on iter definition")
+		err = p.ErrGeneric("Missing id", tok.File, tok.Line, "on iter definiton")
+		return err
+	}
+
+	tok, err, isDDEq := p.match(fxlex.TokDDEq)
 	if err != nil || !isDDEq {
-		err = errors.New("Missing ':=' token on iter definition")
+		//err = errors.New("Missing ':=' token on iter definition")
+		err = p.ErrGeneric("Missing ':=' token", tok.File, tok.Line, "on iter definition")
 		return err
 	}
 
@@ -284,9 +292,10 @@ func (p *Parser) Iter() error {
 		return err
 	}
 
-	_, err, isComma := p.match(fxlex.TokType(','))
+	tok, err, isComma := p.match(fxlex.TokType(','))
 	if err != nil || !isComma {
-		err = errors.New("Missing '(' token on iter definition")
+		//err = errors.New("Missing ',' token on iter definition")
+		err = p.ErrGeneric("Missing ',' token", tok.File, tok.Line, "on iter definition")
 		return err
 	}
 
@@ -295,15 +304,17 @@ func (p *Parser) Iter() error {
 		return err
 	}
 
-	_, err, isRpar := p.match(fxlex.TokType(')'))
+	tok, err, isRpar := p.match(fxlex.TokType(')'))
 	if err != nil || !isRpar {
-		err = errors.New("Missing ')' token on iter definition")
+		//err = errors.New("Missing ')' token on iter definition")
+		err = p.ErrGeneric("Missing ')' token", tok.File, tok.Line, "on iter definition")
 		return err
 	}
 
-	_, err, isLbra := p.match(fxlex.TokType('{'))
+	tok, err, isLbra := p.match(fxlex.TokType('{'))
 	if err != nil || !isLbra {
-		err = errors.New("Missing '{' token on iter definition")
+		//err = errors.New("Missing '{' token on iter definition")
+		err = p.ErrGeneric("Missing '{' token", tok.File, tok.Line, "on iter definition")
 		return err
 	}
 
@@ -312,9 +323,10 @@ func (p *Parser) Iter() error {
 		return err
 	}
 
-	_, err, isRbra := p.match(fxlex.TokType('}'))
+	tok, err, isRbra := p.match(fxlex.TokType('}'))
 	if err != nil || !isRbra {
-		err = errors.New("Missing '}' token on iter definition")
+		//err = errors.New("Missing '}' token on iter definition")
+		err = p.ErrGeneric("Missing '}' token", tok.File, tok.Line, "on iter definition")
 		return err
 	}
 
@@ -405,16 +417,16 @@ func (p *Parser) Fdecargs() error {
 		if err != nil || err1 != nil || (isInt || isBool) == false {
 			//err = errors.New("Missing Id on function arguments")
 			//return err
-			_= p.ErrExpected("function declaration", tok_2, "Id")
-			return nil
+			err= p.ErrExpected("function declaration", tok_2, "Id")
+			return err
 		}
 		//comprobar el segundo id
 		tok_1, err, isId := p.match(fxlex.TokId)
 		if err != nil || !isId {
 			//err = errors.New("Missing Id on function arguments")
 			//return err
-			_= p.ErrExpected("function declaration", tok_1, "Id")
-			return nil
+			err= p.ErrExpected("function declaration", tok_1, "Id")
+			return err
 		}
 
 		return p.Fdecargs()
@@ -436,8 +448,8 @@ func (p *Parser) Fdecargs() error {
 		if err != nil || !isId {
 			//err = errors.New("Missing Id on function arguments")
 			//return err
-			_= p.ErrExpected("function declaration", tok_1, "Id")
-			return nil
+			err= p.ErrExpected("function declaration", tok_1, "Id")
+			return err
 		}
 
 		return p.Fdecargs()
@@ -471,10 +483,10 @@ func (p *Parser) Finside() error {
 	tok_1, err, isRpar := p.match(fxlex.TokType(')'))
 
 	if err != nil || !isRpar {
-		_= p.ErrExpected("function declaration", tok_1, ")")
+		err= p.ErrExpected("function declaration", tok_1, ")")
 		//err = errors.New("Missing ')' token on function definition")
 		//return err
-		return nil
+		return err
 	}
 
 	return nil
@@ -490,9 +502,9 @@ func (p *Parser) Fsig() error {
 	tok_1, err, isFunc := p.match(fxlex.TokFunc)
 
 	if err != nil || !isFunc {
-		_= p.ErrExpected("function declaration", tok_1, "func")
+		err= p.ErrExpected("function declaration", tok_1, "func")
 		//return err
-		return nil
+		return err
 	}
 
 	tok_2, err, isId := p.match(fxlex.TokId)
@@ -502,13 +514,13 @@ func (p *Parser) Fsig() error {
 	if err != nil || err_main != nil{
 
 		if err != nil{
-			_= p.ErrExpected("function declaration", tok_2, "id")
+			err= p.ErrExpected("function declaration", tok_2, "id")
 			//return err
-			return nil
+			return err
 		}else if err_main != nil{
-			_= p.ErrExpected("function declaration", tok_main, "id")
+			err= p.ErrExpected("function declaration", tok_main, "id")
 			//return err
-			return nil
+			return err
 		}
 	}
 
@@ -517,9 +529,9 @@ func (p *Parser) Fsig() error {
 		tok_3, err, isLpar := p.match(fxlex.TokType('('))
 
 		if err != nil || !isLpar {
-			_= p.ErrExpected("function declaration", tok_3, "(")
+			err= p.ErrExpected("function declaration", tok_3, "(")
 			//return err
-			return nil
+			return err
 		}
 
 		if err := p.Finside(); err != nil {
@@ -528,8 +540,8 @@ func (p *Parser) Fsig() error {
 
 	}else{
 		tok_err, _, _ := p.match(fxlex.TokType('('))
-		_= p.ErrExpected("function declaration", tok_err, "main or function id")
-		return nil
+		err= p.ErrExpected("function declaration", tok_err, "main or function id")
+		return err
 	}
 
 	return nil
@@ -547,10 +559,10 @@ func (p *Parser) Func() error {
 	tok_1, err, isLbra := p.match(fxlex.TokType('{'))
 
 	if err != nil || !isLbra {
-		_= p.ErrExpected("function", tok_1, "{")
+		err= p.ErrExpected("function", tok_1, "{")
 		p.ConsumeUntilMarker("}")
 		//return err
-		return nil
+		return err
 	}
 
 	if err := p.Body(); err != nil {
@@ -607,23 +619,23 @@ func (p *Parser) Prog() error {
 
 }
 
-func (p *Parser) Parse() []error {
+func (p *Parser) Parse() error {
 	p.pushTrace("Parse")
 	defer p.popTrace()
 
-	p.Prog()
+	//p.Prog()
 
+	/*
 	if p.Errors != nil{
 		fmt.Println("SYNTAX ERROR")
 		return p.Errors
 	}
+	*/
 
-	/*
 	if err := p.Prog(); err != nil {
 		fmt.Println("SYNTAX ERROR")
 		return err
-		//return p.Errors
 	}
-	*/
+
 	return nil
 }
