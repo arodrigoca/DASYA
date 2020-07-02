@@ -198,7 +198,7 @@ func (p *Parser) Funcall() error {
 		//err = errors.New("Missing '(' on function call")
 		//return err
 		err= p.ErrExpected("function call", tok_1, "(")
-		p.ConsumeUntilMarker(";")
+		//p.ConsumeUntilMarker(";")
 		return err
 	}
 
@@ -220,7 +220,9 @@ func (p *Parser) Atom() error {
 		}
 		return nil
 	}
-	err = errors.New("Bad atom")
+	//err = errors.New("Bad atom")
+	err = p.ErrGeneric("Bad atom", t.File, t.Line, "")
+
 	return err
 }
 
@@ -247,7 +249,7 @@ func (p *Parser) Iter() error {
 		//return err
 		//err= p.ErrExpected("iter declaration", tok_1, "Iter")
 		err = p.ErrGeneric("Bad function call or empty", tok_1.File, tok_1.Line, "on function body")
-		return err
+		//return err
 	}
 
 	tok_2, err, isLpar := p.match(fxlex.TokType('('))
@@ -255,26 +257,28 @@ func (p *Parser) Iter() error {
 		//err = errors.New("Missing '(' token on iter definition")
 		//return err
 		err= p.ErrExpected("iter declaration", tok_2, "(")
-		return err
+		//return err
 	}
 
 	tok, err, isId := p.match(fxlex.TokId)
 	if err != nil || !isId {
 		//err = errors.New("Missing id on iter definition")
 		err = p.ErrGeneric("Missing id", tok.File, tok.Line, "on iter definiton")
-		return err
+		//return err
 	}
 
 	tok, err, isDDEq := p.match(fxlex.TokDDEq)
 	if err != nil || !isDDEq {
 		//err = errors.New("Missing ':=' token on iter definition")
 		err = p.ErrGeneric("Missing ':=' token", tok.File, tok.Line, "on iter definition")
-		return err
+		//return err
 	}
 
 	err = p.Expr()
 	if err != nil {
-		return err
+		p.ConsumeUntilMarker("}")
+		return nil
+		//return err
 	}
 
 	//_, err, isSemic := p.match(fxlex.TokType(';'))
@@ -284,45 +288,50 @@ func (p *Parser) Iter() error {
 		//err = errors.New("Missing ';' token on iter definition")
 		//return err
 		err = p.ErrGeneric("Missing ';' token", tok.File, tok.Line, "on iter definiton")
-		p.ConsumeUntilMarker("{")
+		//p.ConsumeUntilMarker("{")
 		//fmt.Println(p.l.Peek())
-		return nil
+		//return err
 	}
 
 	err = p.Expr()
 	if err != nil {
-		return err
+		p.ConsumeUntilMarker("}")
+		return nil
 	}
 
 	tok, err, isComma := p.match(fxlex.TokType(','))
 	if err != nil || !isComma {
 		//err = errors.New("Missing ',' token on iter definition")
 		err = p.ErrGeneric("Missing ',' token", tok.File, tok.Line, "on iter definition")
-		return err
+		//return err
 	}
 
 	err = p.Expr()
 	if err != nil {
-		return err
+		p.ConsumeUntilMarker("}")
+		return nil
+		//return err
 	}
 
 	tok, err, isRpar := p.match(fxlex.TokType(')'))
 	if err != nil || !isRpar {
 		//err = errors.New("Missing ')' token on iter definition")
 		err = p.ErrGeneric("Missing ')' token", tok.File, tok.Line, "on iter definition")
-		return err
+		//return err
 	}
 
 	tok, err, isLbra := p.match(fxlex.TokType('{'))
 	if err != nil || !isLbra {
 		//err = errors.New("Missing '{' token on iter definition")
 		err = p.ErrGeneric("Missing '{' token", tok.File, tok.Line, "on iter definition")
-		return err
+		//return err
 	}
 
 	err = p.Body()
 	if err != nil {
-		return err
+		p.ConsumeUntilMarker("}")
+		return nil
+		//return err
 	}
 
 	tok, err, isRbra := p.match(fxlex.TokType('}'))
@@ -562,7 +571,7 @@ func (p *Parser) Func() error {
 
 	if err != nil || !isLbra {
 		err= p.ErrExpected("function", tok_1, "{")
-		p.ConsumeUntilMarker("}")
+		//p.ConsumeUntilMarker("}")
 		//return err
 		return err
 	}
@@ -621,23 +630,24 @@ func (p *Parser) Prog() error {
 
 }
 
-func (p *Parser) Parse() error {
+func (p *Parser) Parse() []error {
 	p.pushTrace("Parse")
 	defer p.popTrace()
 
-	//p.Prog()
+	p.Prog()
 
-	/*
+
 	if p.Errors != nil{
 		fmt.Println("SYNTAX ERROR")
 		return p.Errors
 	}
-	*/
 
+	/*
 	if err := p.Prog(); err != nil {
 		fmt.Println("SYNTAX ERROR")
 		return err
 	}
+	*/
 
 	return nil
 }
