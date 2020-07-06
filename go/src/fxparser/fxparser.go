@@ -528,6 +528,8 @@ func (p *Parser) Fdecargs() error {
 	//comprobar si es la segunda regla
 	_, err, isInt := p.match(fxlex.TokDefInt)
 	_, err1, isBool := p.match(fxlex.TokDefBool)
+	fmt.Println(isInt)
+	fmt.Println(isBool)
 
 	if err != nil || err1 != nil || (isInt || isBool) == false {
 		return err
@@ -628,7 +630,9 @@ func (p *Parser) Fsig() error {
 		}
 
 		if err := p.Finside(); err != nil {
-			return err
+			//return err
+			p.ConsumeUntilMarker("{", false)
+			return nil
 		}
 
 	}else{
