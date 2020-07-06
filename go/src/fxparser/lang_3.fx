@@ -1,6 +1,6 @@
 func onlycall(){
 
-  circle(12);
-  rect(1,2,4,5);
+  circle(1,y,2);
+  rect(1);
 
 }

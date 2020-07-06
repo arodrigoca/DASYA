@@ -87,13 +87,15 @@ func (p *Parser) ErrGeneric(message string, file string, line int, place string)
 
 
 
-func (p *Parser) ConsumeUntilMarker(markers string) error {
+func (p *Parser) ConsumeUntilMarker(markers string, consume bool) error {
 
 	for t, _ := p.l.Peek(); ; t, _ = p.l.Peek() {
 		//t.PrintToken()
 		if t.Type != fxlex.TokEof {
 			if strings.Contains(markers, t.Lexema) {
-				//_, _ = p.l.Lex()
+				if consume{
+					_, _ = p.l.Lex()
+				}
 				return nil
 			} else {
 				_, err := p.l.Lex()
@@ -162,8 +164,12 @@ func (p *Parser) Fargs() error {
 	p.pushTrace("FARGS")
 	defer p.popTrace()
 	if err := p.Expr(); err != nil {
-		return err
+		//fmt.Println("CONSUMED UNTIL MARKER")
+		p.ConsumeUntilMarker(",", false)
+		//return nil
+		//return err
 	}
+
 	if err := p.Exprend(); err != nil {
 		return err
 	}
@@ -206,7 +212,8 @@ func (p *Parser) Rfuncall() error {
 		//err := p.ErrGeneric("Missing ')' token", tok.File, tok.Line, "on function call")
 		//return err
 		err = p.ErrExpected("on function call", tok, ")")
-		p.ConsumeUntilMarker(";")
+		//p.ConsumeUntilMarker(";")
+		return err
 	}
 
 	tok, err, isSemic := p.match(fxlex.TokType(';'))
@@ -229,13 +236,16 @@ func (p *Parser) Funcall() error {
 	if err != nil || !isLpar {
 		//err = errors.New("Missing '(' on function call")
 		//return err
-		_ = p.ErrExpected("function call", tok_1, "(")
-		p.ConsumeUntilMarker(")")
+	 	err = p.ErrExpected("function call", tok_1, "(")
+		//p.ConsumeUntilMarker(")")
+		return err
 
 	}
 
 	err = p.Rfuncall()
 	if err != nil{
+
+		//p.ConsumeUntilMarker(";")
 		return err
 	}
 
@@ -325,7 +335,7 @@ func (p *Parser) Iter() error {
 
 	err = p.Expr()
 	if err != nil {
-		p.ConsumeUntilMarker("{}();")
+		//p.ConsumeUntilMarker("{}();")
 		return nil
 		//return err
 	}
@@ -345,7 +355,7 @@ func (p *Parser) Iter() error {
 
 	err = p.Expr()
 	if err != nil {
-		p.ConsumeUntilMarker("{}();")
+		//p.ConsumeUntilMarker("{}();")
 		return nil
 	}
 
@@ -361,7 +371,7 @@ func (p *Parser) Iter() error {
 
 	err = p.Expr()
 	if err != nil {
-		p.ConsumeUntilMarker("{}();")
+		//p.ConsumeUntilMarker("{}();")
 		return nil
 		//return err
 	}
@@ -388,7 +398,7 @@ func (p *Parser) Iter() error {
 
 	err = p.Body()
 	if err != nil {
-		p.ConsumeUntilMarker("{}();")
+		//p.ConsumeUntilMarker("{}();")
 		return nil
 		//return err
 	}
@@ -419,7 +429,17 @@ func (p *Parser) Stmnt() error {
 
 	if isId {
 		//es la primera regla
-		return p.Funcall()
+		//return p.Funcall()
+		err = p.Funcall()
+		if err != nil{
+			err = p.ConsumeUntilMarker(";", true)
+			if err != nil{
+				return err
+			}
+
+		}
+
+		return nil
 
 	}
 	//es la segunda regla
