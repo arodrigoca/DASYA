@@ -511,7 +511,7 @@ func (p *Parser) Fdecargs() error {
 		if err != nil || err1 != nil || (isInt || isBool) == false {
 			//err = errors.New("Missing Id on function arguments")
 			//return err
-			err= p.ErrExpected("function declaration", tok_2, "Type")
+			err= p.ErrExpected("function arguments", tok_2, "Type")
 			p.ConsumeUntilMarker(")", false)
 			return nil
 		}
@@ -560,7 +560,7 @@ func (p *Parser) Fdecargs() error {
 	}
 
 	tok, err, _ := p.match(fxlex.TokType(')'))
-	err= p.ErrExpected("function declaration", tok, "Type")
+	err= p.ErrExpected("function definition", tok, ")")
 	p.ConsumeUntilMarker(")", false)
 	return nil
 
@@ -613,18 +613,18 @@ func (p *Parser) Fsig() error {
 		return err
 	}
 
-	tok_2, err, isId := p.match(fxlex.TokId)
-	tok_main, err_main, isMain := p.match(fxlex.TokMain)
+	_, err, isId := p.match(fxlex.TokId)
+	_, err_main, isMain := p.match(fxlex.TokMain)
 
 
 	if err != nil || err_main != nil{
 
 		if err != nil{
-			err= p.ErrExpected("function declaration", tok_2, "id")
+			//err= p.ErrExpected("function declaration", tok_2, "id")
 			//return err
 			return err
 		}else if err_main != nil{
-			err= p.ErrExpected("function declaration", tok_main, "id")
+			//err= p.ErrExpected("function declaration", tok_main, "id")
 			//return err
 			return err
 		}
@@ -647,9 +647,25 @@ func (p *Parser) Fsig() error {
 		}
 
 	}else{
+		//even though the function is not correctly defined, keep the flow and evaluate everything to search for more
+		//errors
 		tok_err, _, _ := p.match(fxlex.TokType('('))
 		err= p.ErrExpected("function declaration", tok_err, "main or function id")
-		return err
+		p.ConsumeUntilMarker("(", false)
+
+		tok_3, err, isLpar := p.match(fxlex.TokType('('))
+
+		if err != nil || !isLpar {
+			err= p.ErrExpected("function declaration", tok_3, "(")
+			//return err
+			return err
+		}
+
+		if err := p.Finside(); err != nil {
+			p.ConsumeUntilMarker("{", false)
+			return nil
+		}
+
 	}
 
 	return nil
