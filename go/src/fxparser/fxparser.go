@@ -495,6 +495,7 @@ func (p *Parser) Fdecargs() error {
 
 	p.pushTrace("FDECARGS")
 	defer p.popTrace()
+
 	_, err, isComma := p.match(fxlex.TokType(','))
 
 	if err != nil {
@@ -510,8 +511,9 @@ func (p *Parser) Fdecargs() error {
 		if err != nil || err1 != nil || (isInt || isBool) == false {
 			//err = errors.New("Missing Id on function arguments")
 			//return err
-			err= p.ErrExpected("function declaration", tok_2, "Id")
-			return err
+			err= p.ErrExpected("function declaration", tok_2, "Type")
+			p.ConsumeUntilMarker(")", false)
+			return nil
 		}
 		//comprobar el segundo id
 		tok_1, err, isId := p.match(fxlex.TokId)
@@ -519,7 +521,8 @@ func (p *Parser) Fdecargs() error {
 			//err = errors.New("Missing Id on function arguments")
 			//return err
 			err= p.ErrExpected("function declaration", tok_1, "Id")
-			return err
+			p.ConsumeUntilMarker(")", false)
+			return nil
 		}
 
 		return p.Fdecargs()
@@ -528,10 +531,9 @@ func (p *Parser) Fdecargs() error {
 	//comprobar si es la segunda regla
 	_, err, isInt := p.match(fxlex.TokDefInt)
 	_, err1, isBool := p.match(fxlex.TokDefBool)
-	fmt.Println(isInt)
-	fmt.Println(isBool)
 
-	if err != nil || err1 != nil || (isInt || isBool) == false {
+	if err != nil || err1 != nil {
+
 		return err
 	}
 
@@ -544,13 +546,22 @@ func (p *Parser) Fdecargs() error {
 			//err = errors.New("Missing Id on function arguments")
 			//return err
 			err= p.ErrExpected("function declaration", tok_1, "Id")
-			return err
+			p.ConsumeUntilMarker(")", false)
+			return nil
 		}
 
 		return p.Fdecargs()
 	}
+	//es la tercera regla, con lo cual empty o bien hay algún error
+	t, err := p.l.Peek()
 
-	//es la tercera regla, con lo cual empty
+	if t.Type == fxlex.TokType(')'){
+		return nil
+	}
+
+	tok, err, _ := p.match(fxlex.TokType(')'))
+	err= p.ErrExpected("function declaration", tok, "Type")
+	p.ConsumeUntilMarker(")", false)
 	return nil
 
 }

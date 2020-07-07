@@ -5,7 +5,7 @@ func function1(int a, int b){
 
 }
 
-func function2(){
+func function2(bool c, bool d){
 
   circle(1,y,2);
   rect(1);
