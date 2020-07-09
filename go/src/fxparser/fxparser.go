@@ -290,16 +290,15 @@ func (p *Parser) Iter() error {
 	p.pushTrace("ITER")
 	defer p.popTrace()
 
+	has_error := false
+
 	tok_1, err, isIter := p.match(fxlex.TokIter)
 	if err != nil || !isIter {
 		//err = errors.New("Missing 'iter' on iter definition")
 		//return err
 		//err= p.ErrExpected("iter declaration", tok_1, "Iter")
 		err = p.ErrGeneric("Bad function call or empty", tok_1.File, tok_1.Line, "on function body")
-		if err != nil{
-			return err
-		}
-		//return err
+		return err
 	}
 
 	tok_2, err, isLpar := p.match(fxlex.TokType('('))
@@ -307,110 +306,104 @@ func (p *Parser) Iter() error {
 		//err = errors.New("Missing '(' token on iter definition")
 		//return err
 		err= p.ErrExpected("iter declaration", tok_2, "(")
-		if err != nil{
-			return err
-		}
-		//return err
+		p.ConsumeUntilMarker(":=", false)
+		has_error = true
+
 	}
 
-	tok, err, isId := p.match(fxlex.TokId)
-	if err != nil || !isId {
-		//err = errors.New("Missing id on iter definition")
-		err = p.ErrGeneric("Missing id", tok.File, tok.Line, "on iter definiton")
-		if err != nil{
-			return err
+	if !has_error{
+		has_error = false
+		tok, err, isId := p.match(fxlex.TokId)
+		if err != nil || !isId {
+			//err = errors.New("Missing id on iter definition")
+			err = p.ErrGeneric("Missing id", tok.File, tok.Line, "on iter definiton")
+			p.ConsumeUntilMarker(":=", false)
+			has_error = true
 		}
-		//return err
 	}
 
+	has_error = false
 	tok, err, isDDEq := p.match(fxlex.TokDDEq)
 	if err != nil || !isDDEq {
 		//err = errors.New("Missing ':=' token on iter definition")
 		err = p.ErrGeneric("Missing ':=' token", tok.File, tok.Line, "on iter definition")
-		if err != nil{
-			return err
-		}
-		//return err
+		p.ConsumeUntilMarker(";", false)
+		has_error = true
 	}
 
-	err = p.Expr()
-	if err != nil {
-		//p.ConsumeUntilMarker("{}();")
-		return nil
-		//return err
+	if !has_error{
+		has_error = false
+		err = p.Expr()
+		if err != nil {
+			p.ConsumeUntilMarker(";", false)
+			has_error = true
+		}
 	}
 
 	//_, err, isSemic := p.match(fxlex.TokType(';'))
+	has_error = false
 	tok, err, isSemic := p.match(fxlex.TokType(';'))
 	if err != nil || !isSemic {
 
 		//err = errors.New("Missing ';' token on iter definition")
 		//return err
 		err = p.ErrGeneric("Missing ';' token", tok.File, tok.Line, "on iter definiton")
-		if err != nil{
-			return err
+		p.ConsumeUntilMarker(")", false)
+		has_error = true
+	}
+
+	if !has_error{
+		has_error = false
+		err = p.Expr()
+		if err != nil {
+			//p.ConsumeUntilMarker("{}();")
+			return nil
 		}
-		//return err
-	}
 
-	err = p.Expr()
-	if err != nil {
-		//p.ConsumeUntilMarker("{}();")
-		return nil
-	}
-
-	tok, err, isComma := p.match(fxlex.TokType(','))
-	if err != nil || !isComma {
-		//err = errors.New("Missing ',' token on iter definition")
-		err = p.ErrGeneric("Missing ',' token", tok.File, tok.Line, "on iter definition")
-		if err != nil{
-			return err
+		tok, err, isComma := p.match(fxlex.TokType(','))
+		if err != nil || !isComma {
+			//err = errors.New("Missing ',' token on iter definition")
+			err = p.ErrGeneric("Missing ',' token", tok.File, tok.Line, "on iter definition")
+			p.ConsumeUntilMarker(")", false)
 		}
-		//return err
+
+		if !has_error{
+			err = p.Expr()
+			if err != nil {
+				p.ConsumeUntilMarker(")", false)
+			}
+		}
 	}
 
-	err = p.Expr()
-	if err != nil {
-		//p.ConsumeUntilMarker("{}();")
-		return nil
-		//return err
-	}
-
+	has_error = false
 	tok, err, isRpar := p.match(fxlex.TokType(')'))
 	if err != nil || !isRpar {
 		//err = errors.New("Missing ')' token on iter definition")
 		err = p.ErrGeneric("Missing ')' token", tok.File, tok.Line, "on iter definition")
-		if err != nil{
-			return err
-		}
-		//return err
+		p.ConsumeUntilMarker("{", false)
+		has_error = true
 	}
 
+	has_error = false
 	tok, err, isLbra := p.match(fxlex.TokType('{'))
+
 	if err != nil || !isLbra {
 		//err = errors.New("Missing '{' token on iter definition")
 		err = p.ErrGeneric("Missing '{' token", tok.File, tok.Line, "on iter definition")
-		if err != nil{
-			return err
-		}
-		//return err
 	}
 
 	err = p.Body()
 	if err != nil {
-		//p.ConsumeUntilMarker("{}();")
-		return nil
-		//return err
+		p.ConsumeUntilMarker("}", false)
+		has_error = true
 	}
 
 	tok, err, isRbra := p.match(fxlex.TokType('}'))
+
 	if err != nil || !isRbra {
 		//err = errors.New("Missing '}' token on iter definition")
 		err = p.ErrGeneric("Missing '}' token", tok.File, tok.Line, "on iter definition")
-		if err != nil{
-			return err
-		}
-		return errors.New("Missing '}' closing token")
+		return err
 	}
 
 	return nil

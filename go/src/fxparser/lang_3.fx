@@ -1,7 +1,10 @@
 func hello(int a, int b){
 
   circle(1,y,2);
-  rect(1);
+
+  iter(i := 0; x , 1){
+    circle (2 , 3, y , 5);
+  }
 
 }
 
