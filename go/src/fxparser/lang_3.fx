@@ -1,6 +1,5 @@
 func hello(int a, int b){
 
-  bool k;
   circle(1,y,2);
 
   iter(i := 0; x, 1){
@@ -13,5 +12,7 @@ func function2(bool c, bool d){
 
   circle(1,y,2);
   rect(1);
+
+  k = 1;
 
 }

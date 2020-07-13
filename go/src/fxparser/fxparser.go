@@ -414,9 +414,9 @@ func (p *Parser) Stmnt() error {
 	//            <ITER>
 	//UPDATE P5: AÑADIR DECLARACIONES
 	//<STMNT> ::= id <FUNCALL>       | done
-	//						id "=" <EXPR> ";"	 | done
+	//						id "=" <EXPR> ";"	 |
 	//						int id ";"         |
-	//						bool id ";"        |
+	//						bool id ";"        | done
 	//            <ITER>
 
 	p.pushTrace("STMNT")
@@ -428,9 +428,8 @@ func (p *Parser) Stmnt() error {
 	}
 
 	next_token, _ := p.l.Peek()
-
 	if isId {
-		//es la primera regla o la tercera
+		//es la primera regla o la segunda
 		//return p.Funcall()
 
 		if next_token.Type == fxlex.TokType('('){
@@ -445,7 +444,37 @@ func (p *Parser) Stmnt() error {
 		}else if next_token.Type == fxlex.TokType('='){
 			//es la segunda regla
 			fmt.Println("Second rule")
-			//stub
+			_, err, is_eq := p.match(fxlex.TokType('='))
+			if err != nil{
+				return err
+			}
+
+			if !is_eq{
+				panic("Something went wrong while parsing")
+			}
+
+			err = p.Expr()
+
+			if err != nil{
+				p.ConsumeUntilMarker(";", true)
+				return nil
+			}
+
+			tok_semic, err, is_semic := p.match(fxlex.TokType(';'))
+
+			if err != nil{
+				return err
+			}
+
+			if !is_semic{
+				err = p.ErrExpected("Asignation", tok_semic, ";")
+				return nil
+			}
+
+			return nil
+
+		}else{
+			err = p.ErrGeneric("Malformed asignation", next_token.File, next_token.Line, "")
 			p.ConsumeUntilMarker(";", true)
 			return nil
 		}
@@ -769,7 +798,13 @@ func (p *Parser) Prog() error {
 
 func (p *Parser) Parse() []error {
 	p.pushTrace("Parse")
-	defer p.popTrace()
+	//defer p.popTrace()
+	defer func(){
+		p.popTrace()
+		if r := recover(); r != nil{
+			fmt.Println(p.Errors)
+		}
+	}()
 
 	p.Prog()
 
