@@ -414,9 +414,9 @@ func (p *Parser) Stmnt() error {
 	//            <ITER>
 	//UPDATE P5: AÑADIR DECLARACIONES
 	//<STMNT> ::= id <FUNCALL>       | done
-	//						id "=" <EXPR> ";"	 |
+	//						id "=" <EXPR> ";"	 | done
 	//						int id ";"         |
-	//						bool id ";"        | done
+	//						bool id ";"        |
 	//            <ITER>
 
 	p.pushTrace("STMNT")
