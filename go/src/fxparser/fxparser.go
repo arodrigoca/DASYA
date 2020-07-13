@@ -412,6 +412,13 @@ func (p *Parser) Iter() error {
 func (p *Parser) Stmnt() error {
 	//<STMNT> ::= id <FUNCALL> |
 	//            <ITER>
+	//UPDATE P5: AÑADIR DECLARACIONES
+	//<STMNT> ::= id <FUNCALL>       | done
+	//						id "=" <EXPR> ";"	 | done
+	//						int id ";"         |
+	//						bool id ";"        |
+	//            <ITER>
+
 	p.pushTrace("STMNT")
 	defer p.popTrace()
 
@@ -420,20 +427,44 @@ func (p *Parser) Stmnt() error {
 		return err
 	}
 
-	if isId {
-		//es la primera regla
-		//return p.Funcall()
-		err = p.Funcall()
-		if err != nil{
-			err = p.ConsumeUntilMarker(";", true)
-			if err != nil{
-				return err
-			}
+	next_token, _ := p.l.Peek()
 
+	if isId {
+		//es la primera regla o la tercera
+		//return p.Funcall()
+
+		if next_token.Type == fxlex.TokType('('){
+			err = p.Funcall()
+			if err != nil{
+				err = p.ConsumeUntilMarker(";", true)
+				if err != nil{
+					return err
+				}
+
+			}
+		}else if next_token.Type == fxlex.TokType('='){
+			//es la segunda regla
+			fmt.Println("Second rule")
+			//stub
+			p.ConsumeUntilMarker(";", true)
+			return nil
 		}
 
 		return nil
 
+	}else if next_token.Type == fxlex.TokDefInt{
+		//es la tercera regla
+		fmt.Println("Third rule")
+		//stub
+		p.ConsumeUntilMarker(";", true)
+		return nil
+
+	}else if next_token.Type == fxlex.TokDefBool{
+		//es la cuarta regla
+		fmt.Println("Fourth rule")
+		//stub
+		p.ConsumeUntilMarker(";", true)
+		return nil
 	}
 	//es la segunda regla
 	return p.Iter()
