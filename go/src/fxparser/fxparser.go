@@ -521,8 +521,37 @@ func (p *Parser) Stmnt() error {
 	}else if next_token.Type == fxlex.TokDefBool{
 		//es la cuarta regla
 		fmt.Println("Fourth rule")
-		//stub
-		p.ConsumeUntilMarker(";", true)
+
+		_, err, isBool := p.match(fxlex.TokDefBool)
+
+		if err != nil || !isBool{
+			panic("Something went wrong while parsing")
+		}
+
+		tok_id, err, isId := p.match(fxlex.TokId)
+
+		if err != nil{
+			panic("Something went wrong while parsing")
+		}
+
+		if !isId{
+			err = p.ErrExpected("Declaration", tok_id, "id")
+			p.ConsumeUntilMarker(";", true)
+			return nil
+		}
+
+		tok_semic, err, isSemic := p.match(fxlex.TokType(';'))
+
+		if err != nil{
+			panic("Something went wrong while parsing")
+		}
+
+		if !isSemic{
+			
+			err = p.ErrExpected("Declaration", tok_semic, ";")
+			return nil
+		}
+
 		return nil
 	}
 	//es la segunda regla
