@@ -415,9 +415,9 @@ func (p *Parser) Stmnt() error {
 	//UPDATE P5: AÑADIR DECLARACIONES
 	//<STMNT> ::= id <FUNCALL>       | done
 	//						id "=" <EXPR> ";"	 | done
-	//						int id ";"         |
+	//						int id ";"         | done
 	//						bool id ";"        |
-	//            <ITER>
+	//            <ITER>               done
 
 	p.pushTrace("STMNT")
 	defer p.popTrace()
@@ -474,7 +474,7 @@ func (p *Parser) Stmnt() error {
 			return nil
 
 		}else{
-			err = p.ErrGeneric("Malformed asignation", next_token.File, next_token.Line, "")
+			err = p.ErrGeneric("Malformed asignation or declaration", next_token.File, next_token.Line, "")
 			p.ConsumeUntilMarker(";", true)
 			return nil
 		}
@@ -484,8 +484,38 @@ func (p *Parser) Stmnt() error {
 	}else if next_token.Type == fxlex.TokDefInt{
 		//es la tercera regla
 		fmt.Println("Third rule")
-		//stub
-		p.ConsumeUntilMarker(";", true)
+		_, err, isInt := p.match(fxlex.TokDefInt)
+
+		if err != nil || !isInt{
+			panic("Something went wrong while parsing")
+		}
+
+		tok_id, err, isId := p.match(fxlex.TokId)
+
+		if err != nil{
+			panic("Something went wrong while parsing")
+		}
+
+		if !isId{
+
+			err = p.ErrExpected("Declaration", tok_id, "Id")
+			p.ConsumeUntilMarker(";", true)
+			return nil
+
+		}
+
+		tok_semic, err, isSemic := p.match(fxlex.TokType(';'))
+
+		if err != nil{
+			panic("Something went wrong while parsing")
+		}
+
+		if !isSemic{
+
+			err = p.ErrExpected("Declaration", tok_semic, ";")
+			return nil
+		}
+
 		return nil
 
 	}else if next_token.Type == fxlex.TokDefBool{

@@ -13,6 +13,6 @@ func function2(bool c, bool d){
   circle(1,y,2);
   rect(1);
 
-  k = 1;
+  int k;
 
 }
